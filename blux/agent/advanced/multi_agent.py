@@ -1,74 +1,155 @@
+# blux/agent/advanced/multi_agent.py
+
+from blux.agent.advanced.reasoning import ReasoningLayer
+
 class MultiAgentManager:
     """
-    Manages multiple BLUX-cA agents simultaneously.
-    Features:
-    - Task delegation
-    - Broadcast and aggregation of responses
-    - Conflict resolution based on constitutional rules
+    Multi-agent manager with memory broadcasting, secure monitoring,
+    reasoning integration, and constitutional enforcement.
     """
+
     def __init__(self, constitution=None):
         self.agents = {}
-        self.constitution = constitution  # Optional: used for arbitration
+        self.constitution = constitution
+        self.monitor = None
+        self.reasoning = {}
+
+    def attach_monitor(self, monitor):
+        self.monitor = monitor
 
     def register_agent(self, name, agent_instance):
         self.agents[name] = agent_instance
+        # Attach reasoning layer per agent
+        self.reasoning[name] = ReasoningLayer(agent_instance, constitution=self.constitution)
+        if self.monitor:
+            self.monitor.log(name, "agent_registered")
 
-    def broadcast_input(self, user_input):
+    def _enforce_constitution(self, agent_name, response):
         """
-        Sends input to all registered agents and returns their responses in a dict.
+        Placeholder for rule enforcement.
+        Could veto, flag, or alter responses that violate constitutional rules.
         """
+        if self.constitution and "violation" in response:
+            if self.monitor:
+                self.monitor.log(agent_name, "constitutional_violation", {"response": response})
+            return "[VIOLATION DETECTED]"
+        return response
+
+    def broadcast_input(self, user_input, user_type="unknown"):
         results = {}
         for name, agent in self.agents.items():
-            results[name] = agent.process_input(user_input)
+            reasoning = self.reasoning[name]
+            reasoning_result = reasoning.process(user_input, user_type=user_type)
+            resp = self._enforce_constitution(name, reasoning_result["decision"])
+            results[name] = resp
+            if self.monitor:
+                self.monitor.log(name, "input_processed", {
+                    "input": user_input,
+                    "response": resp,
+                    "reasoning": reasoning_result
+                })
         return results
 
-    def delegate_task(self, user_input, target_agent=None):
-        """
-        Sends input to a specific agent or selects one dynamically.
-        Returns a dict of {agent_name: response}.
-        """
+    def delegate_task(self, user_input, target_agent=None, user_type="unknown"):
         if target_agent and target_agent in self.agents:
-            return {target_agent: self.agents[target_agent].process_input(user_input)}
+            resp = self.broadcast_input(user_input, user_type)[target_agent]
+            if self.monitor:
+                self.monitor.log(target_agent, "task_delegated", {"input": user_input, "response": resp})
+            return {target_agent: resp}
         elif self.agents:
-            # Default: choose first agent
             first_agent_name = next(iter(self.agents))
-            return {first_agent_name: self.agents[first_agent_name].process_input(user_input)}
+            resp = self.broadcast_input(user_input, user_type)[first_agent_name]
+            if self.monitor:
+                self.monitor.log(first_agent_name, "task_delegated", {"input": user_input, "response": resp})
+            return {first_agent_name: resp}
         else:
+            if self.monitor:
+                self.monitor.log("manager", "task_delegated_failed", {"input": user_input})
             return {"error": "No agents registered"}
 
-    def aggregate_responses(self, responses):
-        """
-        Aggregates multiple agent responses.
-        Simple placeholder: concatenates results; could use voting or constitution-based arbitration.
-        """
-        if not responses:
-            return "No responses to aggregate."
+    def broadcast_memory(self, key, value, user_type="default", priority=1, tags=None):
+        for agent in self.agents.values():
+            if hasattr(agent, "memory"):
+                agent.memory.add(key, value, user_type=user_type, priority=priority, tags=tags or [])
+                if self.monitor:
+                    self.monitor.log(agent.name, "memory_broadcast", {"key": key, "value": value, "tags": tags})
+
+    def aggregate_memory(self, key, predictive=True):
         aggregated = []
-        for agent_name, response in responses.items():
-            aggregated.append(f"[{agent_name}] {response}")
-        return "\n".join(aggregated)
+        for name, agent in self.agents.items():
+            if hasattr(agent, "memory"):
+                entries = agent.memory.recall(key)
+                if entries:
+                    if predictive:
+                        weighted = [e for e in entries if "urgent" in e.get("tags", [])]
+                        aggregated.extend(weighted or entries)
+                    else:
+                        aggregated.extend(entries)
+        if self.monitor:
+            self.monitor.log("manager", "memory_aggregated", {"key": key, "entries": aggregated})
+        return aggregated
 
-    def resolve_conflict(self, responses):
+    def resolve_conflict(self, responses, use_prediction=True):
+        enforced = {agent: self._enforce_constitution(agent, resp) for agent, resp in responses.items()}
+        if use_prediction:
+            sorted_agents = sorted(
+                enforced.keys(),
+                key=lambda name: getattr(self.reasoning[name], "predict_behavior", lambda x: [1])(None)[0] if hasattr(self.reasoning[name], "predict_behavior") else 1,
+                reverse=True
+            )
+            resolved = {a: enforced[a] for a in sorted_agents}
+        else:
+            resolved = enforced
+        return "\n".join(f"[{agent}] {resp}" for agent, resp in resolved.items())
+
+    def aggregate_responses(self, responses):
+        return "\n".join(f"[{agent}] {resp}" for agent, resp in responses.items())ive aggregation =====
+    def broadcast_memory(self, key, value, user_type="default", priority=1, tags=None):
+        for agent in self.agents.values():
+            if hasattr(agent, "memory"):
+                agent.memory.add(key, value, user_type=user_type, priority=priority, tags=tags or [])
+                if self.monitor:
+                    self.monitor.log(agent.name, "memory_broadcast", {"key": key, "value": value, "tags": tags})
+
+    def aggregate_memory(self, key, predictive=True):
         """
-        Optional: Resolve conflicting responses using constitutional rules.
-        Placeholder: currently returns aggregated response.
+        Aggregates memory across all agents.
+        If predictive=True, weights results based on reasoning predictions.
         """
-        # Future: implement rule-based arbitration
-        return self.aggregate_responses(responses)
+        aggregated = []
+        for name, agent in self.agents.items():
+            if hasattr(agent, "memory"):
+                entries = agent.memory.recall(key)
+                if entries:
+                    if predictive:
+                        # Simple weighting: prioritize entries tagged as urgent or from predicted struggler
+                        weighted = [e for e in entries if "urgent" in e.get("tags", [])]
+                        aggregated.extend(weighted or entries)
+                    else:
+                        aggregated.extend(entries)
+        if self.monitor:
+            self.monitor.log("manager", "memory_aggregated", {"key": key, "entries": aggregated})
+        return aggregated
 
+    # ===== Stage 6: Response aggregation & advanced conflict resolution =====
+    def resolve_conflict(self, responses, use_prediction=True):
+        """
+        Stage 6 conflict resolution:
+        - Enforce constitutional rules
+        - Optionally use reasoning prediction to weight responses
+        """
+        enforced = {agent: self._enforce_constitution(agent, resp) for agent, resp in responses.items()}
+        if use_prediction:
+            # Simple prediction-based sorting: 'struggler' > 'neutral' > 'indulgent'
+            sorted_agents = sorted(
+                enforced.keys(),
+                key=lambda name: self.reasoning[name].predict_behavior("")[0] if hasattr(self.reasoning[name], "predict_behavior") else 1,
+                reverse=True
+            )
+            resolved = {a: enforced[a] for a in sorted_agents}
+        else:
+            resolved = enforced
+        return "\n".join(f"[{agent}] {resp}" for agent, resp in resolved.items())
 
-# Example usage:
-if __name__ == "__main__":
-    from blux.agent.core_agent import BLUXAgent
-
-    # Create multiple agents
-    agent1 = BLUXAgent(name="Agent_A")
-    agent2 = BLUXAgent(name="Agent_B")
-
-    manager = MultiAgentManager()
-    manager.register_agent(agent1.name, agent1)
-    manager.register_agent(agent2.name, agent2)
-
-    input_text = "I need help with a problem"
-    responses = manager.broadcast_input(input_text)
-    print("Aggregated responses:\n", manager.aggregate_responses(responses))
+    def aggregate_responses(self, responses):
+        return "\n".join(f"[{agent}] {resp}" for agent, resp in responses.items())

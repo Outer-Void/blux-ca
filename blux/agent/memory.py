@@ -13,11 +13,10 @@ class Memory:
             "decision": decision
         }
         self.session_memory.append(entry)
-        # Placeholder for consented long-term memory
-        self.long_term_memory.append(entry)
+        self.long_term_memory.append(entry)  # placeholder for consented storage
 
     def recall_session(self):
         return self.session_memory
 
     def recall_long_term(self):
-        return self.long_term_memory
+        return self.long_term_memorylong_term_memory

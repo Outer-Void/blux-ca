@@ -5,8 +5,8 @@ class DiscernmentCompass:
     - Indulgent: boundary & off-ramp
     """
     def classify(self, user_input):
-        # Placeholder logic: keyword based for demo
         if any(word in user_input.lower() for word in ["help", "struggle", "problem"]):
             return "struggler"
+        return "indulgent"       return "struggler"
         else:
             return "indulgent"

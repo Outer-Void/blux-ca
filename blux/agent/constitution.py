@@ -10,8 +10,8 @@ class Constitution:
         ]
 
     def apply_rules(self, user_input, user_type):
-        # Simplified placeholder: returns a decision string
         if user_type == "struggler":
             return "validate and provide guidance"
+        return "set boundaries / off-ramp"provide guidance"
         else:
             return "set boundaries / off-ramp"

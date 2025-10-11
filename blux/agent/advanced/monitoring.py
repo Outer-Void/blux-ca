@@ -1,43 +1,48 @@
+# blux/agent/advanced/monitoring.py
+
+import logging
+import json
 import time
-from threading import Thread
+from threading import Lock, Thread
 
-class MonitoringDashboard:
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("BLUX-cA-Monitor")
+
+class AgentMonitor:
     """
-    Real-time monitoring dashboard for BLUX-cA agents.
-    Features:
-    - Live console monitoring
-    - Optional threaded update
-    - Integration with SecureController
+    Monitors BLUX-cA agent actions:
+    - Input processing
+    - Memory updates
+    - Reasoning/strategy decisions
+    - Audit compliance
     """
-    def __init__(self, controller):
-        self.controller = controller
-        self.running = False
 
-    def show_status(self):
-        agents = getattr(self.controller.registry, "agents", {})
-        adaptors = getattr(self.controller.registry, "adaptors", {})
-        evaluators = getattr(self.controller.registry, "evaluators", {})
-        print("=== BLUX-cA System Status ===")
-        print(f"Agents registered: {list(agents.keys())}")
-        print(f"Adaptors registered: {list(adaptors.keys())}")
-        print(f"Evaluators registered: {list(evaluators.keys())}")
-        print("==============================")
+    def __init__(self, log_file="blux_agent.log"):
+        self.log_file = log_file
+        self.lock = Lock()
+        self.logs = []
 
-    def live_monitor(self, interval=5):
-        """
-        Continuously display system status every `interval` seconds.
-        """
-        self.running = True
-        try:
-            while self.running:
-                self.show_status()
-                time.sleep(interval)
-        except KeyboardInterrupt:
-            print("Monitoring stopped.")
+    def log_action(self, agent_name, action_type, details):
+        entry = {
+            "timestamp": time.time(),
+            "agent": agent_name,
+            "action": action_type,
+            "details": details
+        }
+        with self.lock:
+            self.logs.append(entry)
+            try:
+                with open(self.log_file, "a") as f:
+                    f.write(json.dumps(entry) + "\n")
+            except Exception as e:
+                logger.error(f"Failed to write log: {e}")
 
-    def start_threaded_monitor(self, interval=5):
-        """
-        Starts monitoring in a separate thread, allowing main process to continue.
+    def get_logs(self, agent_name=None):
+        with self.lock:
+            if agent_name:
+                return [log for log in self.logs if log["agent"] == agent_name]
+            return list(self.logs)g for log in self.logs if log["agent"] == agent_name]
+            return list(self.logs)ts monitoring in a separate thread, allowing main process to continue.
         """
         thread = Thread(target=self.live_monitor, args=(interval,), daemon=True)
         thread.start()

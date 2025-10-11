@@ -1,3 +1,5 @@
+# blux/agent/advanced/reasoning.py
+
 from datetime import datetime
 
 class ReasoningLayer:
@@ -14,46 +16,25 @@ class ReasoningLayer:
         self.constitution = constitution
 
     def select_strategy(self, user_input, user_type="unknown"):
-        """
-        Chooses response strategy based on input type and memory patterns.
-        """
         if user_type == "struggler":
-            strategy = "validate_and_guide"
+            return "validate_and_guide"
         elif user_type == "indulgent":
-            strategy = "set_boundaries"
+            return "set_boundaries"
         else:
-            strategy = "neutral_response"
-        return strategy
+            return "neutral_response"
 
     def meta_cognition(self, user_input, decision):
-        """
-        Evaluates the agent's own decision for consistency with constitutional rules.
-        """
-        # Placeholder for rules-based evaluation
         audit_result = {"compliant": True, "notes": "Decision aligns with constitution"}
-        # Could integrate memory reinforcement or corrections
         return audit_result
 
     def predict_behavior(self, user_input, memory_entries=None):
-        """
-        Optional: Predicts likely patterns (struggler/indulgent tendencies) from memory.
-        """
-        if memory_entries is None:
-            memory_entries = self.agent.memory.recall()
-        # Simple heuristic placeholder
-        prediction = "struggler" if any("help" in e["input"].lower() for e in memory_entries) else "neutral"
+        if memory_entries is None and hasattr(self.agent, "memory"):
+            memory_entries = [self.agent.memory.recall(user_input)]
+        prediction = "struggler" if any(memory_entries) and "help" in str(memory_entries).lower() else "neutral"
         return prediction
 
     def process(self, user_input, user_type="unknown"):
-        """
-        Full reasoning pipeline:
-        1. Select strategy
-        2. Make decision via agent
-        3. Self-audit decision
-        4. Optional predictive behavior
-        """
         strategy = self.select_strategy(user_input, user_type)
-        # Agent processes input
         decision = self.agent.process_input(user_input)
         audit = self.meta_cognition(user_input, decision)
         prediction = self.predict_behavior(user_input)
@@ -61,6 +42,20 @@ class ReasoningLayer:
             "input": user_input,
             "strategy": strategy,
             "decision": decision,
+            "audit": audit,
+            "prediction": prediction,
+            "timestamp": datetime.utcnow().isoformat()
+        }trategy.
+        """
+        if strategy == "default":
+            return f"{self.agent_name} considers: {user_input}"
+        elif strategy == "reflective":
+            past = memory_context["value"] if memory_context else "nothing"
+            return f"{self.agent_name} reflects: {user_input} (past: {past})"
+        elif strategy == "aggressive":
+            return f"{self.agent_name} aggressively resolves: {user_input}"
+        else:
+            return f"{self.agent_name} handles: {user_input}": decision,
             "audit": audit,
             "prediction": prediction,
             "timestamp": datetime.utcnow().isoformat()

@@ -1,54 +1,57 @@
-from datetime import datetime
+# blux/agent/advanced/adaptive_memory.py
+
+import time
+from threading import Lock
 
 class AdaptiveMemory:
     """
-    Implements advanced adaptive memory for BLUX-cA agents.
-    Features:
-    - Long-term and weighted memory
-    - Reinforcement loops based on interactions
-    - Memory decay for outdated or irrelevant entries
+    Thread-safe adaptive memory for BLUX-cA agents.
+    Supports decay, priority weighting, tag-based recall, and checkpointing.
     """
-    def __init__(self, decay_rate=0.01):
-        self.memory_store = []
-        self.decay_rate = decay_rate  # Amount memory weight decays per cycle
 
-    def store(self, entry, weight=1.0):
-        """
-        Stores a memory entry with optional weight.
-        Entry format: {'input': str, 'user_type': str, 'decision': str, 'timestamp': datetime, 'weight': float}
-        """
-        memory_entry = {
-            "input": entry.get("input", ""),
-            "user_type": entry.get("user_type", "unknown"),
-            "decision": entry.get("decision", ""),
-            "timestamp": datetime.now(),
-            "weight": weight
-        }
-        self.memory_store.append(memory_entry)
-        self.reinforce(memory_entry)
+    def __init__(self):
+        self.memory_store = {}
+        self.lock = Lock()
 
-    def recall(self, filter_fn=None, top_n=None):
-        """
-        Returns filtered memory, optionally limited to top_n weighted entries.
-        """
-        memory = self.memory_store
-        if filter_fn:
-            memory = [e for e in memory if filter_fn(e)]
-        memory = sorted(memory, key=lambda x: x["weight"], reverse=True)
-        if top_n:
-            memory = memory[:top_n]
-        return memory
+    def add(self, key, value, user_type="default", priority=1, tags=None):
+        if tags is None:
+            tags = []
+        with self.lock:
+            self.memory_store[key] = {
+                "value": value,
+                "user_type": user_type,
+                "priority": priority,
+                "tags": tags,
+                "timestamp": time.time()
+            }
 
-    def reinforce(self, entry, factor=0.1):
-        """
-        Adjusts the weight of memory entries based on reinforcement.
-        Placeholder: reinforcement logic can be updated based on user success or relevance.
-        """
-        entry["weight"] += factor
-        self.apply_decay()
+    def recall(self, key, decay_rate=0.001):
+        with self.lock:
+            data = self.memory_store.get(key)
+            if not data:
+                return None
+            age = time.time() - data["timestamp"]
+            weight = max(0, data["priority"] * (1 - decay_rate * age))
+            return {"value": data["value"], "weight": weight, "tags": data["tags"]}
 
-    def apply_decay(self):
-        """
+    def recall_by_tag(self, tag):
+        with self.lock:
+            return [
+                {key: data}
+                for key, data in self.memory_store.items()
+                if tag in data["tags"]
+            ]e_path="memory_checkpoint.json"):
+        with self.lock:
+            with open(file_path, "w") as f:
+                json.dump(self.memory_store, f, indent=2)
+
+    def load_checkpoint(self, file_path="memory_checkpoint.json"):
+        try:
+            with open(file_path, "r") as f:
+                with self.lock:
+                    self.memory_store = json.load(f)
+        except FileNotFoundError:
+            self.memory_store = {}     """
         Applies decay to all memory entries to reduce relevance of older/unimportant items.
         """
         for entry in self.memory_store:
