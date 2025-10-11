@@ -1,0 +1,64 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+.env/
+.env.* 
+.venv/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs
+*.log
+secure_audit.log
+*.out
+*.err
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*.DS_Store
+*.lock
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Pytest / unittest
+.pytest_cache/
+
+# IDE / Editor directories
+.vscode/
+.idea/
+*.iml
+
+# Node / JS dependencies (if using JS/TS evaluators)
+node_modules/
+
+# Optional reflection storage
+reflections/*.md
+
+# Secrets and keys (do NOT commit)
+*.key
+*.pem
+*.env
