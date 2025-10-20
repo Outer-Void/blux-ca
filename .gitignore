@@ -1,3 +1,5 @@
+# BLUX-cA - .gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -6,36 +8,41 @@ __pycache__/
 # C extensions
 *.so
 
-# Virtual environment
-venv/
-.env/
-.env.* 
-.venv/
-
 # Distribution / packaging
+.Python
 build/
+develop-eggs/
 dist/
-*.egg-info/
+downloads/
+eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Logs
-*.log
-secure_audit.log
-*.out
-*.err
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Temporary files
-*.tmp
-*.swp
-*.bak
-*.DS_Store
-*.lock
-
-# Coverage reports
+# Unit test / coverage reports
 htmlcov/
+.tox/
+.nox/
 .coverage
 .coverage.*
 .cache
@@ -43,22 +50,187 @@ nosetests.xml
 coverage.xml
 *.cover
 *.py,cover
-
-# Pytest / unittest
+.hypothesis/
 .pytest_cache/
 
-# IDE / Editor directories
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if having platform-specific dependencies or dependencies
+#   having no cross-platform support, pipenv may install dependencies that don't work, or not
+#   install all needed dependencies.
+#Pipfile.lock
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Local configuration
+config/local.yaml
+config/secrets.yaml
+config/*.key
+config/*.pem
+config/*.crt
+
+# Capsule database (development)
+*.db
+*.db-journal
+capsules.db
+
+# Log files
+logs/
+*.log
+*.log.*
+blux-ca.log
+
+# Cache directories
+.cache/
+.capsule_cache/
+.redis_cache/
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/
+/temp/
+
+# IDE files
 .vscode/
 .idea/
-*.iml
+*.swp
+*.swo
+*~
 
-# Node / JS dependencies (if using JS/TS evaluators)
-node_modules/
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Optional reflection storage
-reflections/*.md
+# Backup files
+*.bak
+*.backup
+*.old
 
-# Secrets and keys (do NOT commit)
+# Encryption keys (NEVER COMMIT)
 *.key
 *.pem
-*.env
+*.crt
+*.cert
+
+# Coverage reports
+.coverage
+htmlcov/
+
+# Profiling data
+*.prof
+*.line_profiler
+
+# Package files
+*.deb
+*.rpm
+*.tar.gz
+*.zip
+
+# Test data
+test_data/
+fixtures/live/
+fixtures/production/
+
+# Performance data
+perf_data/
+benchmarks/live/
+
+# Docker
+Dockerfile.local
+docker-compose.override.yml
+
+# Kubernetes
+k8s/overlays/local/
+k8s/overlays/dev/
+
+# Message queue data
+/nats-data/
+/rabbitmq-data/
+
+# Archive storage (local development)
+archive/
+backups/
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# End of BLUX-cA .gitignore
