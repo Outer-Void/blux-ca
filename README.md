@@ -133,3 +133,14 @@ Document any new evaluators, adaptors, or agents in README.
 # License
 
 MIT License
+
+## Conscious Agent Core (Enterprise)
+
+The `blux_ca` package implements the enterprise-grade conscious agent kernel. It ships with:
+
+- Perception, reflection, discernment, constitution, intervention, and audit layers.
+- FastAPI microservice factory under `blux_ca.api.service`.
+- Typer CLI exposed via `blux_ca.cli:get_app`.
+- Integration adapters for Doctrine, Guard, Lite orchestrator, and Quantum CLI.
+- Documentation suite served with MkDocs Material.
+- Scripts for generating file trees, exporting audits, and validating doctrine scenarios.

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blux-ca"
+version = "0.1.0"
+description = "BLUX Conscious Agent core"
+authors = [{name = "BLUX", email = "ca@blux.ai"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "typer[all]",
+  "fastapi",
+  "pydantic>=1.10,<2.0",
+  "PyYAML",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy"]
+
+[project.entry-points."blux.plugins"]
+ca = "blux_ca.cli:get_app"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-q"
