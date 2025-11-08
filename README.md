@@ -16,6 +16,14 @@ Memory decay for outdated information
 
 Recall, filtering, and summarization
 
+**Phase 1 Conscious Heart**
+
+- `blux_ca.core.heart.ConsciousHeart` orchestrates perception, discernment, and doctrine-backed verdicts.
+- Intent compass classifies along truth, integrity, compassion, and awareness axes.
+- Koan probes surface reflective prompts for orchestrated `bq-cli` sessions.
+- Consent-based memory honors privacy-first defaults and only persists with explicit approval.
+- Immutable audit log supports append-only playback with hash chaining for local-first compliance.
+
 Multi-Agent Collaboration
 
 Broadcast tasks to multiple agents

@@ -1,49 +1,47 @@
-"""Controller: fan-out -> gather -> evaluate -> merge.
+"""Minimal orchestration controller used in legacy tests."""
 
-This is intentionally simple and synchronous for clarity.
-"""
-from typing import List, Dict, Any
-from .registry import ModelRegistry
-from .router import Router
-from .logs import AuditLogger
-from importlib import import_module
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Any, Dict
+
+
+@dataclass
+class _RegistryState:
+    agents: Dict[str, Any] = field(default_factory=dict)
+    adaptors: Dict[str, Any] = field(default_factory=dict)
+    evaluators: Dict[str, Any] = field(default_factory=dict)
+
+    def list_all(self) -> Dict[str, list[str]]:
+        return {
+            "agents": list(self.agents.keys()),
+            "adaptors": list(self.adaptors.keys()),
+            "evaluators": list(self.evaluators.keys()),
+        }
 
 
 class Controller:
-    def __init__(self, router: Router, logger: AuditLogger):
-        self.router = router
-        self.logger = logger
+    """Coordinates agents, adaptors, and evaluators for simple task processing."""
 
-    def handle_request(self, prompt: str) -> Dict[str, Any]:
-        selected = self.router.select(prompt)
-        responses = []
-        for name in selected:
-            adapter = self.router.registry.get_adapter(name)
-            if not adapter:
-                continue
-            out = adapter.predict(prompt)
-            responses.append({"model": name, "output": out})
+    def __init__(self) -> None:
+        self.registry = _RegistryState()
 
-        # Evaluate responses
-        from .evaluator.python import PythonEvaluator
+    def register_agent(self, name: str, agent: Any) -> None:
+        self.registry.agents[name] = agent
 
-        evaluator = PythonEvaluator()
-        scored = []
-        for r in responses:
-            score, metadata = evaluator.score(r["output"], prompt)
-            scored.append({"model": r["model"], "output": r["output"], "score": score, "meta": metadata})
+    def register_adaptor(self, name: str, adaptor: Any) -> None:
+        self.registry.adaptors[name] = adaptor
 
-        # Merge policy: choose top score
-        best = sorted(scored, key=lambda x: x["score"], reverse=True)[0] if scored else None
+    def register_evaluator(self, name: str, evaluator: Any) -> None:
+        self.registry.evaluators[name] = evaluator
 
-        audit_entry = {
-            "prompt": prompt,
-            "candidates": scored,
-            "selected": best,
-        }
-        self.logger.log(audit_entry)
-
-        return {"selected": best, "candidates": scored}
+    def process_task(self, prompt: str, *, agent_name: str) -> str:
+        agent = self.registry.agents[agent_name]
+        result = agent.process_input(prompt)
+        for evaluator in self.registry.evaluators.values():
+            if hasattr(evaluator, "evaluate"):
+                evaluator.evaluate(result)
+        return result
 
 
 __all__ = ["Controller"]
