@@ -1,15 +1,19 @@
-"""Model registry and adapter registration.
+"""Simple in-memory registry for orchestrator adapters."""
 
-This registry is in-memory and discovers adapters that implement the simple
-Adapter interface defined by `predict(prompt: str) -> dict`.
-"""
+from __future__ import annotations
+
+import json
 from pathlib import Path
-import yaml
 from typing import Dict, List, Optional
+
+try:  # Optional dependency for YAML parsing
+    import yaml
+except ModuleNotFoundError:  # pragma: no cover - fall back to JSON
+    yaml = None
 
 
 class ModelAdapter:
-    """Adapter interface. Implement `predict`."""
+    """Adapter interface. Implement ``predict``."""
 
     def __init__(self, name: str):
         self.name = name
@@ -36,10 +40,12 @@ class ModelRegistry:
         cfg_path = Path(config_path)
         if not cfg_path.exists():
             raise FileNotFoundError(cfg_path)
-        cfg = yaml.safe_load(cfg_path.read_text())
+        raw = cfg_path.read_text(encoding="utf-8")
+        if yaml is not None:
+            cfg = yaml.safe_load(raw)
+        else:
+            cfg = json.loads(raw)
         registry = cls()
-        # we don't auto-create adapters here — caller will register adapters
-        # but return the registry and the model list in case it's useful
         registry._model_list = cfg.get("models", [])
         return registry
 
