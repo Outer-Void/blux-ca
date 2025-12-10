@@ -1,154 +1,404 @@
-# BLUX-cA – Conscious Agent Orchestrator
+# BLUX-cA – Clarity Agent Orchestrator
 
-## Overview
+Conscious, Constitutional, Multi-Model, and Fully Audited
 
-> - BLUX-cA is a next-generation Conscious-Agent AI framework, designed for secure, adaptive, and multi-agent orchestration. It blends adaptive memory, multi-agent coordination, advanced evaluators, secure orchestration, real-time monitoring, CLI utilities, robust testing, and optional reasoning layers into a fully integrated system.
+BLUX-cA is the Conscious Agent kernel of the BLUX ecosystem — a constitution-driven, multi-agent reasoning engine designed to provide aligned guidance, orchestrated tooling, secure code execution, self-reflection, and verifiable intelligence.
 
-> - BLUX-cA’s mission is to provide intelligent, constitutionally-aligned guidance and automation, while maintaining auditability, security, and multi-user adaptability.
+It is the center of gravity for BLUX-Lite (orchestrator), BLUX-Quantum (CLI operations), BLUX-Guard (security cockpit), the Doctrine (ethical spine), and your future daughter-safe autonomy model.
 
-## Core Features
+BLUX-cA blends:
 
-Adaptive Memory & Learning
+Constitutional reasoning
 
-Weighted memory with reinforcement loops
+Adaptive memory
 
-Memory decay for outdated information
+Discernment & reflection
 
-Recall, filtering, and summarization
+Task orchestration
 
-**Phase 1 Conscious Heart**
+Code-aware evaluators
 
-- `blux_ca.core.heart.ConsciousHeart` orchestrates perception, discernment, and doctrine-backed verdicts.
-- Intent compass classifies along truth, integrity, compassion, and awareness axes.
-- Koan probes surface reflective prompts for orchestrated `bq-cli` sessions.
-- Consent-based memory honors privacy-first defaults and only persists with explicit approval.
-- Immutable audit log supports append-only playback with hash chaining for local-first compliance.
+Self-audit + hash-chained logs
 
-Multi-Agent Collaboration
+Secure multi-agent delegation
 
-Broadcast tasks to multiple agents
 
-Delegation and conflict resolution
+All while keeping data local, audit trails immutable, and user sovereignty non-negotiable.
 
-Aggregation of agent outputs
 
-Advanced Evaluators & Task Pipelines
+---
 
-Async Python and JS/TS evaluators
+## ⚡ Core Capabilities
 
-Bash/Shell command execution
+1) Adaptive Memory & Constitutional Learning
 
-Task chaining pipelines
+A privacy-first, consent-only memory system with:
 
-Secure Orchestrator
+Weighted reinforcement memory
+
+Memory decay for outdated items
+
+Consent-gated persistence
+
+Router-bound context assembly
+
+Summaries, filters, and reflective distillation
+
+Append-only, hash-chained audit logs
+
+
+Memory lives locally on the user’s device — never externally.
+
+
+---
+
+2) Phase 1: The Conscious Heart
+
+blux_ca.core.heart.ConsciousHeart orchestrates the core “mind” of cA:
+
+Includes:
+
+Perception → Discernment → Verdict loop
+
+Truth-alignment checks (integrity, awareness, compassion)
+
+Koan-based self-reflection prompts
+
+Case-classification (struggler vs indulger logic)
+
+Doctrine-bound action selection
+
+Direct integration with Clarity Engine
+
+Ethical floor: Light > Denial, Integrity > Approval
+
+
+
+---
+
+3) Multi-Agent Collaboration
+
+BLUX-cA communicates with and coordinates across model agents:
+
+Broadcast tasks
+
+Split/merge outputs
+
+Conflict resolution heuristics
+
+Router-guided model delegation
+
+Configurable fan-out for complex tasks
+
+
+
+---
+
+4) Advanced Evaluators & Code Tasks
+
+BLUX-cA integrates the BLUX evaluator suite for real code reasoning:
+
+Evaluators:
+
+Python evaluator (safe-mode planned)
+
+Node-based JS/TS evaluator
+
+Bash subprocess evaluator
+
+Async evaluators
+
+Multistep pipeline evaluators
+
+
+Code Context Layer (NEW)
+
+Repo scanning
+
+Line-range extraction
+
+Anchor detection (# >>> NAME)
+
+Unified diff generation (diff-only workflow)
+
+Patch validation (no anchor deletion)
+
+
+This powers:
+
+Bug finding
+
+Code explanation
+
+File-aware reasoning
+
+Minimal diffs for BLUX-Lite orchestrator
+
+
+
+---
+
+5) Secure Orchestrator Layer
+
+Located in blux/orchestrator/secure/
 
 Token-based authentication
 
 Role-based authorization
 
-Tamper-evident audit logging
+Multi-user isolation
 
-SecureController for multi-user safe orchestration
+Tamper-evident audit logs
 
-Real-Time Monitoring & Visualization
+Controlled evaluator sandboxing
 
-Console and threaded live monitoring
 
-Agent, adaptor, and evaluator tracking
 
-Optional web dashboard integration
+---
 
-CLI & Script Utilities
+6) Real-Time Monitoring & Observer
 
-Batch task execution
+Threaded agent observer
 
-Interactive REPL
+Evaluator performance metrics
 
-Memory querying
+Execution trails
 
-Automated reflection ingestion
+Optional web dashboard
 
-Testing & QA Enhancements
+Insight for both humans and automated controllers
 
-Stress tests for high-volume scenarios
 
-Sandbox safety validation
 
-CI/CD integration hooks
+---
 
-Security and token validation
+7) CLI & Script Utilities
 
-Optional Intelligence & Reasoning
+Entry point: ca.py
 
-Strategy/tactics selection
+Commands:
 
-Meta-cognition and self-audit
+ca reflect
 
-Predictive user behavior
+ca explain <text>
 
-Full reasoning pipeline
+ca code-eval <file>
 
-## Installation
+ca code-task "<instruction>"
 
-`git clone https://github.com/YourUsername/blux-ca.git cd blux-ca pip install -r requirements.txt`
+ca audit-export
 
-## Usage
+ca repl
 
-### CLI
+ca doctrine
 
-- Run single task `python blux/cli.py --task "Help me with a problem"` 
-- Start interactive REPL `python blux/cli.py --repl` 
-- Batch execution from file `python blux/cli.py --batch tasks.txt` 
-- Query agent memory` python blux/cli.py --query_memory`
+ca memory
 
-### Python Integration
+ca router
 
-```python
-from blux.agent.core_agent import BLUXAgent 
-from blux.agent.advanced.reasoning import ReasoningLayer agent = BLUXAgent(name="BLUX-cA") reasoning = ReasoningLayer(agent) result = reasoning.process("I feel lost and need guidance", user_type="struggler") print(result)
-```
+ca self-test
 
-## Project Structure
 
-```lsd
-blux-ca/ 
-├── blux/ 
-├── agent/advanced/ # Adaptive memory, multi-agent, monitoring, reasoning 
-├── evaluator/advanced/ # Python, JS/TS, Bash evaluators, pipelines 
-├── orchestrator/secure/ # SecureController, Auth, Audit
-├── cli.py # Enhanced CLI 
-└── adaptors/ # Adaptors (dummy, HTTP, etc.) 
-├── scripts/ # Utility scripts (REPL, batch, memory, reflection) 
-├── tests/ # Stress, sandbox, security, and CI tests 
-├── reflections/ # Optional reflection inputs for memory ingestion 
-└── README.md 
-```
+These tools also integrate with bq (BLUX Quantum) for cross-shell automation.
 
-## Contributing
 
-Follow the BLUX-cA Constitution & Core Principles: 
+---
 
-Integrity > approval
+8) Testing & QA
 
-Truth > comfort
+Located under tests/:
 
-Light > denial
+Evaluator stress tests
 
-Use unit tests and CI hooks before merging changes.
+Sandbox validation
 
-Document any new evaluators, adaptors, or agents in README.
+Orchestrator load tests
 
-# License
+Constitution scenario checks
 
-MIT License
+CI-ready test suite
 
-## Conscious Agent Core (Enterprise)
 
-The `blux_ca` package implements the enterprise-grade conscious agent kernel. It ships with:
 
-- Perception, reflection, discernment, constitution, intervention, and audit layers.
-- FastAPI microservice factory under `blux_ca.api.service`.
-- Typer CLI exposed via `blux_ca.cli:get_app`.
-- Integration adapters for Doctrine, Guard, Lite orchestrator, and Quantum CLI.
-- Documentation suite served with MkDocs Material.
-- Scripts for generating file trees, exporting audits, and validating doctrine scenarios.
+---
+
+9) Optional Intelligence Stack
+
+You may activate the extended reasoning pipeline, which includes:
+
+Strategy/tactic selectors
+
+Meta-cognition pass
+
+Self-critique + reflective rewrite
+
+Predictive user-behavior modeling
+
+Multi-agent consensus resolution
+
+
+Always constrained by:
+
+The BLUX Constitution
+Integrity > Approval
+Truth > Comfort
+Light > Denial
+
+
+---
+
+## 🚀 Installation
+
+git clone https://github.com/Outer-Void/blux-ca.git
+cd blux-ca
+pip install -r requirements.txt
+
+
+---
+
+## 🧠 Usage Examples
+
+CLI
+
+# Run a single reasoning task
+python ca.py reflect "I feel lost today"
+
+# REPL
+python ca.py repl
+
+# Evaluate code
+python ca.py code-eval --file utils.py
+
+# Batch tasks
+python ca.py --batch tasks.txt
+
+# Export audit logs
+python ca.py audit-export
+
+
+---
+
+## Python Integration Example
+
+from blux_ca.core.heart import ConsciousHeart
+from blux_ca.core.clarity_engine import ClarityEngine
+
+engine = ClarityEngine()
+heart = ConsciousHeart(engine)
+
+result = heart.process(
+    "I feel lost and need guidance.",
+    user_type="struggler"
+)
+
+print(result.message)
+
+
+---
+
+## 📦 Project Structure (Updated & Accurate)
+
+blux-ca/
+│
+├── ca/                     # CLI entry + core interface
+│   ├── ca.py               # Main Typer CLI
+│   └── core/
+│       ├── clarity_engine.py
+│       ├── heart.py
+│       ├── perception.py
+│       ├── discernment.py
+│       ├── constitution.py
+│       ├── koans.py
+│       ├── memory.py
+│       ├── audit.py
+│       ├── code_context.py         # NEW
+│       ├── code_tasks.py           # NEW
+│       └── diff_engine.py          # NEW
+│
+├── blux/                   # Integrated BLUX-Lite components
+│   ├── evaluator/
+│   │   ├── python.py
+│   │   ├── js_ts.py
+│   │   ├── bash_evaluator.py
+│   │   └── advanced/...
+│   ├── orchestrator/
+│   │   ├── controller.py
+│   │   ├── registry.py
+│   │   ├── router.py
+│   │   └── secure/
+│   └── logs.py
+│
+├── adaptors/
+│   ├── bq_cli.py
+│   ├── http.py
+│   └── dummy.py
+│
+├── reflections/
+│   └── *.txt
+│
+├── scripts/
+│   ├── ingest_reflections.py
+│   ├── export_audit.py
+│   └── filetree_gen.py
+│
+├── tests/
+│   ├── test_evaluators.py
+│   ├── test_sandbox.py
+│   ├── test_heart.py
+│   └── test_clarity_engine.py
+│
+└── README.md
+
+
+---
+
+## 🤝 Contributing
+
+BLUX-cA contributors follow the BLUX Constitution:
+
+Integrity > Approval
+
+Truth > Comfort
+
+Light > Denial
+
+
+Requirements:
+
+Unit tests for every addition
+
+Constitutional alignment
+
+Clear documentation in README
+
+No breaking changes to audit logs or code-diff safety
+
+
+
+---
+
+## 📜 License
+
+MIT License.
+
+
+---
+
+## 🏛 Conscious Agent Enterprise Kernel
+
+The enterprise subsystem includes:
+
+blux_ca.api.service – FastAPI service generator
+
+Doctrine integration
+
+BLUX-Guard security hooks
+
+BLUX-Lite orchestrator adapter
+
+BLUX-Quantum CLI tooling
+
+MkDocs documentation site
+
+
+This completes the unified BLUX-cA kernel.
