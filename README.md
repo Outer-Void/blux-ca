@@ -248,11 +248,11 @@ Light > Denial
 ---
 
 ## 🚀 Installation
-
+```
 git clone https://github.com/Outer-Void/blux-ca.git
 cd blux-ca
 pip install -r requirements.txt
-
+```
 
 ---
 
@@ -261,25 +261,34 @@ pip install -r requirements.txt
 CLI
 
 # Run a single reasoning task
+```
 python ca.py reflect "I feel lost today"
+```
 
 # REPL
+```
 python ca.py repl
+```
 
 # Evaluate code
+```
 python ca.py code-eval --file utils.py
+```
 
 # Batch tasks
+```
 python ca.py --batch tasks.txt
+```
 
 # Export audit logs
+```
 python ca.py audit-export
-
+```
 
 ---
 
 ## Python Integration Example
-
+```
 from blux_ca.core.heart import ConsciousHeart
 from blux_ca.core.clarity_engine import ClarityEngine
 
@@ -292,63 +301,157 @@ result = heart.process(
 )
 
 print(result.message)
-
+```
 
 ---
 
 ## 📦 Project Structure (Updated & Accurate)
+```
+blux-ca
+├── CLARITY_AGENT_SPEC.md
+├── LICENSE
+├── README.md
+├── ca
+│   ├── __init__.py
+│   ├── adaptors
+│   │   ├── __init__.py
+│   │   ├── bq_cli.py
+│   │   ├── doctrine.py
+│   │   ├── dummy_local.py
+│   │   ├── guard.py
+│   │   ├── http_api.py
+│   │   ├── lite.py
+│   │   ├── quantum.py
+│   │   └── reg.py
+│   ├── agent
+│   │   ├── __init__.py
+│   │   ├── advanced
+│   │   │   ├── __init__.py
+│   │   │   ├── adaptive_memory.py
+│   │   │   ├── monitoring.py
+│   │   │   ├── multi_agent.py
+│   │   │   └── reasoning.py
+│   │   ├── audit.py
+│   │   ├── constitution.py
+│   │   ├── core_agent.py
+│   │   ├── discernment.py
+│   │   ├── memory.py
+│   │   └── utils.py
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── schemas.py
+│   │   └── service.py
+│   ├── cli.py
+│   ├── config.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── audit.py
+│   │   ├── clarity_engine.py
+│   │   ├── code_context.py
+│   │   ├── code_tasks.py
+│   │   ├── compass
+│   │   │   ├── __init__.py
+│   │   │   └── intent.py
+│   │   ├── constitution.py
+│   │   ├── diff_engine.py
+│   │   ├── dimensions.py
+│   │   ├── discernment.py
+│   │   ├── enums.py
+│   │   ├── heart.py
+│   │   ├── intervention.py
+│   │   ├── koan.py
+│   │   ├── llm_adapter.py
+│   │   ├── memory.py
+│   │   ├── perception.py
+│   │   ├── reflection.py
+│   │   └── states.py
+│   ├── evaluator
+│   │   ├── __init__.py
+│   │   ├── advanced
+│   │   │   ├── __init__.py
+│   │   │   ├── bash_evaluator.py
+│   │   │   ├── js_ts_async.py
+│   │   │   ├── pipeline.py
+│   │   │   └── python_async.py
+│   │   ├── js_ts.py
+│   │   └── python.py
+│   ├── orchestrator
+│   │   ├── __init__.py
+│   │   ├── config.yaml
+│   │   ├── controller.py
+│   │   ├── logs.py
+│   │   ├── registry.py
+│   │   ├── router.py
+│   │   └── secure
+│   │       ├── __init__.py
+│   │       ├── audit.py
+│   │       ├── auth.py
+│   │       └── secure_controller.py
+│   └── telemetry.py
+├── ca.py
+├── constitution
+│   └── behavior.md
+├── docs
+│   ├── ARCHITECTURE.md
+│   ├── CONFIGURATION.md
+│   ├── CONSTITUTION.md
+│   ├── DISCERNMENT.md
+│   ├── ETHICS_ENGINE.md
+│   ├── INSTALL.md
+│   ├── INTEGRATIONS.md
+│   ├── INTERVENTIONS.md
+│   ├── OPERATIONS.md
+│   ├── PRIVACY.md
+│   ├── ROADMAP.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   ├── VISION.md
+│   └── index.md
+├── ethos
+│   └── manifest.yaml
+├── identity
+│   └── seed.json
+├── mkdocs.yml
+├── pyproject.toml
+├── requirements.txt
+├── scripts
+│   ├── batch_task.py
+│   ├── export_audit_json.py
+│   ├── gen_filetree.py
+│   ├── ingest_reflection.py
+│   ├── interactive_repl.py
+│   ├── memory_query.py
+│   ├── new_entry.py
+│   ├── reflection.py
+│   ├── run_reflection_test.py
+│   ├── update_readme_filetree.py
+│   └── validate_constitution.py
+└── tests
+    ├── ca
+    │   ├── test_audit.py
+    │   ├── test_bq_cli.py
+    │   ├── test_compass.py
+    │   ├── test_constitution.py
+    │   ├── test_discernment.py
+    │   ├── test_heart.py
+    │   ├── test_interventions.py
+    │   └── test_memory.py
+    ├── fixtures
+    │   ├── dialogues
+    │   │   └── sample.json
+    │   └── doctrine_snapshots
+    │       └── sample.json
+    ├── test_agent.py
+    ├── test_ci_hooks.py
+    ├── test_evaluator.py
+    ├── test_integration.py
+    ├── test_orchestrator.py
+    ├── test_sandbox.py
+    ├── test_security.py
+    └── test_stress.py
 
-blux-ca/
-│
-├── ca/                     # CLI entry + core interface
-│   ├── ca.py               # Main Typer CLI
-│   └── core/
-│       ├── clarity_engine.py
-│       ├── heart.py
-│       ├── perception.py
-│       ├── discernment.py
-│       ├── constitution.py
-│       ├── koans.py
-│       ├── memory.py
-│       ├── audit.py
-│       ├── code_context.py         # NEW
-│       ├── code_tasks.py           # NEW
-│       └── diff_engine.py          # NEW
-│
-├── blux/                   # Integrated BLUX-Lite components
-│   ├── evaluator/
-│   │   ├── python.py
-│   │   ├── js_ts.py
-│   │   ├── bash_evaluator.py
-│   │   └── advanced/...
-│   ├── orchestrator/
-│   │   ├── controller.py
-│   │   ├── registry.py
-│   │   ├── router.py
-│   │   └── secure/
-│   └── logs.py
-│
-├── adaptors/
-│   ├── bq_cli.py
-│   ├── http.py
-│   └── dummy.py
-│
-├── reflections/
-│   └── *.txt
-│
-├── scripts/
-│   ├── ingest_reflections.py
-│   ├── export_audit.py
-│   └── filetree_gen.py
-│
-├── tests/
-│   ├── test_evaluators.py
-│   ├── test_sandbox.py
-│   ├── test_heart.py
-│   └── test_clarity_engine.py
-│
-└── README.md
-
+22 directories, 120 files
+```
 
 ---
 
