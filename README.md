@@ -243,7 +243,11 @@ print(result.message)
 ```
 blux-ca/
 ├── CLARITY_AGENT_SPEC.md      # Detailed specification
-├── LICENSE                     # Apache 2.0 License
+├── LICENSE                     # Dual-license overview
+├── LICENSE-APACHE              # Apache 2.0 terms
+├── LICENSE-COMMERCIAL          # Commercial terms
+├── NOTICE                      # Apache notice
+├── COMMERCIAL.md               # Commercial licensing guide
 ├── README.md                   # This file
 ├── ca.py                       # Main CLI entry point
 ├── pyproject.toml             # Python project metadata
@@ -572,17 +576,23 @@ We take security seriously and will respond promptly to all reports.
 
 ## 📜 License
 
-This project is licensed under the **Apache License 2.0**.
+BLUX-cA is dual-licensed:
 
-See the [LICENSE](LICENSE) file for full details.
+- **Open Source (Apache 2.0):** You may use, modify, and distribute the project under the terms in [LICENSE-APACHE](LICENSE-APACHE). Keep notices intact and document your changes.
+- **Commercial License:** For embedding in commercial products, offering hosted services, or other business uses beyond Apache 2.0, a commercial agreement is required. See [LICENSE-COMMERCIAL](LICENSE-COMMERCIAL) or contact **theoutervoid@outlook.com** to obtain terms.
 
-**Key Points:**
-- ✅ Commercial use permitted
-- ✅ Modification permitted
-- ✅ Distribution permitted
-- ✅ Patent use permitted
-- ⚠️ Must include license and copyright notice
-- ⚠️ Changes must be documented
+See [LICENSE](LICENSE) for an overview of the dual-license options.
+
+**Apache 2.0 highlights:**
+- ✅ Use, modify, and distribute with notice retention
+- ✅ Patent license from contributors
+- ⚠️ Include license and NOTICE when redistributing
+- ⚠️ Document file modifications
+
+**Commercial path highlights:**
+- ✅ Commercial use available under a separate agreement
+- ⚠️ No redistribution or sublicensing without commercial terms
+- 📧 Contact: theoutervoid@outlook.com
 
 ---
 
