@@ -9,6 +9,10 @@ description = "BLUX Conscious Agent core"
 authors = [{name = "BLUX", email = "ca@blux.ai"}]
 readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+classifiers = [
+  "License :: OSI Approved :: Apache Software License",
+]
 dependencies = [
   "typer[all]",
   "fastapi",
@@ -29,3 +33,10 @@ ca = "blux_ca.cli:get_app"
 [tool.pytest.ini_options]
 pythonpath = ["."]
 addopts = "-q"
+
+[tool.setuptools]
+license-files = [
+  "LICENSE-APACHE",
+  "NOTICE",
+  "LICENSE-COMMERCIAL",
+]
