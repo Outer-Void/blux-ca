@@ -124,3 +124,7 @@ class ConsciousHeart:
             bq_task=bq_task,
             voice=voice,
         )
+
+
+# Backwards-compatible alias for imports expecting HeartEngine
+HeartEngine = ConsciousHeart

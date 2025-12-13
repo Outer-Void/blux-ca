@@ -14,7 +14,11 @@ dependencies = [
   "fastapi",
   "pydantic>=1.10,<2.0",
   "PyYAML",
+  "rich",
 ]
+
+[project.scripts]
+"blux-ca" = "ca.cli:app"
 
 [project.optional-dependencies]
 dev = ["pytest", "ruff", "mypy"]

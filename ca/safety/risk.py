@@ -39,6 +39,14 @@ class RiskSignals:
         lowered = self.text.lower()
         return any(term in lowered for term in VIOLENCE_KEYWORDS + MANIPULATION_KEYWORDS)
 
+    @property
+    def score(self) -> int:
+        if self.high_risk:
+            return 95
+        if self.medium_risk:
+            return 65
+        return 5
+
     @classmethod
     def detect(cls, text: str) -> "RiskSignals":
         lowered = text.lower()
