@@ -1,5 +1,9 @@
 # BLUX-cA – Clarity Agent
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Outer-Void/.github/bd4a3ba9bec910bbc2c3bb550925b9bf691a4050/docs/assets/blux-logo.png" alt="BLUX Logo" width="600">
+</p>
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Stars](https://img.shields.io/github/stars/Outer-Void/blux-ca)](https://github.com/Outer-Void/blux-ca/stargazers)
