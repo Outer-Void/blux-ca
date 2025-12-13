@@ -25,6 +25,15 @@ Secure multi-agent delegation
 
 All while keeping data local, audit trails immutable, and user sovereignty non-negotiable.
 
+## 🚀 Quickstart (Grand Universe)
+
+1. Install dependencies locally: `pip install -e .`
+2. Launch the CLI banner and help: `blux-ca --help`
+3. Run a single request: `blux-ca start "summarize today's climate news"`
+4. Explore demos: `blux-ca demo-orchestrator` and `blux-ca demo-recovery`
+
+The CLI drives the full clarity → governance → routing → guard → execution loop with append-only audit logging under `~/.blux-ca/audit/runtime.jsonl`.
+
 
 ---
 

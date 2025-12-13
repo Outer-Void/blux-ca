@@ -1,0 +1,15 @@
+- name: guard-rails
+  type: plugin
+  version: v1
+  description: Safety guard and redaction layer
+  capabilities:
+    - safety
+    - redaction
+  entrypoint: ca.integrations.guard.GuardSignals
+- name: doctrine-governance
+  type: plugin
+  version: v1
+  description: Governance doctrine enforcement
+  capabilities:
+    - governance
+  entrypoint: ca.integrations.doctrine.DoctrineGateway

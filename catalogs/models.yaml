@@ -1,0 +1,18 @@
+- name: local-sim
+  type: llm
+  provider: local
+  version: v1
+  description: Deterministic local reasoning loop
+  capabilities:
+    - offline
+    - deterministic
+  entrypoint: ca.llm.local.LocalLLM
+- name: api-openai
+  type: llm
+  provider: api
+  version: v1
+  description: API adapter placeholder for OpenAI compatible endpoints
+  capabilities:
+    - remote
+    - streaming
+  entrypoint: ca.llm.api.OpenAILLM

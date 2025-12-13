@@ -1,0 +1,16 @@
+- name: math-evaluator
+  type: tool
+  version: v1
+  description: Simple arithmetic evaluator
+  capabilities:
+    - math
+    - deterministic
+  entrypoint: ca.evaluator.python.PythonEvaluator
+- name: web-summary
+  type: tool
+  version: v1
+  description: Offline news summarizer stub
+  capabilities:
+    - summarization
+    - offline
+  entrypoint: ca.evaluator.python.PythonEvaluator

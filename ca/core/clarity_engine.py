@@ -81,11 +81,11 @@ class ClarityEngine:
     ) -> ClarityResponse:
         # Initialize or restore recovery state machine
         rsm = RecoveryStateMachine.from_token(user_state_token)
-        previous_state = rsm.state
+        previous_state = rsm.state.recovery_state
         
         # Update state based on input
         rsm.update_from_input(text)
-        current_state = rsm.state
+        current_state = rsm.state.recovery_state
         state_changed = previous_state != current_state
         
         # Analyze through all three dimensions
