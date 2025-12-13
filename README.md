@@ -1,300 +1,99 @@
-# BLUX-cA – Clarity Agent Orchestrator
+# BLUX-cA – Clarity Agent
 
-Conscious, Constitutional, Multi-Model, and Fully Audited
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
-BLUX-cA is the Conscious Agent kernel of the BLUX ecosystem — a constitution-driven, multi-agent reasoning engine designed to provide aligned guidance, orchestrated tooling, secure code execution, self-reflection, and verifiable intelligence.
+> A constitutional AI orchestration layer that applies ethics, discernment, and self-reflection to every action.
 
-It is the center of gravity for BLUX-Lite (orchestrator), BLUX-Quantum (CLI operations), BLUX-Guard (security cockpit), the Doctrine (ethical spine), and your future daughter-safe autonomy model.
+BLUX-cA (Clarity Agent) is the conscious reasoning kernel of the BLUX ecosystem—a constitution-driven, multi-agent orchestration engine designed to provide aligned guidance, secure code execution, self-reflection, and verifiable intelligence. It serves as the foundational layer for BLUX-Lite (orchestrator), BLUX-Quantum (CLI operations), and BLUX-Guard (security cockpit).
 
-BLUX-cA blends:
+## 🎯 Vision
 
-Constitutional reasoning
+BLUX-cA combines constitutional reasoning, adaptive memory, and multi-agent collaboration to create AI systems that prioritize:
 
-Adaptive memory
+- **Integrity over Approval** – Truth-aligned responses
+- **Light over Denial** – Confronting reality with compassion
+- **Privacy by Design** – Local-first, consent-gated memory
+- **Verifiable Intelligence** – Immutable audit trails and hash-chained logs
 
-Discernment & reflection
+## ✨ Key Features
 
-Task orchestration
+### 🧠 Constitutional Intelligence
+- **Adaptive Memory System** with weighted reinforcement and decay
+- **Consent-Gated Persistence** – All data stored locally on user devices
+- **Constitutional Learning** – Aligned with the BLUX ethical framework
+- **Self-Reflection Engine** – Koan-based prompts for continuous improvement
 
-Code-aware evaluators
+### 🔄 Multi-Agent Orchestration
+- **Model Delegation** with router-guided task distribution
+- **Conflict Resolution** through consensus algorithms
+- **Broadcast & Fan-Out** for complex parallel reasoning
+- **Split/Merge Pipelines** for collaborative problem-solving
 
-Self-audit + hash-chained logs
+### 💻 Advanced Code Intelligence
+- **Code Context Layer** – Repository scanning and anchor detection
+- **Multi-Language Evaluators** – Python, JavaScript/TypeScript, Bash
+- **Diff Generation** – Minimal, unified patches for safe code updates
+- **Secure Sandboxing** – Controlled execution environments
 
-Secure multi-agent delegation
+### 🛡️ Enterprise Security
+- **Token-Based Authentication** with role-based authorization
+- **Multi-User Isolation** for secure concurrent operations
+- **Tamper-Evident Audit Logs** – Append-only, hash-chained records
+- **Doctrine Integration** – Policy-driven governance layer
 
+### 📊 Observability
+- **Real-Time Monitoring** of agent performance
+- **Execution Trail Logging** for debugging and analysis
+- **Optional Web Dashboard** for visualization
+- **Telemetry Integration** for insights
 
-All while keeping data local, audit trails immutable, and user sovereignty non-negotiable.
+## 🚀 Quick Start
 
+### Installation
 
----
-
-## ⚡ Core Capabilities
-
-1) Adaptive Memory & Constitutional Learning
-
-A privacy-first, consent-only memory system with:
-
-Weighted reinforcement memory
-
-Memory decay for outdated items
-
-Consent-gated persistence
-
-Router-bound context assembly
-
-Summaries, filters, and reflective distillation
-
-Append-only, hash-chained audit logs
-
-
-Memory lives locally on the user’s device — never externally.
-
-
----
-
-2) Phase 1: The Conscious Heart
-
-blux_ca.core.heart.ConsciousHeart orchestrates the core “mind” of cA:
-
-Includes:
-
-Perception → Discernment → Verdict loop
-
-Truth-alignment checks (integrity, awareness, compassion)
-
-Koan-based self-reflection prompts
-
-Case-classification (struggler vs indulger logic)
-
-Doctrine-bound action selection
-
-Direct integration with Clarity Engine
-
-Ethical floor: Light > Denial, Integrity > Approval
-
-
-
----
-
-3) Multi-Agent Collaboration
-
-BLUX-cA communicates with and coordinates across model agents:
-
-Broadcast tasks
-
-Split/merge outputs
-
-Conflict resolution heuristics
-
-Router-guided model delegation
-
-Configurable fan-out for complex tasks
-
-
-
----
-
-4) Advanced Evaluators & Code Tasks
-
-BLUX-cA integrates the BLUX evaluator suite for real code reasoning:
-
-Evaluators:
-
-Python evaluator (safe-mode planned)
-
-Node-based JS/TS evaluator
-
-Bash subprocess evaluator
-
-Async evaluators
-
-Multistep pipeline evaluators
-
-
-Code Context Layer (NEW)
-
-Repo scanning
-
-Line-range extraction
-
-Anchor detection (# >>> NAME)
-
-Unified diff generation (diff-only workflow)
-
-Patch validation (no anchor deletion)
-
-
-This powers:
-
-Bug finding
-
-Code explanation
-
-File-aware reasoning
-
-Minimal diffs for BLUX-Lite orchestrator
-
-
-
----
-
-5) Secure Orchestrator Layer
-
-Located in blux/orchestrator/secure/
-
-Token-based authentication
-
-Role-based authorization
-
-Multi-user isolation
-
-Tamper-evident audit logs
-
-Controlled evaluator sandboxing
-
-
-
----
-
-6) Real-Time Monitoring & Observer
-
-Threaded agent observer
-
-Evaluator performance metrics
-
-Execution trails
-
-Optional web dashboard
-
-Insight for both humans and automated controllers
-
-
-
----
-
-7) CLI & Script Utilities
-
-Entry point: ca.py
-
-Commands:
-
-ca reflect
-
-ca explain <text>
-
-ca code-eval <file>
-
-ca code-task "<instruction>"
-
-ca audit-export
-
-ca repl
-
-ca doctrine
-
-ca memory
-
-ca router
-
-ca self-test
-
-
-These tools also integrate with bq (BLUX Quantum) for cross-shell automation.
-
-
----
-
-8) Testing & QA
-
-Located under tests/:
-
-Evaluator stress tests
-
-Sandbox validation
-
-Orchestrator load tests
-
-Constitution scenario checks
-
-CI-ready test suite
-
-
-
----
-
-9) Optional Intelligence Stack
-
-You may activate the extended reasoning pipeline, which includes:
-
-Strategy/tactic selectors
-
-Meta-cognition pass
-
-Self-critique + reflective rewrite
-
-Predictive user-behavior modeling
-
-Multi-agent consensus resolution
-
-
-Always constrained by:
-
-The BLUX Constitution
-Integrity > Approval
-Truth > Comfort
-Light > Denial
-
-
----
-
-## 🚀 Installation
-```
+```bash
+# Clone the repository
 git clone https://github.com/Outer-Void/blux-ca.git
 cd blux-ca
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Verify installation
+python ca.py --version
 ```
 
----
+### Basic Usage
 
-## 🧠 Usage Examples
+```bash
+# Reflect on a question
+python ca.py reflect "I need guidance on making a difficult decision"
 
-CLI
-
-# Run a single reasoning task
-```
-python ca.py reflect "I feel lost today"
-```
-
-# REPL
-```
+# Start interactive REPL
 python ca.py repl
-```
 
 # Evaluate code
-```
 python ca.py code-eval --file utils.py
-```
 
-# Batch tasks
-```
-python ca.py --batch tasks.txt
-```
+# Run code tasks
+python ca.py code-task "Analyze this function for security issues"
 
 # Export audit logs
-```
 python ca.py audit-export
 ```
 
----
+### Python API
 
-## Python Integration Example
-```
+```python
 from blux_ca.core.heart import ConsciousHeart
 from blux_ca.core.clarity_engine import ClarityEngine
 
+# Initialize the conscious agent
 engine = ClarityEngine()
 heart = ConsciousHeart(engine)
 
+# Process a request
 result = heart.process(
     "I feel lost and need guidance.",
     user_type="struggler"
@@ -303,213 +102,208 @@ result = heart.process(
 print(result.message)
 ```
 
----
+## 📂 Project Structure
 
-## 📦 Project Structure (Updated & Accurate)
 ```
-blux-ca
-├── CLARITY_AGENT_SPEC.md
-├── LICENSE
-├── README.md
-├── ca
-│   ├── __init__.py
-│   ├── adaptors
-│   │   ├── __init__.py
-│   │   ├── bq_cli.py
-│   │   ├── doctrine.py
-│   │   ├── dummy_local.py
-│   │   ├── guard.py
-│   │   ├── http_api.py
-│   │   ├── lite.py
-│   │   ├── quantum.py
-│   │   └── reg.py
-│   ├── agent
-│   │   ├── __init__.py
-│   │   ├── advanced
-│   │   │   ├── __init__.py
-│   │   │   ├── adaptive_memory.py
-│   │   │   ├── monitoring.py
-│   │   │   ├── multi_agent.py
-│   │   │   └── reasoning.py
-│   │   ├── audit.py
-│   │   ├── constitution.py
-│   │   ├── core_agent.py
-│   │   ├── discernment.py
-│   │   ├── memory.py
-│   │   └── utils.py
-│   ├── api
-│   │   ├── __init__.py
-│   │   ├── schemas.py
-│   │   └── service.py
-│   ├── cli.py
-│   ├── config.py
-│   ├── core
-│   │   ├── __init__.py
-│   │   ├── audit.py
-│   │   ├── clarity_engine.py
-│   │   ├── code_context.py
-│   │   ├── code_tasks.py
-│   │   ├── compass
-│   │   │   ├── __init__.py
-│   │   │   └── intent.py
-│   │   ├── constitution.py
-│   │   ├── diff_engine.py
-│   │   ├── dimensions.py
-│   │   ├── discernment.py
-│   │   ├── enums.py
-│   │   ├── heart.py
-│   │   ├── intervention.py
-│   │   ├── koan.py
-│   │   ├── llm_adapter.py
-│   │   ├── memory.py
-│   │   ├── perception.py
-│   │   ├── reflection.py
-│   │   └── states.py
-│   ├── evaluator
-│   │   ├── __init__.py
-│   │   ├── advanced
-│   │   │   ├── __init__.py
-│   │   │   ├── bash_evaluator.py
-│   │   │   ├── js_ts_async.py
-│   │   │   ├── pipeline.py
-│   │   │   └── python_async.py
-│   │   ├── js_ts.py
-│   │   └── python.py
-│   ├── orchestrator
-│   │   ├── __init__.py
-│   │   ├── config.yaml
-│   │   ├── controller.py
-│   │   ├── logs.py
-│   │   ├── registry.py
-│   │   ├── router.py
-│   │   └── secure
-│   │       ├── __init__.py
-│   │       ├── audit.py
-│   │       ├── auth.py
-│   │       └── secure_controller.py
-│   └── telemetry.py
-├── ca.py
-├── constitution
-│   └── behavior.md
-├── docs
-│   ├── ARCHITECTURE.md
-│   ├── CONFIGURATION.md
-│   ├── CONSTITUTION.md
-│   ├── DISCERNMENT.md
-│   ├── ETHICS_ENGINE.md
-│   ├── INSTALL.md
-│   ├── INTEGRATIONS.md
-│   ├── INTERVENTIONS.md
-│   ├── OPERATIONS.md
-│   ├── PRIVACY.md
-│   ├── ROADMAP.md
-│   ├── SECURITY.md
-│   ├── TROUBLESHOOTING.md
-│   ├── VISION.md
-│   └── index.md
-├── ethos
-│   └── manifest.yaml
-├── identity
-│   └── seed.json
-├── mkdocs.yml
-├── pyproject.toml
-├── requirements.txt
-├── scripts
-│   ├── batch_task.py
-│   ├── export_audit_json.py
-│   ├── gen_filetree.py
-│   ├── ingest_reflection.py
-│   ├── interactive_repl.py
-│   ├── memory_query.py
-│   ├── new_entry.py
-│   ├── reflection.py
-│   ├── run_reflection_test.py
-│   ├── update_readme_filetree.py
-│   └── validate_constitution.py
-└── tests
-    ├── ca
-    │   ├── test_audit.py
-    │   ├── test_bq_cli.py
-    │   ├── test_compass.py
-    │   ├── test_constitution.py
-    │   ├── test_discernment.py
-    │   ├── test_heart.py
-    │   ├── test_interventions.py
-    │   └── test_memory.py
-    ├── fixtures
-    │   ├── dialogues
-    │   │   └── sample.json
-    │   └── doctrine_snapshots
-    │       └── sample.json
-    ├── test_agent.py
-    ├── test_ci_hooks.py
-    ├── test_evaluator.py
-    ├── test_integration.py
-    ├── test_orchestrator.py
-    ├── test_sandbox.py
-    ├── test_security.py
-    └── test_stress.py
-
-22 directories, 120 files
+blux-ca/
+├── ca/                          # Core agent implementation
+│   ├── agent/                   # Agent logic and reasoning
+│   │   ├── advanced/            # Advanced features (memory, monitoring)
+│   │   ├── constitution.py      # Constitutional framework
+│   │   ├── discernment.py       # Decision-making logic
+│   │   └── memory.py            # Memory management
+│   ├── api/                     # API service layer
+│   ├── core/                    # Core engine components
+│   │   ├── clarity_engine.py    # Main reasoning engine
+│   │   ├── heart.py             # Conscious processing core
+│   │   ├── code_context.py      # Code analysis layer
+│   │   └── diff_engine.py       # Code diff generation
+│   ├── evaluator/               # Code evaluation engines
+│   │   ├── python.py            # Python evaluator
+│   │   ├── js_ts.py             # JavaScript/TypeScript evaluator
+│   │   └── advanced/            # Async and pipeline evaluators
+│   ├── orchestrator/            # Multi-agent coordination
+│   │   ├── router.py            # Task routing logic
+│   │   ├── controller.py        # Orchestration controller
+│   │   └── secure/              # Security layer
+│   └── adaptors/                # External integrations
+│       ├── doctrine.py          # Doctrine engine integration
+│       ├── guard.py             # BLUX-Guard integration
+│       └── quantum.py           # BLUX-Quantum CLI integration
+├── constitution/                # Constitutional definitions
+├── doctrine/                    # Policy and governance rules
+├── ethos/                       # Ethical framework
+├── docs/                        # Comprehensive documentation
+├── scripts/                     # Utility scripts
+├── tests/                       # Test suite
+└── ca.py                        # Main CLI entry point
 ```
 
----
+## 🔧 Configuration
+
+BLUX-cA uses a hierarchical configuration system:
+
+1. **Default Configuration** – Built-in sensible defaults
+2. **Environment Variables** – Runtime overrides
+3. **Local Config Files** – User-specific settings
+
+```yaml
+# config.yaml example
+orchestrator:
+  max_agents: 5
+  timeout: 30s
+  
+memory:
+  decay_rate: 0.1
+  reinforcement_factor: 1.5
+  
+security:
+  audit_enabled: true
+  sandbox_mode: strict
+```
+
+See [docs/CONFIGURATION.md](docs/CONFIGURATION.md) for detailed options.
+
+## 🧪 Testing
+
+```bash
+# Run all tests
+pytest
+
+# Run specific test suites
+pytest tests/test_agent.py
+pytest tests/test_evaluator.py
+pytest tests/test_orchestrator.py
+
+# Run with coverage
+pytest --cov=ca --cov-report=html
+```
+
+## 📚 Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- [Architecture Overview](docs/ARCHITECTURE.md)
+- [Installation Guide](docs/INSTALL.md)
+- [Configuration Reference](docs/CONFIGURATION.md)
+- [Security Model](docs/SECURITY.md)
+- [Privacy Guarantees](docs/PRIVACY.md)
+- [Integration Guide](docs/INTEGRATIONS.md)
+- [Operations Manual](docs/OPERATIONS.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
 
 ## 🤝 Contributing
 
-BLUX-cA contributors follow the BLUX Constitution:
+We welcome contributions that align with the BLUX Constitution:
 
-Integrity > Approval
+- **Integrity > Approval** – Honest feedback and truthful code
+- **Truth > Comfort** – Solutions over convenient shortcuts
+- **Light > Denial** – Transparency in all changes
 
-Truth > Comfort
+### Contribution Guidelines
 
-Light > Denial
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Write tests for your changes
+4. Ensure all tests pass (`pytest`)
+5. Update documentation as needed
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
 
+### Requirements
 
-Requirements:
+- Unit tests for all new functionality
+- Constitutional alignment verification
+- Clear documentation updates
+- No breaking changes to audit logs or security features
 
-Unit tests for every addition
+## 🗺️ Roadmap
 
-Constitutional alignment
+- [ ] Enhanced multi-model support (GPT-4, Claude, Gemini)
+- [ ] Visual dashboard for real-time monitoring
+- [ ] Extended sandboxing with container isolation
+- [ ] Distributed orchestration capabilities
+- [ ] Advanced memory compression and retrieval
+- [ ] Plugin architecture for custom evaluators
 
-Clear documentation in README
+See [docs/ROADMAP.md](docs/ROADMAP.md) for detailed plans.
 
-No breaking changes to audit logs or code-diff safety
-
-
-
----
-
-## 📜 License
-
-MIT License.
-
-
----
-
-## 🏛 Conscious Agent Enterprise Kernel
+## 🏢 Enterprise Features
 
 The enterprise subsystem includes:
 
-blux_ca.api.service – FastAPI service generator
+- **FastAPI Service** – RESTful API for integration
+- **Doctrine Integration** – Policy-driven governance
+- **BLUX-Guard Hooks** – Security monitoring and alerts
+- **BLUX-Lite Adapter** – Orchestration planning
+- **BLUX-Quantum CLI** – Advanced command-line tools
+- **MkDocs Site** – Hosted documentation
 
-Doctrine integration
+## 📊 Architecture Highlights
 
-BLUX-Guard security hooks
+### Conscious Processing Pipeline
 
-BLUX-Lite orchestrator adapter
+```
+Input → Perception → Discernment → Constitutional Check → Verdict → Response
+                                            ↓
+                                    Reflection & Audit
+```
 
-BLUX-Quantum CLI tooling
+### Multi-Agent Coordination
 
-MkDocs documentation site
+```
+Router → [Agent1, Agent2, Agent3] → Conflict Resolution → Merged Output
+           ↓        ↓        ↓
+        Model A  Model B  Model C
+```
 
+### Code Intelligence Flow
 
-This completes the unified BLUX-cA kernel.
+```
+Code → Context Extraction → Evaluation → Diff Generation → Validation → Output
+         ↓
+    [Anchors, Ranges, Dependencies]
+```
 
+## 🔒 Security
 
-## Doctrine Engine
-Initial pillars engine with rule bundle in doctrine/rules and CLI via `python -m doctrine.cli check "text"`.
+BLUX-cA prioritizes security at every layer:
 
-## Clarity Agent Runtime
-- New runtime orchestrator under `ca/runtime` integrates Doctrine governance, Lite planning, Guard labeling, and pluggable LLM stubs.
-- Safety overrides and recovery helpers ensure crisis-aware responses before any generation.
+- **Sandboxed Execution** – Isolated environments for code evaluation
+- **Audit Logging** – Immutable, hash-chained records
+- **Access Control** – Token-based auth with role management
+- **Data Encryption** – At-rest and in-transit protection
+- **Vulnerability Scanning** – Continuous security monitoring
+
+Report security issues to: [outervoid.blux@gmail.com](mailto:outervoid.blux@gmail.com)
+
+## 📜 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## 🌐 Links
+
+- **Website**: [github.com/Outer-Void](https://github.com/Outer-Void)
+- **Documentation**: [GitHub Pages](https://outer-void.github.io/blux-ca/)
+- **Issues**: [GitHub Issues](https://github.com/Outer-Void/blux-ca/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Outer-Void/blux-ca/discussions)
+
+## 🙏 Acknowledgments
+
+Built with the principles of conscious AI development:
+- Privacy-first design
+- Ethical reasoning frameworks
+- Constitutional alignment
+- Verifiable intelligence
+- Human sovereignty
+
+---
+
+<p align="center">
+  <strong>BLUX-cA</strong> – Where consciousness meets code
+</p>
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/Outer-Void">Outer Void</a>
+</p>
