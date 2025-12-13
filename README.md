@@ -505,3 +505,11 @@ MkDocs documentation site
 
 
 This completes the unified BLUX-cA kernel.
+
+
+## Doctrine Engine
+Initial pillars engine with rule bundle in doctrine/rules and CLI via `python -m doctrine.cli check "text"`.
+
+## Clarity Agent Runtime
+- New runtime orchestrator under `ca/runtime` integrates Doctrine governance, Lite planning, Guard labeling, and pluggable LLM stubs.
+- Safety overrides and recovery helpers ensure crisis-aware responses before any generation.
