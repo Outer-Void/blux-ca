@@ -1,0 +1,12 @@
+sources:
+  - file: data/core.jsonl
+    weight: 0.60
+  - file: data/safety.jsonl
+    weight: 0.20
+  - file: data/governance.jsonl
+    weight: 0.10
+  - file: data/coding.jsonl
+    weight: 0.10
+max_samples: null
+shuffle: true
+seed: 42

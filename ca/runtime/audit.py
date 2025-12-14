@@ -6,7 +6,7 @@ import uuid
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, List
+from typing import Any, Callable, Iterable, List
 
 from doctrine.redaction import redact
 
@@ -26,9 +26,10 @@ class AuditRow:
 class AuditLedger:
     """Append-only audit ledger with hash chaining."""
 
-    def __init__(self, *, log_path: str | Path | None = None) -> None:
+    def __init__(self, *, log_path: str | Path | None = None, redactor: Callable[[Any], Any] | None = None) -> None:
         self.path = Path(log_path) if log_path else Path.home() / ".blux-ca" / "audit" / "runtime.jsonl"
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.redactor = redactor or redact
 
     def _chain_hash(self, payload: dict[str, Any], prev_hash: str) -> str:
         body = json.dumps({"payload": payload, "prev": prev_hash}, sort_keys=True).encode()
@@ -43,7 +44,7 @@ class AuditLedger:
             "decision": event.get("decision", "unknown"),
             "risk": int(event.get("risk", 0)),
             "summary": event.get("summary", ""),
-            "event": redact(event),
+            "event": self.redactor(event),
         }
         digest = self._chain_hash(payload, prev_hash)
         record = {**payload, "hash": digest, "prev_hash": prev_hash}
