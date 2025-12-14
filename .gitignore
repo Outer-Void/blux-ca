@@ -118,6 +118,16 @@ venv.bak/
 # mkdocs documentation
 /site
 
+# Training artifacts
+runs/
+out/
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+*.gguf
+*.log
+
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -234,3 +244,15 @@ pids/
 *.pid.lock
 
 # End of BLUX-cA .gitignore
+
+# Training artifacts
+runs/
+out/
+*.safetensors
+*.bin
+*.pt
+*.ckpt
+*.gguf
+*.log
+.venv/
+venv/

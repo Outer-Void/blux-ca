@@ -238,6 +238,34 @@ print(result.message)
 
 ---
 
+## 🎛 Training (QLoRA)
+
+BLUX-cA ships with a QLoRA training pipeline under `train/` for adapter-only finetuning against an external dataset repository. Provide the dataset path via `--dataset-dir` or `DATASET_DIR`.
+
+```bash
+# Validate dataset
+python train/validate_dataset.py --dataset-dir /path/to/blux-ca-dataset --strict
+
+# Optional dry-run (tokenize a few samples)
+python train/train_qlora.py --dataset-dir /path/to/blux-ca-dataset --dry-run
+
+# Train adapter
+python train/train_qlora.py --dataset-dir /path/to/blux-ca-dataset
+
+# Evaluate probes
+python train/run_eval.py --dataset-dir /path/to/blux-ca-dataset --run runs/<timestamp> --strict
+
+# Or via CLI
+blux-ca train validate --dataset-dir /path/to/blux-ca-dataset --strict
+blux-ca train qlora --dataset-dir /path/to/blux-ca-dataset --dry-run
+blux-ca train qlora --dataset-dir /path/to/blux-ca-dataset
+blux-ca train eval --dataset-dir /path/to/blux-ca-dataset --run runs/<timestamp> --strict
+```
+
+See [train/README.md](train/README.md) for prerequisites, configuration, and the release checklist. Training outputs are written to `runs/<timestamp>/` (gitignored).
+
+---
+
 ## 📂 Project Structure
 
 ```
@@ -394,6 +422,14 @@ pytest --cov=ca --cov-report=html
 
 # Run stress tests
 pytest tests/test_stress.py -v
+```
+
+Developer quality gates:
+
+```
+make lint   # compileall + ruff + black --check
+make fmt    # apply black and autofix ruff suggestions
+make smoke  # CLI smoke checks (help + doctor + train help)
 ```
 
 **CI/CD:** GitHub Actions workflows automatically run tests on all pull requests.
@@ -636,3 +672,6 @@ Built with the principles of conscious AI development:
 [![Follow](https://img.shields.io/github/followers/Outer-Void?style=social)](https://github.com/Outer-Void)
 
 </div>
+
+## 🧠 QLoRA Training
+A reproducible QLoRA adapter pipeline lives under [`train/`](train/README.md). It expects an external dataset repository with `data/*.jsonl` and `eval/*.jsonl` files using the BLUX-cA chat schema. Follow the commands in `train/README.md` to validate datasets, run dry-runs, train adapters, and evaluate probes before sharing adapters (base weights not included).
