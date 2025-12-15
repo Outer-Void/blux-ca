@@ -14,7 +14,7 @@ from validate_dataset import SYSTEM_PLACEHOLDER, validate_dataset
 
 
 def _timestamp() -> str:
-    return datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    return datetime.utcnow().strftime("%Y%m%d_%H%M%S")
 
 
 def _load_config(path: Path) -> Dict:
@@ -98,7 +98,8 @@ def prepare_dataset(
     if shuffle:
         rng.shuffle(collected)
 
-    run_dir = output_root / (run_name or _timestamp())
+    folder_name = _timestamp() if not run_name else f"{_timestamp()}_{run_name}"
+    run_dir = output_root / folder_name
     run_dir.mkdir(parents=True, exist_ok=True)
     output_path = run_dir / "prepared_train.jsonl"
     with output_path.open("w", encoding="utf-8") as handle:
