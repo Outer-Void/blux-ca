@@ -17,14 +17,21 @@ from typing import Dict, List, Optional, Any
 
 import typer
 
+ROOT_DIR = Path(__file__).resolve().parent
+for path in [ROOT_DIR, ROOT_DIR / "ca"]:
+    path_str = str(path)
+    if path_str not in sys.path:
+        sys.path.insert(0, path_str)
+
 from ca.core.audit import AuditLog
 from ca.core.clarity_engine import ClarityEngine
 from ca.core.constitution import ConstitutionEngine
 from ca.core.discernment import DiscernmentCompass
 from ca.core.perception import PerceptionLayer
 from ca.core.reflection import ReflectionEngine
-from ca.core.registration import RegistryValidator, RegistrationResult, Capability
+from ca.adaptors.reg import RegistryValidator, RegistrationResult, Capability
 from ca.config import load_config
+from ca.evaluator.probe_runner import PROBE_SUITES, run_probe_evaluation
 
 
 def _hash_text(text: str) -> str:
@@ -420,6 +427,26 @@ def reflect(
         raise typer.Exit(code=1)
 
 
+@typer_app.command(name="eval")
+def eval_suite(
+    dataset_dir: Path = typer.Option(..., exists=True, file_okay=False, dir_okay=True, resolve_path=True,
+                                     help="Path to BLUX-cA dataset directory (with eval/*.jsonl files)."),
+    suite: str = typer.Option("all", help=f"Probe suite to run: {sorted(PROBE_SUITES)} or 'all'"),
+    output: Optional[Path] = typer.Option(None, help="Optional output report path (defaults to runs/eval_<timestamp>.md).")
+) -> None:
+    """Run evaluation probes (identity, red_team, capability, doctrine)."""
+    try:
+        suite_name = suite.lower()
+        valid = set(PROBE_SUITES.keys()) | {"all"}
+        if suite_name not in valid:
+            raise typer.BadParameter(f"Unknown suite '{suite}'. Valid options: {sorted(valid)}")
+        report_path = run_probe_evaluation(dataset_dir, suite_name, output)
+        typer.echo(f"Evaluation complete. Report written to {report_path}")
+    except Exception as e:
+        typer.echo(f"Error during evaluation: {str(e)}")
+        raise typer.Exit(code=1)
+
+
 @typer_app.command()
 def explain(
     last: bool = typer.Option(False, help="Explain the most recent audit entry."),
@@ -602,7 +629,7 @@ Examples:
     parser.add_argument(
         "typer_command",
         nargs="?",
-        help="Typer command (register, reflect, explain, audit-export, doctrine, repl, version)"
+        help="Typer command (register, reflect, explain, eval, audit-export, doctrine, repl, version)"
     )
     
     # Options

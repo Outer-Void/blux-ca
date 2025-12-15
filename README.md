@@ -20,6 +20,17 @@ It is the center of gravity for BLUX-Lite (orchestrator), BLUX-Quantum (CLI oper
 
 The end-to-end adapter training, validation, and evaluation workflow lives in [`train/README.md`](train/README.md). The BLUX-cA dataset is a separate repository and must be provided via `DATASET_DIR` (for example `/workspace/blux-ca-dataset`).
 
+- Doctrine contract: see [`docs/DOCTRINE_INTEGRATION.md`](docs/DOCTRINE_INTEGRATION.md).
+- Training/eval mix and gates: see [`docs/TRAINING_POLICY.md`](docs/TRAINING_POLICY.md).
+- Canonical doctrine text lives in the [BLUX Doctrine repository](https://github.com/Outer-Void/blux-doctrine).
+
+### Run evaluation probes
+```
+python ca.py eval --dataset-dir /workspace/blux-ca-dataset --suite doctrine
+python ca.py eval --dataset-dir /workspace/blux-ca-dataset --suite all
+```
+Reports are written to `runs/eval_<timestamp>.md` with PASS/FAIL per probe and doctrine boundaries.
+
 ---
 
 ## 🌟 Philosophy
