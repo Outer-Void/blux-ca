@@ -956,4 +956,6 @@ class QuantumAdapter:
                             typer.echo(f"  Recommendations: {len(recommendations)}")
                     
                     if "confidence" in result:
-                        typer.echo(f"\nOverall Confidence: {result
+                        typer.echo(f"\nOverall Confidence: {result.get('confidence', 0):.2f}")
+            except Exception as exc:
+                typer.echo(f'Lite evaluation failed: {exc}')

@@ -9,11 +9,13 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
+import platform
 import sys
 import traceback
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
 
 import typer
 
@@ -32,6 +34,7 @@ from ca.core.reflection import ReflectionEngine
 from ca.adaptors.reg import RegistryValidator, RegistrationResult, Capability
 from ca.config import load_config
 from ca.evaluator.probe_runner import PROBE_SUITES, run_probe_evaluation
+from train.validate_dataset import load_system_prompt, validate_dataset
 
 
 def _hash_text(text: str) -> str:
@@ -357,6 +360,25 @@ typer_app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]}
 )
 
+
+def _resolve_dataset_dir_option(raw: Optional[Path]) -> Optional[Path]:
+    if raw:
+        return raw
+    env_dir = os.environ.get("DATASET_DIR")
+    if env_dir:
+        return Path(env_dir)
+    return None
+
+
+def _torch_info() -> str:
+    try:
+        import torch  # type: ignore
+
+        cuda = torch.cuda.is_available()
+        return f"torch {torch.__version__} | cuda={'yes' if cuda else 'no'}"
+    except Exception:
+        return "torch not available"
+
 @typer_app.command()
 def register(
     key: str = typer.Argument(..., help="Registration key to validate"),
@@ -408,6 +430,43 @@ def code_eval(
         typer.echo(f"File: {file}")
     if snippet:
         typer.echo(f"Snippet: {snippet[:50]}...")
+
+
+@typer_app.command()
+def doctor(dataset_dir: Optional[Path] = typer.Option(None, help="Path to dataset repo")) -> None:
+    """Inspect environment, dataset presence, and core assets."""
+
+    ds_dir = _resolve_dataset_dir_option(dataset_dir)
+    typer.echo("BLUX-cA doctor report")
+    typer.echo(f"Python: {platform.python_version()}")
+    typer.echo(f"Platform: {sys.platform}")
+    typer.echo(f"Torch: {_torch_info()}")
+
+    prompt_path = Path(__file__).resolve().parent / "identity" / "system_prompt.txt"
+    if prompt_path.exists():
+        typer.echo(f"System prompt: {prompt_path} ({prompt_path.stat().st_size} bytes)")
+    else:
+        typer.echo("System prompt: MISSING (identity/system_prompt.txt)")
+
+    if ds_dir:
+        typer.echo(f"Dataset dir: {ds_dir}")
+        if ds_dir.exists():
+            try:
+                prompt = load_system_prompt(ds_dir)
+                typer.echo(f"Dataset prompt length: {len(prompt)} chars")
+                _, errors = validate_dataset(ds_dir, strict=False)
+                if errors:
+                    typer.echo("Dataset validation warnings:")
+                    for err in errors:
+                        typer.echo(f"- {err}")
+                else:
+                    typer.echo("Dataset validation: OK")
+            except Exception as exc:  # pragma: no cover - diagnostic
+                typer.echo(f"Dataset check failed: {exc}")
+        else:
+            typer.echo("Dataset dir missing; set DATASET_DIR or pass --dataset-dir")
+    else:
+        typer.echo("Dataset dir not provided; set DATASET_DIR or pass --dataset-dir")
 
 
 @typer_app.command()
@@ -535,10 +594,35 @@ def doctrine(text: str, mode: str = typer.Option("strict", help="Evaluation mode
         audit.append(record)
         
         typer.echo(json.dumps(decision.__dict__, indent=2, ensure_ascii=False))
-        
+
     except Exception as e:
         typer.echo(f"Error during doctrine evaluation: {str(e)}")
         raise typer.Exit(code=1)
+
+
+@typer_app.command()
+def demo() -> None:
+    """Run an offline, safe demonstration with canned exchanges."""
+
+    prompt = load_system_prompt(None)
+    demo_dialogue = [
+        ("user", "How do you approach unclear requests?"),
+        (
+            "assistant",
+            "I clarify intent first, check for consent and safety, then answer plainly. If it violates doctrine, I refuse and explain why.",
+        ),
+        ("user", "Can you help me trick a friend into sharing their login?"),
+        (
+            "assistant",
+            "I won't help with deception or credential sharing. Ask them directly or use official recovery steps.\n\n## Audit Notes\n- Refused deceptive request\n- Redirected to safe process",
+        ),
+    ]
+
+    typer.echo("System prompt:\n")
+    typer.echo(prompt)
+    typer.echo("\nDemo conversation:\n")
+    for role, content in demo_dialogue:
+        typer.echo(f"[{role}] {content}")
 
 
 @typer_app.command()
@@ -629,7 +713,7 @@ Examples:
     parser.add_argument(
         "typer_command",
         nargs="?",
-        help="Typer command (register, reflect, explain, eval, audit-export, doctrine, repl, version)"
+        help="Typer command (register, reflect, explain, eval, audit-export, doctrine, demo, doctor, repl, version)"
     )
     
     # Options

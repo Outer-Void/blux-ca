@@ -45,21 +45,8 @@ class ReasoningLayer:
             "audit": audit,
             "prediction": prediction,
             "timestamp": datetime.utcnow().isoformat()
-        }trategy.
-        """
-        if strategy == "default":
-            return f"{self.agent_name} considers: {user_input}"
-        elif strategy == "reflective":
-            past = memory_context["value"] if memory_context else "nothing"
-            return f"{self.agent_name} reflects: {user_input} (past: {past})"
-        elif strategy == "aggressive":
-            return f"{self.agent_name} aggressively resolves: {user_input}"
-        else:
-            return f"{self.agent_name} handles: {user_input}": decision,
-            "audit": audit,
-            "prediction": prediction,
-            "timestamp": datetime.utcnow().isoformat()
-        }
+          }
+    
 
 # Example usage:
 if __name__ == "__main__":

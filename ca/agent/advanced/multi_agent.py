@@ -103,7 +103,7 @@ class MultiAgentManager:
         return "\n".join(f"[{agent}] {resp}" for agent, resp in resolved.items())
 
     def aggregate_responses(self, responses):
-        return "\n".join(f"[{agent}] {resp}" for agent, resp in responses.items())ive aggregation =====
+        return "\n".join(f"[{agent}] {resp}" for agent, resp in responses.items())
     def broadcast_memory(self, key, value, user_type="default", priority=1, tags=None):
         for agent in self.agents.values():
             if hasattr(agent, "memory"):

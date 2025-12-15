@@ -20,7 +20,7 @@ from transformers import (
 from trl import SFTTrainer
 
 from prepare_dataset import prepare_dataset
-from validate_dataset import run_cli_validator, validate_file
+from validate_dataset import load_system_prompt, run_cli_validator, validate_file
 
 
 EXAMPLE_DATASET_CMD = "export DATASET_DIR=/absolute/path/to/blux-ca-dataset"
@@ -60,12 +60,13 @@ def _validate_sources(dataset_dir: Path, mix_config: Path) -> None:
     mix_cfg = _load_yaml(mix_config)
     data_dir = dataset_dir / "data"
     errors: List[str] = []
+    canonical_prompt = load_system_prompt(dataset_dir)
     for source in mix_cfg.get("sources", []):
         path = data_dir / source.get("file", "")
         if not path.exists():
             errors.append(f"Missing file: {path}")
             continue
-        _, _, file_errors = validate_file(path, strict=True)
+        _, _, file_errors = validate_file(path, strict=True, canonical_prompt=canonical_prompt)
         errors.extend(file_errors)
     if errors:
         joined = "\n".join(errors)

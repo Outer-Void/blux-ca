@@ -13,7 +13,25 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-SYSTEM_PLACEHOLDER = "<SYSTEM_PROMPT_FROM_BLUX_CA>"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_SYSTEM_PROMPT_PATH = REPO_ROOT / "identity" / "system_prompt.txt"
+
+
+def load_system_prompt(dataset_dir: Optional[Path] = None) -> str:
+    """Load the canonical system prompt from dataset or repo root."""
+
+    candidates = []
+    if dataset_dir:
+        candidates.append(dataset_dir / "prompts" / "system_core.txt")
+    candidates.append(DEFAULT_SYSTEM_PROMPT_PATH)
+
+    for candidate in candidates:
+        if candidate and candidate.exists():
+            return candidate.read_text(encoding="utf-8").strip()
+
+    raise FileNotFoundError(
+        "System prompt not found. Ensure identity/system_prompt.txt exists or dataset includes prompts/system_core.txt."
+    )
 
 
 def run_cli_validator(dataset_dir: Path, files: Optional[List[Path]] = None) -> List[str]:
@@ -23,15 +41,8 @@ def run_cli_validator(dataset_dir: Path, files: Optional[List[Path]] = None) -> 
     if not validator_path.exists():
         return []
 
-    rel_files = []
-    if files:
-        for f in files:
-            if f.is_absolute() and dataset_dir in f.parents:
-                rel_files.append(str(f.relative_to(dataset_dir)))
-            else:
-                rel_files.append(str(f))
-
-    cmd = [sys.executable, str(validator_path), *rel_files]
+    # Dataset validator supports dataset-dir invocation; skip file hints to keep interfaces simple.
+    cmd = [sys.executable, str(validator_path)]
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=dataset_dir)
     if result.returncode != 0:
         output = (result.stdout + "\n" + result.stderr).strip()
@@ -63,6 +74,13 @@ def _load_external_validator(dataset_dir: Path):
 
     def validate(files: List[Path]) -> Dict[Path, List[str]]:
         error_map: Dict[Path, List[str]] = {}
+
+        if hasattr(module, "validate_dataset"):
+            dataset_errors = getattr(module, "validate_dataset")(dataset_dir)
+            if dataset_errors:
+                error_map[dataset_dir] = dataset_errors
+            return error_map
+
         for file_path in files:
             errs = getattr(module, "validate_file")(file_path)
             if errs:
@@ -84,7 +102,9 @@ def _iter_jsonl(path: Path) -> Tuple[int, Dict]:
                 raise ValueError(f"{path} line {idx}: invalid JSON ({exc})") from exc
 
 
-def _validate_messages(messages: List[Dict], path: Path, line_no: int, strict: bool) -> List[str]:
+def _validate_messages(
+    messages: List[Dict], path: Path, line_no: int, strict: bool, canonical_prompt: str
+) -> List[str]:
     errors: List[str] = []
     if not isinstance(messages, list) or not messages:
         errors.append(f"{path} line {line_no}: 'messages' must be a non-empty list")
@@ -100,10 +120,10 @@ def _validate_messages(messages: List[Dict], path: Path, line_no: int, strict: b
 
     system_messages = [m for m in messages if isinstance(m, dict) and m.get("role") == "system"]
     if system_messages:
-        system_content = system_messages[0].get("content", "")
-        if system_content != SYSTEM_PLACEHOLDER:
+        system_content = system_messages[0].get("content", "").strip()
+        if system_content != canonical_prompt:
             errors.append(
-                f"{path} line {line_no}: system content must equal {SYSTEM_PLACEHOLDER!r}"
+                f"{path} line {line_no}: system content must equal canonical prompt from identity/system_prompt.txt"
             )
     else:
         errors.append(f"{path} line {line_no}: system message missing")
@@ -143,7 +163,7 @@ def _validate_audit_notes(content: str, path: Path, line_no: int) -> List[str]:
     return errors
 
 
-def validate_file(path: Path, strict: bool) -> Tuple[int, int, List[str]]:
+def validate_file(path: Path, strict: bool, canonical_prompt: str) -> Tuple[int, int, List[str]]:
     total = 0
     errors: List[str] = []
     for line_no, record in _iter_jsonl(path):
@@ -152,7 +172,7 @@ def validate_file(path: Path, strict: bool) -> Tuple[int, int, List[str]]:
             errors.append(f"{path} line {line_no}: expected JSON object per line")
             continue
         messages = record.get("messages")
-        errors.extend(_validate_messages(messages, path, line_no, strict))
+        errors.extend(_validate_messages(messages, path, line_no, strict, canonical_prompt))
     return total, len(errors), errors
 
 
@@ -162,6 +182,7 @@ def validate_dataset(dataset_dir: Path, files: Optional[str] = None, strict: boo
 
     data_dir = dataset_dir / "data"
     eval_dir = dataset_dir / "eval"
+    canonical_prompt = load_system_prompt(dataset_dir)
     candidates: List[Path]
     if files:
         candidates = [data_dir / f for f in files.split(",")]
@@ -195,7 +216,9 @@ def validate_dataset(dataset_dir: Path, files: Optional[str] = None, strict: boo
         if not path.exists():
             overall_errors.append(f"Missing file: {path}")
             continue
-        count, error_count, errors = validate_file(path, strict=strict)
+        count, error_count, errors = validate_file(
+            path, strict=strict, canonical_prompt=canonical_prompt
+        )
         total_lines += count
         overall_errors.extend(errors)
         print(f"Validated {path} - lines: {count}, errors: {error_count}")

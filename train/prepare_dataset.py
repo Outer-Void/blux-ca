@@ -10,7 +10,7 @@ from typing import Dict, List, Optional
 
 import yaml
 
-from validate_dataset import SYSTEM_PLACEHOLDER, validate_dataset
+from validate_dataset import load_system_prompt, validate_dataset
 
 
 def _timestamp() -> str:
@@ -53,6 +53,8 @@ def prepare_dataset(
     ``max_samples`` value. When ``strict`` is True, data files are validated
     before mixing.
     """
+
+    canonical_prompt = load_system_prompt(dataset_dir)
 
     if strict:
         _, errors = validate_dataset(dataset_dir, strict=True)
@@ -107,7 +109,7 @@ def prepare_dataset(
             if "messages" in record:
                 system_msgs = [m for m in record["messages"] if m.get("role") == "system"]
                 if system_msgs:
-                    system_msgs[0]["content"] = SYSTEM_PLACEHOLDER
+                    system_msgs[0]["content"] = canonical_prompt
             handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     resolved_mix_path = run_dir / "mix_config_resolved.yaml"
