@@ -20,7 +20,10 @@ from transformers import (
 from trl import SFTTrainer
 
 from prepare_dataset import prepare_dataset
-from validate_dataset import validate_dataset, validate_file
+from validate_dataset import run_cli_validator, validate_file
+
+
+EXAMPLE_DATASET_CMD = "export DATASET_DIR=/absolute/path/to/blux-ca-dataset"
 
 
 def _load_yaml(path: Path) -> Dict:
@@ -31,6 +34,26 @@ def _load_yaml(path: Path) -> Dict:
 def _write_json(path: Path, payload: Dict) -> None:
     with path.open("w", encoding="utf-8") as handle:
         json.dump(payload, handle, indent=2, sort_keys=True)
+
+
+def _resolve_dataset_dir(raw: Optional[Path]) -> Path:
+    if raw:
+        return raw
+    env_dir = os.environ.get("DATASET_DIR")
+    if env_dir:
+        return Path(env_dir)
+    raise ValueError(
+        f"Dataset directory is required. Provide --dataset-dir or set DATASET_DIR (e.g., {EXAMPLE_DATASET_CMD})"
+    )
+
+
+def _resolve_base_model(cfg: Dict, prefer_cpu_safe: bool = False) -> str:
+    env_base_model = os.environ.get("BASE_MODEL")
+    if env_base_model:
+        return env_base_model
+    if prefer_cpu_safe:
+        return cfg.get("cpu_base_model", cfg.get("base_model"))
+    return cfg.get("base_model")
 
 
 def _validate_sources(dataset_dir: Path, mix_config: Path) -> None:
@@ -97,10 +120,11 @@ def _init_model(base_model: str, lora_config: Dict) -> AutoModelForCausalLM:
 
 
 def train(args: argparse.Namespace) -> Path:
-    if args.dataset_dir is None:
-        raise ValueError("Dataset directory is required. Provide --dataset-dir or set DATASET_DIR")
-    if not args.dataset_dir.exists():
-        raise FileNotFoundError(f"Dataset directory not found: {args.dataset_dir}")
+    dataset_dir = _resolve_dataset_dir(args.dataset_dir)
+    if not dataset_dir.exists():
+        raise FileNotFoundError(
+            f"Dataset directory not found: {dataset_dir}. Set DATASET_DIR first (e.g., `{EXAMPLE_DATASET_CMD}`)."
+        )
     if not args.config.exists():
         raise FileNotFoundError(f"Config not found: {args.config}")
     if not args.mix_config.exists():
@@ -109,13 +133,16 @@ def train(args: argparse.Namespace) -> Path:
     qlora_cfg = _load_yaml(args.config)
     mix_config = args.mix_config
 
-    env_base_model = os.environ.get("BASE_MODEL")
-    if env_base_model:
-        qlora_cfg["base_model"] = env_base_model
+    prefer_cpu_safe = args.dry_run and not torch.cuda.is_available() and not os.environ.get("BASE_MODEL")
+    qlora_cfg["base_model"] = _resolve_base_model(qlora_cfg, prefer_cpu_safe=prefer_cpu_safe)
 
-    _validate_sources(args.dataset_dir, mix_config)
+    validation_errors = run_cli_validator(dataset_dir)
+    if validation_errors:
+        raise ValueError("\n".join(validation_errors))
 
-    prepared_path = prepare_dataset(args.dataset_dir, mix_config, args.output_root, run_name=args.run_name)
+    _validate_sources(dataset_dir, mix_config)
+
+    prepared_path = prepare_dataset(dataset_dir, mix_config, args.output_root, run_name=args.run_name, strict=args.strict)
     run_dir = prepared_path.parent
 
     tokenizer = AutoTokenizer.from_pretrained(qlora_cfg["base_model"], use_fast=True)
@@ -185,7 +212,7 @@ def parse_args() -> argparse.Namespace:
         "--dataset-dir",
         required=False,
         type=Path,
-        default=os.environ.get("DATASET_DIR"),
+        default=Path(os.environ["DATASET_DIR"]) if os.environ.get("DATASET_DIR") else None,
         help="Path to dataset repository (or set DATASET_DIR)",
     )
     parser.add_argument("--config", type=Path, default=Path("train/configs/qlora.yaml"), help="QLoRA config path")
@@ -193,6 +220,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-root", type=Path, default=Path("runs"), help="Root directory for outputs")
     parser.add_argument("--run-name", type=str, default=os.environ.get("RUN_NAME"), help="Optional run folder name")
     parser.add_argument("--dry-run", action="store_true", help="Load model/tokenizer and tokenize sample without training")
+    parser.add_argument("--strict", action="store_true", help="Validate dataset strictly before mixing")
     return parser.parse_args()
 
 

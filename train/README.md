@@ -30,12 +30,13 @@ Set the dataset location once per shell:
 export DATASET_DIR=/absolute/path/to/blux-ca-dataset
 ```
 
-Validate dataset strictly (uses dataset-provided validator when present):
+Validate dataset strictly (always invokes the dataset repo validator first):
 ```bash
 python train/validate_dataset.py --dataset-dir "$DATASET_DIR" --strict
 ```
 
-Dry-run (loads base model, prepares 5 samples, tokenizes):
+Dry-run (loads base model, prepares 5 samples, tokenizes). On CPU-only hosts the base model automatically falls back to
+`Qwen/Qwen2.5-1.5B-Instruct` unless you override `BASE_MODEL`:
 ```bash
 python train/train_adapter.py --dataset-dir "$DATASET_DIR" --dry-run
 ```
@@ -50,14 +51,15 @@ Full train:
 python train/train_adapter.py --dataset-dir "$DATASET_DIR" --run-name full
 ```
 
-Eval gate (strict):
+Eval gate (strict). Use `--use-stub` when running without a trained adapter or when offline:
 ```bash
-python train/run_eval.py --dataset-dir "$DATASET_DIR" --run runs/<timestamp_or_name> --strict
+python train/run_eval.py --dataset-dir "$DATASET_DIR" --run runs/<timestamp_or_name> --strict --use-stub
 ```
 
 GPU is recommended for smoke/full runs. On CPU-only environments, set `BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct` for the dry-run to conserve memory.
 
 ## Outputs
+- Runs are created under `runs/YYYYMMDD_HHMMSS_<optional_name>/`
 - Prepared dataset + resolved mix: `runs/<timestamp>/prepared_train.jsonl` and `runs/<timestamp>/mix_config_resolved.yaml`
 - Training artifacts: `runs/<timestamp>/adapter/` plus `runs/<timestamp>/training_args.json` and `config_snapshot.yaml`
 - Evaluation report: `runs/<timestamp>/eval_report.md`

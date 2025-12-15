@@ -8,11 +8,38 @@ from __future__ import annotations
 import argparse
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 SYSTEM_PLACEHOLDER = "<SYSTEM_PROMPT_FROM_BLUX_CA>"
+
+
+def run_cli_validator(dataset_dir: Path, files: Optional[List[Path]] = None) -> List[str]:
+    """Invoke the dataset repository's validator script via subprocess."""
+
+    validator_path = dataset_dir / "tools" / "validate_jsonl.py"
+    if not validator_path.exists():
+        return []
+
+    rel_files = []
+    if files:
+        for f in files:
+            if f.is_absolute() and dataset_dir in f.parents:
+                rel_files.append(str(f.relative_to(dataset_dir)))
+            else:
+                rel_files.append(str(f))
+
+    cmd = [sys.executable, str(validator_path), *rel_files]
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=dataset_dir)
+    if result.returncode != 0:
+        output = (result.stdout + "\n" + result.stderr).strip()
+        return [line for line in output.splitlines() if line.strip()] or [
+            f"Validator exited with code {result.returncode}",
+            f"Re-run manually: python {validator_path}",
+        ]
+    return []
 
 
 def _load_external_validator(dataset_dir: Path):
@@ -145,6 +172,14 @@ def validate_dataset(dataset_dir: Path, files: Optional[str] = None, strict: boo
         return 0, [f"No JSONL files found under {data_dir}"]
     if not eval_dir.exists():
         return 0, [f"Eval probes missing: {eval_dir}"]
+
+    missing_files = [path for path in candidates if not path.exists()]
+    if missing_files:
+        return 0, [f"Missing file: {path}" for path in missing_files]
+
+    cli_errors = run_cli_validator(dataset_dir, candidates)
+    if cli_errors:
+        return 0, cli_errors
 
     external_validator = _load_external_validator(dataset_dir)
     if external_validator:
