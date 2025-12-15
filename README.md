@@ -16,6 +16,12 @@ It is the center of gravity for BLUX-Lite (orchestrator), BLUX-Quantum (CLI oper
 
 ---
 
+## 🧠 Adapter Training Loop
+
+The end-to-end adapter training, validation, and evaluation workflow lives in [`train/README.md`](train/README.md). The BLUX-cA dataset is a separate repository and must be provided via `DATASET_DIR` (for example `/workspace/blux-ca-dataset`).
+
+---
+
 ## 🌟 Philosophy
 
 BLUX-cA operates on three foundational principles:

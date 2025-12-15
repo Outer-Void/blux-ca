@@ -39,11 +39,31 @@ def _sample_records(records: List[Dict], target: int, rng: random.Random) -> Lis
     return [rng.choice(records) for _ in range(target)]
 
 
-def prepare_dataset(dataset_dir: Path, mix_config: Path, output_root: Path, run_name: Optional[str] = None) -> Path:
+def prepare_dataset(
+    dataset_dir: Path,
+    mix_config: Path,
+    output_root: Path,
+    run_name: Optional[str] = None,
+    override_max_samples: Optional[int] = None,
+    strict: bool = False,
+) -> Path:
+    """Create a weighted, deterministic training mix.
+
+    If ``override_max_samples`` is provided it takes precedence over the YAML
+    ``max_samples`` value. When ``strict`` is True, data files are validated
+    before mixing.
+    """
+
+    if strict:
+        _, errors = validate_dataset(dataset_dir, strict=True)
+        if errors:
+            joined = "\n".join(errors)
+            raise ValueError(f"Dataset validation failed before mixing:\n{joined}")
+
     config = _load_config(mix_config)
     sources = config.get("sources", [])
     shuffle = bool(config.get("shuffle", True))
-    max_samples = config.get("max_samples")
+    max_samples = override_max_samples if override_max_samples is not None else config.get("max_samples")
     seed = int(config.get("seed", 42))
 
     rng = random.Random(seed)
@@ -51,11 +71,16 @@ def prepare_dataset(dataset_dir: Path, mix_config: Path, output_root: Path, run_
     if total_weight <= 0:
         raise ValueError("Total weight must be positive")
 
-    data_dir = dataset_dir / "data"
     collected: List[Dict] = []
 
     for src in sources:
-        file_path = data_dir / src["file"]
+        raw_path = Path(src["file"])
+        if raw_path.is_absolute():
+            file_path = raw_path
+        elif raw_path.parts and raw_path.parts[0] == "data":
+            file_path = dataset_dir / raw_path
+        else:
+            file_path = dataset_dir / "data" / raw_path
         if not file_path.exists():
             raise FileNotFoundError(f"Missing dataset file: {file_path}")
         weight = float(src.get("weight", 1.0))
@@ -84,6 +109,19 @@ def prepare_dataset(dataset_dir: Path, mix_config: Path, output_root: Path, run_
                     system_msgs[0]["content"] = SYSTEM_PLACEHOLDER
             handle.write(json.dumps(record, ensure_ascii=False) + "\n")
 
+    resolved_mix_path = run_dir / "mix_config_resolved.yaml"
+    with resolved_mix_path.open("w", encoding="utf-8") as handle:
+        yaml.safe_dump(
+            {
+                **config,
+                "max_samples": max_samples,
+                "seed": seed,
+                "dataset_dir": str(dataset_dir),
+            },
+            handle,
+            sort_keys=False,
+        )
+
     return output_path
 
 
@@ -93,6 +131,7 @@ def main() -> int:
     parser.add_argument("--mix-config", type=Path, default=Path("train/configs/dataset_mix.yaml"), help="Mixing config YAML")
     parser.add_argument("--output-root", type=Path, default=Path("runs"), help="Root directory for run outputs")
     parser.add_argument("--run-name", type=str, default=None, help="Optional run folder name (otherwise timestamp)")
+    parser.add_argument("--max-samples", type=int, default=None, help="Override max_samples in config for quick smoke runs")
     parser.add_argument("--strict", action="store_true", help="Validate input files strictly before mixing")
     args = parser.parse_args()
 
@@ -100,16 +139,14 @@ def main() -> int:
         print(f"Dataset directory not found: {args.dataset_dir}")
         return 1
 
-    if args.strict:
-        _, errors = validate_dataset(args.dataset_dir, strict=True)
-        if errors:
-            print("Validation errors:")
-            for err in errors:
-                print(f"- {err}")
-            return 1
-        print("Strict validation passed")
-
-    output_path = prepare_dataset(args.dataset_dir, args.mix_config, args.output_root, run_name=args.run_name)
+    output_path = prepare_dataset(
+        args.dataset_dir,
+        args.mix_config,
+        args.output_root,
+        run_name=args.run_name,
+        override_max_samples=args.max_samples,
+        strict=args.strict,
+    )
     print(f"Prepared dataset written to {output_path}")
     return 0
 
