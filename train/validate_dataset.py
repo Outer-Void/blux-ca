@@ -6,11 +6,43 @@ contain the BLUX-cA system placeholder.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
+import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 SYSTEM_PLACEHOLDER = "<SYSTEM_PROMPT_FROM_BLUX_CA>"
+
+
+def _load_external_validator(dataset_dir: Path):
+    """Load dataset-provided validator if available.
+
+    Returns a callable with signature List[Path] -> Dict[Path, List[str]]
+    mapping file paths to lists of errors. If not available, returns None.
+    """
+
+    validator_path = dataset_dir / "tools" / "validate_jsonl.py"
+    if not validator_path.exists():
+        return None
+
+    spec = importlib.util.spec_from_file_location("blux_ca_dataset_validator", validator_path)
+    if not spec or not spec.loader:  # pragma: no cover - defensive
+        return None
+
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["blux_ca_dataset_validator"] = module
+    spec.loader.exec_module(module)
+
+    def validate(files: List[Path]) -> Dict[Path, List[str]]:
+        error_map: Dict[Path, List[str]] = {}
+        for file_path in files:
+            errs = getattr(module, "validate_file")(file_path)
+            if errs:
+                error_map[file_path] = errs
+        return error_map
+
+    return validate
 
 
 def _iter_jsonl(path: Path) -> Tuple[int, Dict]:
@@ -102,6 +134,7 @@ def validate_dataset(dataset_dir: Path, files: Optional[str] = None, strict: boo
         return 0, [f"Dataset directory not found: {dataset_dir}"]
 
     data_dir = dataset_dir / "data"
+    eval_dir = dataset_dir / "eval"
     candidates: List[Path]
     if files:
         candidates = [data_dir / f for f in files.split(",")]
@@ -110,8 +143,18 @@ def validate_dataset(dataset_dir: Path, files: Optional[str] = None, strict: boo
 
     if not candidates:
         return 0, [f"No JSONL files found under {data_dir}"]
+    if not eval_dir.exists():
+        return 0, [f"Eval probes missing: {eval_dir}"]
 
-    overall_errors: List[str] = []
+    external_validator = _load_external_validator(dataset_dir)
+    if external_validator:
+        print("Using dataset-supplied validator")
+        errors_map = external_validator(candidates)
+        overall_errors = [f"{path}: {err}" for path, errs in errors_map.items() for err in errs]
+        total_lines = sum(1 for path in candidates for _ in _iter_jsonl(path))
+        return total_lines, overall_errors
+
+    overall_errors = []
     total_lines = 0
     for path in candidates:
         if not path.exists():
