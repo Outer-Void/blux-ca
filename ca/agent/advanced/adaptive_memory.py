@@ -39,23 +39,26 @@ class AdaptiveMemory:
             return [
                 {key: data}
                 for key, data in self.memory_store.items()
-                if tag in data["tags"]
-            ]e_path="memory_checkpoint.json"):
+                if tag in data['tags']
+            ]
+
+    def save_checkpoint(self, file_path='memory_checkpoint.json'):
         with self.lock:
-            with open(file_path, "w") as f:
+            with open(file_path, 'w') as f:
                 json.dump(self.memory_store, f, indent=2)
 
-    def load_checkpoint(self, file_path="memory_checkpoint.json"):
+    def load_checkpoint(self, file_path='memory_checkpoint.json'):
         try:
-            with open(file_path, "r") as f:
-                with self.lock:
+            with self.lock:
+                with open(file_path, 'r') as f:
                     self.memory_store = json.load(f)
         except FileNotFoundError:
-            self.memory_store = {}     """
-        Applies decay to all memory entries to reduce relevance of older/unimportant items.
-        """
-        for entry in self.memory_store:
-            entry["weight"] *= (1 - self.decay_rate)
+            self.memory_store = {}
+
+    def apply_decay(self):
+        """Applies decay to all memory entries to reduce relevance of older/unimportant items."""
+        for entry in self.memory_store.values():
+            entry['weight'] *= (1 - self.decay_rate)
 
     def summarize_memory(self):
         """

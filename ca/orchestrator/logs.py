@@ -38,8 +38,7 @@ class AuditLogger:
         entry["signature"] = sig.get("sig")
         with open(self.path, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry))
-            f.write("
-")
+            f.write("\n")
 
 
 __all__ = ["AuditLogger"]

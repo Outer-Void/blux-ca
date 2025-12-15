@@ -1,3 +1,14 @@
+---
+library_name: transformers
+license: apache-2.0
+language:
+  - en
+tags:
+  - blux-ca
+  - adapter
+  - clarity-agent
+---
+
 # BLUX-cA – Clarity Agent
 
 <p align="center">
