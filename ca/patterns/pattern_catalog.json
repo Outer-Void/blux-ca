@@ -1,0 +1,103 @@
+{
+  "catalog_id": "blux-ca.patterns.v1",
+  "patterns": [
+    {
+      "pattern_id": "illusion.tool_claim",
+      "marker_id": "illusion.tool_access",
+      "category": "illusion",
+      "reason_codes": ["illusion.external_access_claim"],
+      "description": "Claims direct access to external tools or systems."
+    },
+    {
+      "pattern_id": "illusion.verification_claim",
+      "marker_id": "illusion.external_verification",
+      "category": "illusion",
+      "reason_codes": ["illusion.external_verification_claim"],
+      "description": "Claims verification against external sources."
+    },
+    {
+      "pattern_id": "authority.professional_claim",
+      "marker_id": "authority.role_claim",
+      "category": "authority_leakage",
+      "reason_codes": ["authority.professional_role"],
+      "description": "Claims professional authority or credentials."
+    },
+    {
+      "pattern_id": "authority.guarantee_claim",
+      "marker_id": "authority.outcome_guarantee",
+      "category": "authority_leakage",
+      "reason_codes": ["authority.outcome_guarantee"],
+      "description": "Claims authority to approve or guarantee outcomes."
+    },
+    {
+      "pattern_id": "contradiction.internal",
+      "marker_id": "contradiction.self_reported",
+      "category": "contradiction",
+      "reason_codes": ["contradiction.internal"],
+      "description": "Mentions internal inconsistency or contradiction."
+    },
+    {
+      "pattern_id": "contradiction.temporal",
+      "marker_id": "contradiction.temporal_reference",
+      "category": "contradiction",
+      "reason_codes": ["contradiction.temporal"],
+      "description": "References temporal inconsistency with prior statements."
+    },
+    {
+      "pattern_id": "contradiction.policy",
+      "marker_id": "contradiction.policy_reference",
+      "category": "contradiction",
+      "reason_codes": ["contradiction.policy"],
+      "description": "References a policy conflict or boundary."
+    },
+    {
+      "pattern_id": "contradiction.factual",
+      "marker_id": "contradiction.factual_reference",
+      "category": "contradiction",
+      "reason_codes": ["contradiction.factual"],
+      "description": "References a factual contradiction."
+    },
+    {
+      "pattern_id": "manipulation.override",
+      "marker_id": "manipulation.override_instructions",
+      "category": "manipulation",
+      "reason_codes": ["manipulation.override"],
+      "description": "Attempts to override higher-priority instructions."
+    },
+    {
+      "pattern_id": "manipulation.urgency",
+      "marker_id": "manipulation.urgency_pressure",
+      "category": "manipulation",
+      "reason_codes": ["manipulation.urgency"],
+      "description": "Uses urgency to pressure a response."
+    },
+    {
+      "pattern_id": "manipulation.coercion",
+      "marker_id": "manipulation.coercive_language",
+      "category": "manipulation",
+      "reason_codes": ["manipulation.coercion"],
+      "description": "Uses coercive or ultimatum language."
+    },
+    {
+      "pattern_id": "manipulation.guilt",
+      "marker_id": "manipulation.guilt_trip",
+      "category": "manipulation",
+      "reason_codes": ["manipulation.guilt"],
+      "description": "Applies guilt to influence behavior."
+    },
+    {
+      "pattern_id": "manipulation.intimidation",
+      "marker_id": "manipulation.intimidation",
+      "category": "manipulation",
+      "reason_codes": ["manipulation.intimidation"],
+      "description": "Uses intimidation or threats to influence behavior."
+    },
+    {
+      "pattern_id": "uncertainty.missing_bounds",
+      "marker_id": "uncertainty.no_bounds",
+      "category": "missing_uncertainty_bounds",
+      "reason_codes": ["uncertainty.missing_bounds"],
+      "description": "Certainty claims lack uncertainty bounds."
+    }
+  ]
+}

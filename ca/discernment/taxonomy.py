@@ -8,9 +8,10 @@ from typing import Sequence
 
 
 class PatternCategory(str, Enum):
-    ILLUSION = "illusion_taxonomy"
+    ILLUSION = "illusion"
     AUTHORITY_LEAKAGE = "authority_leakage"
-    MANIPULATION = "manipulation_attempt"
+    CONTRADICTION = "contradiction"
+    MANIPULATION = "manipulation"
     MISSING_UNCERTAINTY = "missing_uncertainty_bounds"
 
 
@@ -22,12 +23,27 @@ class Severity(str, Enum):
 
 
 @dataclass(frozen=True)
+class EvidenceRef:
+    source: str
+    start: int
+    end: int
+    text: str
+
+
+@dataclass(frozen=True)
 class PatternDetection:
+    pattern_id: str
+    marker_id: str
     category: PatternCategory
-    pattern: str
     severity: Severity
-    evidence: Sequence[str]
+    reason_codes: Sequence[str]
+    evidence_refs: Sequence[EvidenceRef]
     description: str
 
 
-__all__ = ["PatternCategory", "Severity", "PatternDetection"]
+__all__ = [
+    "EvidenceRef",
+    "PatternCategory",
+    "Severity",
+    "PatternDetection",
+]

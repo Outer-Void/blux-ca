@@ -1,28 +1,40 @@
 # DISCERNMENT
 
 BLUX-cA operates as a discernment-only engine. It analyzes envelopes and user intent,
-detects pattern risks, and produces structured **Discernment Reports** with explicit
-uncertainty flags and handoff options — without executing tools or invoking external
-models.
+detects pattern risks, and produces structured **discernment_report** artifacts with explicit
+uncertainty flags and handoff options — without running tools or invoking external systems.
 
 ## Core guarantees
 
-- **Discernment only**: no tool execution, no command running, no external model calls.
+- **Discernment only**: no tool running, no command dispatch, no external model calls.
 - **Disagreement allowed**: posture scoring can explicitly disagree when patterns
   indicate risky certainty or authority leakage.
 - **Deterministic outputs**: rule-based detectors provide consistent results for the
   same inputs.
 - **Uncertainty forward**: explicit uncertainty flags are included in the report for
   downstream handoff decisions.
-- **Hybrid memory policy**:
-  - **User mode**: stateless by default; memory bundles are treated as input and not
-    stored.
-  - **Creator/Operator mode**: limited, explicit, auditable, and revocable memory is
-    permitted.
+- **Memory policy**:
+  - **Default**: stateless.
+  - **Client-provided memory**: allowed only when supplied in the input and recorded in
+    `report.memory`.
+  - **Creator vault**: permitted only when explicitly referenced via the
+    `creator_vault` input/output field and recorded in `report.memory`.
 
-## CLI workflows
+## Non-capabilities
 
-- `blux-ca analyze <envelope.json>`: detect patterns and score posture.
-- `blux-ca score <text>`: score posture for raw text input.
-- `blux-ca report <envelope.json> --out report.json`: emit a full Discernment Report
-  and append an audit trail entry.
+- **No execution**
+- **No enforcement**
+- **No tokens**
+- **No routing/controller role**
+- **No doctrine engine**
+
+## Output generator
+
+`generate_discernment_report(input_envelope, client_memory=None, creator_vault=None)` is the
+single report generator. Output conforms to:
+
+- `blux://contracts/discernment_report.schema.json`
+
+## CLI workflow
+
+- `blux-ca report <envelope.json> --out report.json`: emit a full discernment_report artifact.

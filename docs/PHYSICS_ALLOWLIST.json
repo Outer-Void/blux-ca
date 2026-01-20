@@ -1,4 +1,7 @@
 {
   "execution_patterns": [],
-  "guard_reg_lite": []
+  "control_plane": [],
+  "tokens": [],
+  "doctrine": [],
+  "contracts": []
 }

@@ -1,19 +1,5 @@
-from ca.core.audit import AuditLog
-from ca.core.compass import CompassAxis, IntentCompass
-from ca.core.constitution import ConstitutionEngine
-from ca.core.discernment import DiscernmentCompass, IntentType
-from ca.core.heart import HeartEngine
-from ca.core.memory import ConsentMemory
-from ca.core import intervention
+"""Compatibility exports for BLUX-cA."""
 
-__all__ = [
-    "AuditLog",
-    "CompassAxis",
-    "IntentCompass",
-    "ConstitutionEngine",
-    "DiscernmentCompass",
-    "IntentType",
-    "HeartEngine",
-    "ConsentMemory",
-    "intervention",
-]
+from ca.report import generate_discernment_report
+
+__all__ = ["generate_discernment_report"]

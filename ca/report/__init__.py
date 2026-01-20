@@ -1,5 +1,5 @@
-"""Discernment report builder package."""
+"""Discernment report exports."""
 
-from .builder import DiscernmentReport, EnvelopeInput, build_report
+from .generator import EnvelopeInput, generate_discernment_report
 
-__all__ = ["DiscernmentReport", "EnvelopeInput", "build_report"]
+__all__ = ["EnvelopeInput", "generate_discernment_report"]
