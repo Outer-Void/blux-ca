@@ -1,9 +1,9 @@
 # DISCERNMENT
 
 BLUX-cA operates as a discernment-only engine. It analyzes envelopes and user intent,
-detects pattern risks, and produces structured Discernment Reports without executing
-tools or invoking external models. The system can disagree with inputs when uncertainty
-is missing or manipulation attempts are detected.
+detects pattern risks, and produces structured **Discernment Reports** with explicit
+uncertainty flags and handoff options — without executing tools or invoking external
+models.
 
 ## Core guarantees
 
@@ -12,6 +12,8 @@ is missing or manipulation attempts are detected.
   indicate risky certainty or authority leakage.
 - **Deterministic outputs**: rule-based detectors provide consistent results for the
   same inputs.
+- **Uncertainty forward**: explicit uncertainty flags are included in the report for
+  downstream handoff decisions.
 - **Hybrid memory policy**:
   - **User mode**: stateless by default; memory bundles are treated as input and not
     stored.

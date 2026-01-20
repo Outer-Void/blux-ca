@@ -1,0 +1,46 @@
+{
+  "$schema": "blux://contracts/discernment_report.schema.json",
+  "trace_id": "fixture-9f1c2a",
+  "mode": "user",
+  "user_intent": "summary",
+  "input": {
+    "text": "I am certain this will work. Please summarize the risks.",
+    "memory_bundle": null,
+    "metadata": {
+      "source": "fixture"
+    }
+  },
+  "patterns": [
+    {
+      "category": "missing_uncertainty_bounds",
+      "pattern": "certain_without_bounds",
+      "severity": "medium",
+      "evidence": [
+        "I am certain"
+      ],
+      "description": "Signals certainty without explicit uncertainty bounds."
+    }
+  ],
+  "posture": {
+    "score": 72,
+    "level": "high",
+    "stance": "disagree",
+    "explanations": [
+      "Certainty without bounds increases epistemic risk.",
+      "Recommend explicit uncertainty or caveats."
+    ]
+  },
+  "recommendation": {
+    "next_step": "handoff_review",
+    "rationale": "Elevated risk patterns detected; route for downstream review."
+  },
+  "constraints": {
+    "non_executing": true,
+    "can_disagree": true
+  },
+  "memory_policy": {
+    "mode": "user",
+    "stateful": false,
+    "notes": "User mode is stateless; memory bundles are treated as input only."
+  }
+}

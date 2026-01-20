@@ -1,0 +1,11 @@
+{
+  "$schema": "blux://contracts/envelope.schema.json",
+  "trace_id": "fixture-9f1c2a",
+  "mode": "user",
+  "user_intent": "summary",
+  "text": "I am certain this will work. Please summarize the risks.",
+  "memory_bundle": null,
+  "metadata": {
+    "source": "fixture"
+  }
+}
