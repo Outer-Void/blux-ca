@@ -12,9 +12,12 @@ from rich.console import Console
 from rich.table import Table
 from rich.traceback import install
 
+from ca.catalog import CatalogRegistry
+from ca.discernment.engine import analyze_text
+from ca.posture.scoring import score_posture
+from ca.report.builder import build_report
 from ca.runtime.agent import GrandUniverse
 from ca.runtime.audit import AuditLedger
-from ca.catalog import CatalogRegistry
 
 install()
 app = typer.Typer(add_completion=False, help="BLUX-cA Grand Universe CLI")
@@ -93,6 +96,42 @@ def audit_view(tail: int = typer.Option(5, help="Tail last N audit rows")) -> No
     for row in rows:
         table.add_row(row.trace_id, row.decision, str(row.risk), row.summary)
     console.print(table)
+
+
+def _load_json(path: Path) -> dict:
+    if not path.exists():
+        raise typer.BadParameter(f"Envelope not found at {path}")
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+@app.command()
+def analyze(envelope: Path = typer.Argument(..., help="Envelope JSON payload")) -> None:
+    """Analyze an envelope and emit discernment patterns + posture score."""
+    payload = _load_json(envelope)
+    report = build_report(payload)
+    console.print_json(json.dumps(report.to_dict(), default=str))
+
+
+@app.command()
+def score(text: str = typer.Argument(..., help="Text to score for discernment posture")) -> None:
+    """Score a raw text input for discernment posture only."""
+    analysis = analyze_text(text)
+    posture = score_posture(analysis.patterns)
+    console.print_json(json.dumps(posture.__dict__, default=str))
+
+
+@app.command()
+def report(
+    envelope: Path = typer.Argument(..., help="Envelope JSON payload"),
+    out: Path = typer.Option(..., help="Output path for report JSON"),
+) -> None:
+    """Build a Discernment Report and write it to disk."""
+    payload = _load_json(envelope)
+    report_data = build_report(payload).to_dict()
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(report_data, indent=2), encoding="utf-8")
+    console.print(f"[green]OK[/] Report written to {out}")
 
 
 @app.command()
