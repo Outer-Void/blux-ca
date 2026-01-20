@@ -22,21 +22,20 @@ tags:
 > **Discernment-only cognitive core for pattern recognition, epistemic posture scoring, and uncertainty signaling.**
 
 BLUX-cA is the discernment-only kernel of the BLUX ecosystem. It analyzes inputs to produce
-structured **discernment reports** and **posture scores**, along with explicit **uncertainty
-flags** and **handoff options** when risk patterns are detected. It does not execute tools,
-run code, or enforce policy.
+structured **discernment_report artifacts** with epistemic posture metadata, explicit
+uncertainty flags, and handoff options. It can disagree by producing a report; it does not
+choose actions for downstream systems.
 
 ---
 
 ## ✅ What BLUX-cA produces
 
 - **Discernment reports** (JSON) containing:
-  - detected patterns and evidence
-  - epistemic posture scoring (stance + confidence)
+  - detected patterns and evidence refs
+  - epistemic posture metadata (score, band, reason codes)
   - uncertainty flags
   - handoff options for downstream systems
-- **Posture scoring** for raw text or envelope inputs
-- **Deterministic, auditable outputs** for the same inputs
+- **Deterministic outputs** for the same inputs
 
 See the fixture examples in [`fixtures/`](fixtures/) for a concrete report and envelope shape.
 
@@ -44,42 +43,38 @@ See the fixture examples in [`fixtures/`](fixtures/) for a concrete report and e
 
 ## 🚫 What BLUX-cA does NOT do
 
-- **No tool execution** (no subprocess, shelling out, or code execution)
-- **No enforcement / guardrail authority** (discernment only)
-- **No token issuance or security orchestration**
-- **No Guard/Reg/Lite responsibilities**
+- **No execution** (no tool running or system access)
+- **No enforcement role or policy authority**
+- **No tokens** (no credential issuance or verification)
+- **No routing/controller role**
+- **No doctrine engine logic embedded**
 
 ---
 
 ## 🧭 Discernment-only guarantees
 
 - **Non-executing:** analysis is strictly read-only on the provided input payloads.
-- **Disagreement allowed:** posture scoring can explicitly disagree when uncertainty is missing or
-  authority leakage is detected.
+- **Disagreement allowed:** posture scoring can surface disagreement when uncertainty is missing
+  or authority leakage is detected.
 - **Uncertainty forward:** explicit uncertainty flags are included in the report for safe handoff.
 
 More details live in [`docs/DISCERNMENT.md`](docs/DISCERNMENT.md).
 
 ---
 
-## ⚡ CLI workflows
+## ⚡ CLI workflow
 
 ```
-blux-ca analyze <envelope.json>
-blux-ca score <text>
 blux-ca report <envelope.json> --out report.json
 ```
-
-Reports are append-only audited as local artifacts under the configured audit path.
 
 ---
 
 ## 📦 Repository layout (high level)
 
 ```
-ca/               # Discernment core + report builders
+ca/               # Discernment core + report generator
 blux_ca/          # Packaging surface
-docs/             # Documentation
 fixtures/         # Example reports/envelopes
 ```
 
@@ -91,4 +86,3 @@ This repo references contracts **by $id only** and does not embed or copy schema
 
 - `blux://contracts/discernment_report.schema.json`
 - `blux://contracts/envelope.schema.json`
-

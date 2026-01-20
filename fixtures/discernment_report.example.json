@@ -10,37 +10,93 @@
       "source": "fixture"
     }
   },
-  "patterns": [
+  "memory": {
+    "mode": "none",
+    "consent": {
+      "client_memory": true,
+      "creator_vault": true
+    },
+    "client_provided": {
+      "present": false,
+      "bundle_ref": null,
+      "client_memory_ref": null
+    },
+    "creator_vault": {
+      "present": false,
+      "vault_ref": null
+    }
+  },
+  "signals": [
     {
+      "pattern_id": "uncertainty.missing_bounds",
+      "marker_id": "uncertainty.no_bounds",
       "category": "missing_uncertainty_bounds",
-      "pattern": "certain_without_bounds",
       "severity": "medium",
-      "evidence": [
-        "I am certain"
+      "reason_codes": [
+        "uncertainty.missing_bounds"
       ],
-      "description": "Signals certainty without explicit uncertainty bounds."
+      "evidence_refs": [
+        {
+          "source": "input.text",
+          "start": 0,
+          "end": 12,
+          "text": "I am certain"
+        }
+      ],
+      "description": "Certainty claims lack uncertainty bounds."
     }
   ],
   "posture": {
-    "score": 72,
-    "level": "high",
-    "stance": "disagree",
-    "explanations": [
-      "Certainty without bounds increases epistemic risk.",
-      "Recommend explicit uncertainty or caveats."
+    "score": 85,
+    "band": "low",
+    "reason_codes": [
+      "uncertainty.missing_bounds"
     ]
   },
-  "recommendation": {
-    "next_step": "handoff_review",
-    "rationale": "Elevated risk patterns detected; route for downstream review."
+  "uncertainty": {
+    "flags": [
+      {
+        "flag_id": "missing_uncertainty_bounds",
+        "reason_codes": [
+          "uncertainty.missing_bounds"
+        ],
+        "evidence_refs": [
+          {
+            "source": "input.text",
+            "start": 0,
+            "end": 12,
+            "text": "I am certain"
+          }
+        ]
+      }
+    ]
   },
+  "handoff": {
+    "recommended": "handoff_review",
+    "options": [
+      {
+        "option_id": "monitor",
+        "priority": "low",
+        "reason_codes": []
+      },
+      {
+        "option_id": "handoff_review",
+        "priority": "standard",
+        "reason_codes": [
+          "uncertainty.missing_bounds"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    {
+      "type": "evidence_summary",
+      "text": "Detected 1 signal markers with 1 evidence spans."
+    }
+  ],
   "constraints": {
+    "discernment_only": true,
     "non_executing": true,
-    "can_disagree": true
-  },
-  "memory_policy": {
-    "mode": "user",
-    "stateful": false,
-    "notes": "User mode is stateless; memory bundles are treated as input only."
+    "no_enforcement": true
   }
 }

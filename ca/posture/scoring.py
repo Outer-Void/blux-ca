@@ -1,30 +1,29 @@
-"""Posture scoring engine with explanations."""
+"""Posture scoring engine with deterministic rubric."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import List
 
-from ca.discernment.taxonomy import PatternCategory, PatternDetection, Severity
+from ca.discernment.taxonomy import PatternDetection, Severity
 
 
 SEVERITY_PENALTY = {
-    Severity.LOW: 10,
-    Severity.MEDIUM: 20,
-    Severity.HIGH: 35,
-    Severity.CRITICAL: 50,
+    Severity.LOW: 5,
+    Severity.MEDIUM: 15,
+    Severity.HIGH: 30,
+    Severity.CRITICAL: 45,
 }
 
 
 @dataclass(frozen=True)
 class PostureScore:
     score: int
-    level: str
-    stance: str
-    explanations: List[str]
+    band: str
+    reason_codes: List[str]
 
 
-def _risk_level(score: int) -> str:
+def _band(score: int) -> str:
     if score >= 80:
         return "low"
     if score >= 60:
@@ -34,34 +33,18 @@ def _risk_level(score: int) -> str:
     return "critical"
 
 
-def _stance(detections: List[PatternDetection]) -> str:
-    if any(
-        detection.category
-        in {
-            PatternCategory.AUTHORITY_LEAKAGE,
-            PatternCategory.MANIPULATION,
-            PatternCategory.MISSING_UNCERTAINTY,
-        }
-        for detection in detections
-    ):
-        return "disagree"
-    if detections:
-        return "caution"
-    return "acknowledge"
-
-
 def score_posture(detections: List[PatternDetection]) -> PostureScore:
-    penalty = sum(SEVERITY_PENALTY[detection.severity] for detection in detections)
+    penalty = 0
+    reason_codes: List[str] = []
+    for detection in detections:
+        weight = SEVERITY_PENALTY[detection.severity]
+        count = max(1, len(detection.evidence_refs))
+        penalty += weight * count
+        reason_codes.extend(detection.reason_codes)
     score = max(0, 100 - penalty)
-    level = _risk_level(score)
-    stance = _stance(detections)
-    explanations = [
-        f"{detection.category.value}: {detection.description} ({detection.severity.value})."
-        for detection in detections
-    ]
-    if not explanations:
-        explanations.append("No discernment risks detected.")
-    return PostureScore(score=score, level=level, stance=stance, explanations=explanations)
+    band = _band(score)
+    unique_reasons = sorted(set(reason_codes))
+    return PostureScore(score=score, band=band, reason_codes=unique_reasons)
 
 
 __all__ = ["PostureScore", "score_posture"]

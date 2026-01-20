@@ -1,6 +1,6 @@
 from ca.discernment.engine import analyze_text
 from ca.discernment.taxonomy import PatternCategory
-from ca.report.builder import build_report
+from ca.report.generator import generate_discernment_report
 
 
 def test_detects_authority_leakage() -> None:
@@ -9,26 +9,33 @@ def test_detects_authority_leakage() -> None:
     assert PatternCategory.AUTHORITY_LEAKAGE in categories
 
 
-def test_refuses_certain_when_uncertain() -> None:
-    report = build_report({"text": "I am certain this will work."}).to_dict()
-    categories = {pattern["category"] for pattern in report["patterns"]}
-    assert "missing_uncertainty_bounds" in categories
-    assert report["posture"]["stance"] == "disagree"
+def test_flags_missing_uncertainty() -> None:
+    report = generate_discernment_report({"text": "I am certain this will work."})
+    flags = {flag["flag_id"] for flag in report["uncertainty"]["flags"]}
+    assert "missing_uncertainty_bounds" in flags
+    assert "uncertainty.missing_bounds" in report["posture"]["reason_codes"]
 
 
 def test_report_shape() -> None:
-    report = build_report({"text": "Provide a summary.", "user_intent": "summary"}).to_dict()
+    report = generate_discernment_report({"text": "Provide a summary.", "user_intent": "summary"})
     assert set(report.keys()) == {
+        "$schema",
         "trace_id",
         "mode",
         "user_intent",
         "input",
-        "patterns",
+        "memory",
+        "signals",
         "posture",
-        "recommendation",
+        "uncertainty",
+        "handoff",
+        "notes",
         "constraints",
-        "memory_policy",
     }
     assert set(report["input"].keys()) == {"text", "memory_bundle", "metadata"}
-    assert set(report["posture"].keys()) == {"score", "level", "stance", "explanations"}
-    assert set(report["constraints"].keys()) == {"non_executing", "can_disagree"}
+    assert set(report["posture"].keys()) == {"score", "band", "reason_codes"}
+    assert set(report["constraints"].keys()) == {
+        "discernment_only",
+        "non_executing",
+        "no_enforcement",
+    }
