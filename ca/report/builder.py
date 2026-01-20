@@ -104,12 +104,12 @@ def _recommendation(posture: PostureScore, detections: list[PatternDetection]) -
     flagged = {detection.category.value for detection in detections}
     if detections or posture.level in {"high", "critical"} or flagged.intersection(critical_categories):
         return {
-            "next_step": "handoff_to_guard",
-            "rationale": "Elevated risk patterns detected; route to Guard for review.",
+            "next_step": "handoff_review",
+            "rationale": "Elevated risk patterns detected; route for downstream review.",
         }
     return {
         "next_step": "monitor",
-        "rationale": "No critical risks detected; continue with guardrails.",
+        "rationale": "No critical risks detected; continue monitoring.",
     }
 
 

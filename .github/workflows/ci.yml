@@ -22,4 +22,4 @@ jobs:
           ruff blux_ca
           mypy blux_ca
       - name: Tests
-        run: pytest tests/ca
+        run: pytest
