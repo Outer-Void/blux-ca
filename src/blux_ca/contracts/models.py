@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 
-MODEL_VERSION = "cA-0.1-mini"
+MODEL_VERSION = "cA-0.1"
 CONTRACT_VERSION = "0.1"
 
 
