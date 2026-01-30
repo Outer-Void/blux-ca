@@ -1,0 +1,8 @@
+{
+  "contract_version": "0.1",
+  "goal_id": "hello",
+  "intent": "Hello from cA-0.1-mini",
+  "constraints": ["fast", "deterministic"],
+  "acceptance": {"note": "ignored"},
+  "request": {"foo": "bar"}
+}

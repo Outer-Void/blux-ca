@@ -1,0 +1,7 @@
+{
+  "contract_version": "0.1",
+  "goal_id": "infeasible",
+  "intent": "Do the impossible",
+  "constraints": ["INFEASIBLE", "conflict"],
+  "acceptance": {"note": "ignored"}
+}

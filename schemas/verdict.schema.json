@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "model_version", "status", "checks", "run"],
+  "properties": {
+    "contract_version": {"type": "string", "const": "0.1"},
+    "model_version": {"type": "string", "const": "cA-0.1-mini"},
+    "status": {"type": "string", "enum": ["PASS", "FAIL", "INFEASIBLE"]},
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "message"],
+        "properties": {
+          "id": {"type": "string"},
+          "status": {"type": "string", "enum": ["PASS", "FAIL"]},
+          "message": {"type": "string"}
+        }
+      }
+    },
+    "delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["message", "minimal_change"],
+      "properties": {
+        "message": {"type": "string"},
+        "minimal_change": {"type": "string"}
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_hash"],
+      "properties": {
+        "input_hash": {"type": "string"}
+      }
+    }
+  }
+}
