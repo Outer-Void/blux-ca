@@ -17,9 +17,9 @@
     }
   ],
   "contract_version": "0.1",
-  "model_version": "cA-0.1-mini",
+  "model_version": "cA-0.1",
   "run": {
-    "input_hash": "b2a3c37229f6e107da68b63bfd94711a822f2ceeea4f67c2b658c73198046277"
+    "input_hash": "86e8be1da7d62a8c343063b8776907a7822d79f44521a0ee38545c0ce1e76095"
   },
   "status": "PASS"
 }
