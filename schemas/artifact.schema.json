@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "model_version", "type", "language", "files", "run"],
+  "properties": {
+    "contract_version": {"type": "string", "const": "0.1"},
+    "model_version": {"type": "string", "const": "cA-0.1-mini"},
+    "type": {"type": "string", "enum": ["code", "config", "diff"]},
+    "language": {"type": "string"},
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "content"],
+        "properties": {
+          "path": {"type": "string"},
+          "content": {"type": "string"}
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input_hash"],
+      "properties": {
+        "input_hash": {"type": "string"}
+      }
+    }
+  }
+}
