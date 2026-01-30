@@ -1,0 +1,25 @@
+{
+  "checks": [
+    {
+      "id": "plan",
+      "message": "Generate minimal artifact satisfying intent",
+      "status": "PASS"
+    },
+    {
+      "id": "schema:artifact.schema.json",
+      "message": "ok",
+      "status": "PASS"
+    },
+    {
+      "id": "schema:verdict.schema.json",
+      "message": "ok",
+      "status": "PASS"
+    }
+  ],
+  "contract_version": "0.1",
+  "model_version": "cA-0.1-mini",
+  "run": {
+    "input_hash": "b2a3c37229f6e107da68b63bfd94711a822f2ceeea4f67c2b658c73198046277"
+  },
+  "status": "PASS"
+}
