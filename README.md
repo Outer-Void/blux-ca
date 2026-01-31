@@ -1,7 +1,7 @@
 # blux-ca
 
-cA-0.1 baseline reference (Phase 2) is a minimal, deterministic contract engine. It produces
-structured artifacts and verdicts with a fixed contract schema.
+cA-0.1 baseline is a minimal, deterministic contract engine. It produces structured artifacts and
+verdicts with a fixed contract schema.
 
 ## CLI
 
@@ -17,6 +17,9 @@ This writes `out/artifact.json` and `out/verdict.json`.
 - Deterministic outputs for identical inputs (stable hashing + ordering).
 - Drift guard scans for banned expansion phrases and fails when they appear.
 - Single-pass run: produces an artifact and verdict, then stops (no retries or expansion loop).
+
+See `docs/CONTRACT.md`, `docs/DETERMINISM.md`, and `docs/VALIDATION.md` for the baseline contract,
+determinism rules, and validation behavior.
 
 ## Platform setup
 
