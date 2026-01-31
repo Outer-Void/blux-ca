@@ -2,15 +2,18 @@ from __future__ import annotations
 
 from blux_ca.contracts.models import Artifact, FileEntry, GoalSpec, PatchEntry, RunHeader
 from blux_ca.core.patches import generate_unified_diff
-
-MODEL_VERSION = "cA-0.4"
-CONTRACT_VERSION = "0.1"
+from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
 
 
-def build_artifact(goal: GoalSpec, input_hash: str) -> Artifact:
+def build_artifact(
+    goal: GoalSpec,
+    input_hash: str,
+    policy_pack_id: str,
+    policy_pack_version: str,
+) -> Artifact:
     request = goal.request or {}
     artifact_type = request.get("artifact_type") or request.get("type") or "code"
-    intent = goal.intent.strip() or "Hello from cA-0.4"
+    intent = goal.intent.strip() or "Hello from cA-1.0-pro"
     language = request.get("language") or "python"
 
     if "patches" in request or artifact_type == "patch_bundle":
@@ -39,6 +42,9 @@ def build_artifact(goal: GoalSpec, input_hash: str) -> Artifact:
         return Artifact(
             contract_version=CONTRACT_VERSION,
             model_version=MODEL_VERSION,
+            schema_version=SCHEMA_VERSION,
+            policy_pack_id=policy_pack_id,
+            policy_pack_version=policy_pack_version,
             type="patch_bundle",
             language=language,
             run=RunHeader(input_hash=input_hash),
@@ -61,6 +67,9 @@ def build_artifact(goal: GoalSpec, input_hash: str) -> Artifact:
     return Artifact(
         contract_version=CONTRACT_VERSION,
         model_version=MODEL_VERSION,
+        schema_version=SCHEMA_VERSION,
+        policy_pack_id=policy_pack_id,
+        policy_pack_version=policy_pack_version,
         type=artifact_type,
         language=language,
         run=RunHeader(input_hash=input_hash),

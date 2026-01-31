@@ -1,48 +1,117 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "additionalProperties": false,
-  "required": ["contract_version", "model_version", "type", "language", "run"],
-  "properties": {
-    "contract_version": {"type": "string", "const": "0.1"},
-    "model_version": {"type": "string", "const": "cA-0.4"},
-    "type": {"type": "string", "enum": ["code", "config", "diff", "patch_bundle"]},
-    "language": {"type": "string"},
-    "files": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["path", "content"],
-        "properties": {
-          "path": {"type": "string"},
-          "content": {"type": "string"},
-          "mode": {"type": "string"}
-        }
-      }
-    },
-    "patches": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["path", "unified_diff"],
-        "properties": {
-          "path": {"type": "string"},
-          "unified_diff": {"type": "string"}
-        }
-      }
-    },
-    "run": {
+  "oneOf": [
+    {
+      "title": "cA-0.1",
       "type": "object",
       "additionalProperties": false,
-      "required": ["input_hash"],
+      "required": ["contract_version", "model_version", "type", "language", "run"],
       "properties": {
-        "input_hash": {"type": "string"}
+        "contract_version": {"type": "string", "const": "0.1"},
+        "model_version": {"type": "string", "const": "cA-0.4"},
+        "type": {
+          "type": "string",
+          "enum": ["code", "config", "diff", "patch_bundle"]
+        },
+        "language": {"type": "string"},
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "content"],
+            "properties": {
+              "path": {"type": "string"},
+              "content": {"type": "string"},
+              "mode": {"type": "string"}
+            }
+          },
+          "minItems": 1
+        },
+        "patches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "unified_diff"],
+            "properties": {
+              "path": {"type": "string"},
+              "unified_diff": {"type": "string"}
+            }
+          },
+          "minItems": 1
+        },
+        "run": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input_hash"],
+          "properties": {
+            "input_hash": {"type": "string"}
+          }
+        }
+      }
+    },
+    {
+      "title": "cA-0.2",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_version",
+        "model_version",
+        "schema_version",
+        "policy_pack_id",
+        "policy_pack_version",
+        "type",
+        "language",
+        "run"
+      ],
+      "properties": {
+        "contract_version": {"type": "string", "const": "0.2"},
+        "model_version": {"type": "string", "const": "cA-1.0-pro"},
+        "schema_version": {"type": "string", "const": "1.0"},
+        "policy_pack_id": {"type": "string"},
+        "policy_pack_version": {"type": "string"},
+        "type": {
+          "type": "string",
+          "enum": ["code", "config", "diff", "patch_bundle"]
+        },
+        "language": {"type": "string"},
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "content"],
+            "properties": {
+              "path": {"type": "string"},
+              "content": {"type": "string"},
+              "mode": {"type": "string"}
+            }
+          },
+          "minItems": 1
+        },
+        "patches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "unified_diff"],
+            "properties": {
+              "path": {"type": "string"},
+              "unified_diff": {"type": "string"}
+            }
+          },
+          "minItems": 1
+        },
+        "run": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input_hash"],
+          "properties": {
+            "input_hash": {"type": "string"}
+          }
+        }
       }
     }
-  },
-  "anyOf": [{"required": ["files"]}, {"required": ["patches"]}]
+  ]
 }

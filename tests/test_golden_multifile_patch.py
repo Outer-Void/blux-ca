@@ -3,11 +3,17 @@ import json
 from blux_ca.core.determinism import canonical_json, stable_hash
 from blux_ca.core.engine import run_engine
 from blux_ca.core.normalize import normalize_goal
+from blux_ca.core.versions import (
+    DEFAULT_POLICY_PACK_ID,
+    DEFAULT_POLICY_PACK_VERSION,
+    MODEL_VERSION,
+    SCHEMA_VERSION,
+)
 
 
 def test_multifile_golden() -> None:
     goal = {
-        "contract_version": "0.1",
+        "contract_version": "0.2",
         "goal_id": "multi",
         "intent": "Multi",
         "constraints": [],
@@ -22,8 +28,11 @@ def test_multifile_golden() -> None:
     }
     artifact, verdict = run_engine(json.loads(json.dumps(goal)))
     expected = {
-        "contract_version": "0.1",
-        "model_version": "cA-0.4",
+        "contract_version": "0.2",
+        "model_version": MODEL_VERSION,
+        "schema_version": SCHEMA_VERSION,
+        "policy_pack_id": DEFAULT_POLICY_PACK_ID,
+        "policy_pack_version": DEFAULT_POLICY_PACK_VERSION,
         "type": "code",
         "language": "python",
         "files": [
@@ -33,7 +42,7 @@ def test_multifile_golden() -> None:
         "run": {"input_hash": stable_hash(normalize_goal(goal))},
     }
     assert artifact.to_dict() == expected
-    assert verdict.model_version == "cA-0.4"
+    assert verdict.model_version == MODEL_VERSION
 
     artifact_again, verdict_again = run_engine(json.loads(json.dumps(goal)))
     assert canonical_json(artifact.to_dict()) == canonical_json(artifact_again.to_dict())
@@ -42,7 +51,7 @@ def test_multifile_golden() -> None:
 
 def test_patch_bundle_golden() -> None:
     goal = {
-        "contract_version": "0.1",
+        "contract_version": "0.2",
         "goal_id": "patch",
         "intent": "Patch",
         "constraints": [],
@@ -55,8 +64,11 @@ def test_patch_bundle_golden() -> None:
     artifact, verdict = run_engine(json.loads(json.dumps(goal)))
     expected_patch = "--- a/app.py\n+++ b/app.py\n@@ -0,0 +1 @@\n+print('hi')\n\n"
     expected = {
-        "contract_version": "0.1",
-        "model_version": "cA-0.4",
+        "contract_version": "0.2",
+        "model_version": MODEL_VERSION,
+        "schema_version": SCHEMA_VERSION,
+        "policy_pack_id": DEFAULT_POLICY_PACK_ID,
+        "policy_pack_version": DEFAULT_POLICY_PACK_VERSION,
         "type": "patch_bundle",
         "language": "python",
         "patches": [
@@ -65,4 +77,4 @@ def test_patch_bundle_golden() -> None:
         "run": {"input_hash": stable_hash(normalize_goal(goal))},
     }
     assert artifact.to_dict() == expected
-    assert verdict.model_version == "cA-0.4"
+    assert verdict.model_version == MODEL_VERSION

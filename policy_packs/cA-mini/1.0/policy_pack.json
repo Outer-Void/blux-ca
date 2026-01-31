@@ -1,0 +1,16 @@
+{
+  "policy_pack_id": "cA-mini",
+  "policy_pack_version": "1.0",
+  "schema_version": "1.0",
+  "description": "Mini policy pack with stricter limits for deterministic runs.",
+  "limits": {
+    "max_files": 3,
+    "max_patches": 3,
+    "max_content_bytes": 2000,
+    "max_total_bytes": 4000
+  },
+  "toggles": {
+    "enforce_todo_check": true,
+    "enforce_python_syntax": true
+  }
+}
