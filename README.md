@@ -11,8 +11,13 @@ python -m blux_ca run --goal examples/goal_hello.json --out out/
 
 This writes `out/artifact.json` and `out/verdict.json`.
 
-## Phase 2 guarantees
+## Enforced behavior
 
+- Outputs are contract-validated `artifact.json` and `verdict.json` payloads only.
 - Deterministic outputs for identical inputs (stable hashing + ordering).
-- Drift guard enforcement: no expansion suggestions until status is PASS.
-- Contract-validated artifact and verdict JSON outputs only.
+- Drift guard scans for banned expansion phrases and fails when they appear.
+- Single-pass run: produces an artifact and verdict, then stops (no retries or expansion loop).
+
+## Platform setup
+
+See `docs/PLATFORMS.md` for environment-specific setup steps.
