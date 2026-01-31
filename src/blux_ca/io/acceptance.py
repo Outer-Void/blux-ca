@@ -10,6 +10,7 @@ import jsonschema
 from blux_ca.contracts.schemas import load_schema
 from blux_ca.core.determinism import canonical_json, stable_hash
 from blux_ca.core.engine import run_engine
+from blux_ca.core.profile import Profile
 from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
 from blux_ca.io.json_writer import write_canonical_json
 
@@ -85,14 +86,18 @@ def _compare_expected(expected_path: Optional[Path], payload: Dict[str, object])
     return ("MISMATCH", "expected output differed")
 
 
-def run_acceptance(fixtures_dir: Path, out_dir: Path) -> Dict[str, object]:
+def run_acceptance(
+    fixtures_dir: Path,
+    out_dir: Path,
+    profile: Optional[Profile] = None,
+) -> Dict[str, object]:
     fixtures = _discover_fixtures(fixtures_dir)
     results: List[Dict[str, str]] = []
 
     for fixture in fixtures:
         goal = json.loads(fixture.goal_path.read_text(encoding="utf-8"))
         goal_schema_status, goal_schema_message = _schema_status(goal, "goal.schema.json")
-        artifact, verdict = run_engine(goal)
+        artifact, verdict = run_engine(goal, profile=profile)
 
         fixture_out = out_dir / fixture.name
         fixture_out.mkdir(parents=True, exist_ok=True)

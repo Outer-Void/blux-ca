@@ -43,9 +43,16 @@ class GoalSpec:
 @dataclass(frozen=True)
 class RunHeader:
     input_hash: str
+    profile_id: Optional[str] = None
+    profile_version: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"input_hash": self.input_hash}
+        payload = {"input_hash": self.input_hash}
+        if self.profile_id is not None:
+            payload["profile_id"] = self.profile_id
+        if self.profile_version is not None:
+            payload["profile_version"] = self.profile_version
+        return payload
 
 
 @dataclass(frozen=True)

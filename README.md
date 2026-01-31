@@ -17,6 +17,34 @@ python -m blux_ca accept --fixtures examples --out out/
 
 This writes `out/<fixture>/artifact.json`, `out/<fixture>/verdict.json`, and `out/report.json`.
 
+## Quickstart (runners)
+
+```bash
+./cA.sh run --goal examples/goal_hello.json --out out/
+```
+
+```powershell
+.\cA.ps1 run --goal examples/goal_hello.json --out out/
+```
+
+```sh
+./cA_mux.sh run --goal examples/goal_hello.json --out out/
+```
+
+```sh
+./cA_proot.sh run --goal examples/goal_hello.json --out out/
+```
+
+## Profiles
+
+```bash
+./cA.sh run --goal examples/goal_hello.json --out out/ --profile cpu
+```
+
+```bash
+./cA.sh run --goal examples/goal_hello.json --out out/ --profile-file profiles/gpu.json
+```
+
 ## Enforced behavior
 
 - Outputs are contract-validated `artifact.json` and `verdict.json` payloads only.

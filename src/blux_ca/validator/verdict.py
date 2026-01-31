@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional, Tuple
+
 from blux_ca.contracts.models import Check, Delta, RunHeader, Verdict
 from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
 from blux_ca.planner.basic_planner import PlanResult
@@ -11,7 +13,12 @@ def build_verdict(
     input_hash: str,
     policy_pack_id: str,
     policy_pack_version: str,
+    profile_metadata: Optional[Tuple[str, str]] = None,
 ) -> Verdict:
+    profile_id = None
+    profile_version = None
+    if profile_metadata is not None:
+        profile_id, profile_version = profile_metadata
     checks = [
         Check(id="plan", status="PASS", message=plan.summary),
     ]
@@ -29,5 +36,9 @@ def build_verdict(
         status=status,
         checks=checks,
         delta=delta,
-        run=RunHeader(input_hash=input_hash),
+        run=RunHeader(
+            input_hash=input_hash,
+            profile_id=profile_id,
+            profile_version=profile_version,
+        ),
     )
