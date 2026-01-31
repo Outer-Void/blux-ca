@@ -1,6 +1,6 @@
 # blux-ca
 
-cA-0.1 baseline is a minimal, deterministic contract engine. It produces structured artifacts and
+cA-0.4 baseline is a minimal, deterministic contract engine. It produces structured artifacts and
 verdicts with a fixed contract schema.
 
 ## CLI
@@ -10,6 +10,12 @@ python -m blux_ca run --goal examples/goal_hello.json --out out/
 ```
 
 This writes `out/artifact.json` and `out/verdict.json`.
+
+```bash
+python -m blux_ca accept --fixtures examples --out out/
+```
+
+This writes `out/<fixture>/artifact.json`, `out/<fixture>/verdict.json`, and `out/report.json`.
 
 ## Enforced behavior
 

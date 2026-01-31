@@ -12,7 +12,7 @@ from blux_ca.validator.validators import ValidationResult, validate_artifact, va
 from blux_ca.validator.verdict import build_verdict
 
 
-MODEL_VERSION = "cA-0.1"
+MODEL_VERSION = "cA-0.4"
 CONTRACT_VERSION = "0.1"
 
 
@@ -45,19 +45,27 @@ def run_engine(goal_input: Dict[str, Any]) -> Tuple[Artifact, Verdict]:
     plan = plan_goal(goal)
     artifact = build_artifact(goal, input_hash)
     sorted_files = sorted(artifact.files, key=lambda entry: entry.path)
-    if [entry.path for entry in sorted_files] != [entry.path for entry in artifact.files]:
+    sorted_patches = sorted(artifact.patches, key=lambda entry: entry.path)
+    if (
+        [entry.path for entry in sorted_files] != [entry.path for entry in artifact.files]
+        or [entry.path for entry in sorted_patches] != [entry.path for entry in artifact.patches]
+    ):
         artifact = Artifact(
             contract_version=artifact.contract_version,
             model_version=artifact.model_version,
             type=artifact.type,
             language=artifact.language,
-            files=sorted_files,
             run=artifact.run,
+            files=sorted_files,
+            patches=sorted_patches,
         )
 
     verdict = build_verdict(plan, artifact, input_hash)
 
-    drift_hits = scan_for_drift(file.content for file in artifact.files)
+    drift_sources = [file.content for file in artifact.files] + [
+        patch.unified_diff for patch in artifact.patches
+    ]
+    drift_hits = scan_for_drift(drift_sources)
     if drift_hits and verdict.status != "PASS":
         verdict = verdict.with_drift_failure(drift_hits)
 

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "blux-ca"
 version = "0.1.0"
-description = "cA-0.1 baseline deterministic contract engine"
+description = "cA-0.4 baseline deterministic contract engine"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["jsonschema>=4.19"]

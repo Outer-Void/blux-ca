@@ -1,6 +1,6 @@
 # Determinism
 
-The cA-0.1 engine is deterministic: identical inputs yield byte-identical canonical JSON outputs.
+The cA-0.4 engine is deterministic: identical inputs yield byte-identical canonical JSON outputs.
 
 ## Canonical JSON
 
@@ -22,7 +22,7 @@ This is implemented in `blux_ca.core.determinism.canonical_json`.
 
 ## Deterministic ordering
 
-- `artifact.files` is sorted lexicographically by `path` before output.
+- `artifact.files` and `artifact.patches` are sorted lexicographically by `path` before output.
 - Schema validation and delta selection use stable, sorted keys when comparing failures.
 
 ## Forbidden sources of nondeterminism
