@@ -7,6 +7,7 @@ from blux_ca.core.delta import select_minimal_delta_from_list
 from blux_ca.core.determinism import stable_hash
 from blux_ca.core.drift_guard import scan_for_drift
 from blux_ca.core.normalize import normalize_goal
+from blux_ca.core.profile import Profile
 from blux_ca.planner.basic_planner import plan_goal
 from blux_ca.builder.basic_builder import build_artifact
 from blux_ca.policy.loader import resolve_policy_pack
@@ -39,11 +40,19 @@ def _with_status(verdict: Verdict, status: str, delta: Optional[Delta]) -> Verdi
     )
 
 
-def run_engine(goal_input: Dict[str, Any]) -> Tuple[Artifact, Verdict]:
+def _run_header_profile(profile: Optional[Profile]) -> Optional[Tuple[str, str]]:
+    if profile is None:
+        return None
+    return (profile.profile_id, profile.profile_version)
+
+
+def run_engine(goal_input: Dict[str, Any], profile: Optional[Profile] = None) -> Tuple[Artifact, Verdict]:
     normalized_goal = normalize_goal(goal_input)
     input_hash = stable_hash(normalized_goal)
     goal = GoalSpec.from_dict(normalized_goal)
     policy_pack = resolve_policy_pack(goal.request)
+
+    profile_metadata = _run_header_profile(profile)
 
     plan = plan_goal(goal)
     artifact = build_artifact(
@@ -51,6 +60,7 @@ def run_engine(goal_input: Dict[str, Any]) -> Tuple[Artifact, Verdict]:
         input_hash,
         policy_pack.policy_pack_id,
         policy_pack.policy_pack_version,
+        profile_metadata,
     )
     sorted_files = sorted(artifact.files, key=lambda entry: entry.path)
     sorted_patches = sorted(artifact.patches, key=lambda entry: entry.path)
@@ -77,6 +87,7 @@ def run_engine(goal_input: Dict[str, Any]) -> Tuple[Artifact, Verdict]:
         input_hash,
         policy_pack.policy_pack_id,
         policy_pack.policy_pack_version,
+        profile_metadata,
     )
 
     drift_sources = [file.content for file in artifact.files] + [

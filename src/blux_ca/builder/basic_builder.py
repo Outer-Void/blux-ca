@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional, Tuple
+
 from blux_ca.contracts.models import Artifact, FileEntry, GoalSpec, PatchEntry, RunHeader
 from blux_ca.core.patches import generate_unified_diff
 from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
@@ -10,7 +12,12 @@ def build_artifact(
     input_hash: str,
     policy_pack_id: str,
     policy_pack_version: str,
+    profile_metadata: Optional[Tuple[str, str]] = None,
 ) -> Artifact:
+    profile_id = None
+    profile_version = None
+    if profile_metadata is not None:
+        profile_id, profile_version = profile_metadata
     request = goal.request or {}
     artifact_type = request.get("artifact_type") or request.get("type") or "code"
     intent = goal.intent.strip() or "Hello from cA-1.0-pro"
@@ -47,7 +54,11 @@ def build_artifact(
             policy_pack_version=policy_pack_version,
             type="patch_bundle",
             language=language,
-            run=RunHeader(input_hash=input_hash),
+            run=RunHeader(
+                input_hash=input_hash,
+                profile_id=profile_id,
+                profile_version=profile_version,
+            ),
             patches=sorted(patches, key=lambda entry: entry.path),
         )
 
@@ -72,6 +83,10 @@ def build_artifact(
         policy_pack_version=policy_pack_version,
         type=artifact_type,
         language=language,
-        run=RunHeader(input_hash=input_hash),
+        run=RunHeader(
+            input_hash=input_hash,
+            profile_id=profile_id,
+            profile_version=profile_version,
+        ),
         files=sorted(files, key=lambda entry: entry.path),
     )

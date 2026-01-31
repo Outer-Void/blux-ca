@@ -46,7 +46,9 @@
           "additionalProperties": false,
           "required": ["input_hash"],
           "properties": {
-            "input_hash": {"type": "string"}
+            "input_hash": {"type": "string"},
+            "profile_id": {"type": "string"},
+            "profile_version": {"type": "string"}
           }
         }
       }
@@ -108,7 +110,9 @@
           "additionalProperties": false,
           "required": ["input_hash"],
           "properties": {
-            "input_hash": {"type": "string"}
+            "input_hash": {"type": "string"},
+            "profile_id": {"type": "string"},
+            "profile_version": {"type": "string"}
           }
         }
       }
