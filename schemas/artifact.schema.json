@@ -5,7 +5,7 @@
   "required": ["contract_version", "model_version", "type", "language", "files", "run"],
   "properties": {
     "contract_version": {"type": "string", "const": "0.1"},
-    "model_version": {"type": "string", "const": "cA-0.1-mini"},
+    "model_version": {"type": "string", "const": "cA-0.1"},
     "type": {"type": "string", "enum": ["code", "config", "diff"]},
     "language": {"type": "string"},
     "files": {
