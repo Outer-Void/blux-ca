@@ -1,0 +1,8 @@
+from __future__ import annotations
+
+CONTRACT_VERSION = "0.2"
+MODEL_VERSION = "cA-1.0-pro"
+SCHEMA_VERSION = "1.0"
+
+DEFAULT_POLICY_PACK_ID = "cA-pro"
+DEFAULT_POLICY_PACK_VERSION = "1.0"

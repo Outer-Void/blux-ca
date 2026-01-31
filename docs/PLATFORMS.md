@@ -50,7 +50,7 @@ python -m pip install -U pip
 ```powershell
 winget install -e --id Python.Python.3
 winget install -e --id Git.Git
-python -m venv .venv
+py -3 -m venv .venv
 .\.venv\Scripts\python -m pip install -U pip
 ```
 
@@ -137,9 +137,9 @@ PY
 ### Windows (PowerShell)
 
 ```powershell
-python -m pip install -e .
-python -m blux_ca run --goal examples/goal_hello.json --out out/
-python - <<'PY'
+py -3 -m pip install -e .
+py -3 -m blux_ca run --goal examples/goal_hello.json --out out/
+py -3 - <<'PY'
 import json
 from jsonschema import validate
 from pathlib import Path

@@ -1,0 +1,16 @@
+{
+  "policy_pack_id": "cA-pro",
+  "policy_pack_version": "1.0",
+  "schema_version": "1.0",
+  "description": "Pro policy pack with expanded limits for high-capability runs.",
+  "limits": {
+    "max_files": 20,
+    "max_patches": 20,
+    "max_content_bytes": 20000,
+    "max_total_bytes": 40000
+  },
+  "toggles": {
+    "enforce_todo_check": false,
+    "enforce_python_syntax": true
+  }
+}

@@ -3,6 +3,7 @@ from pathlib import Path
 
 from blux_ca.core.determinism import canonical_json
 from blux_ca.core.engine import run_engine
+from blux_ca.core.versions import MODEL_VERSION
 
 
 def test_determinism():
@@ -10,7 +11,7 @@ def test_determinism():
     artifact_a, verdict_a = run_engine(goal)
     artifact_b, verdict_b = run_engine(goal)
 
-    assert artifact_a.model_version == "cA-0.4"
-    assert verdict_a.model_version == "cA-0.4"
+    assert artifact_a.model_version == MODEL_VERSION
+    assert verdict_a.model_version == MODEL_VERSION
     assert canonical_json(artifact_a.to_dict()) == canonical_json(artifact_b.to_dict())
     assert canonical_json(verdict_a.to_dict()) == canonical_json(verdict_b.to_dict())

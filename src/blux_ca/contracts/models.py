@@ -3,9 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-
-MODEL_VERSION = "cA-0.4"
-CONTRACT_VERSION = "0.1"
+from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
 
 
 @dataclass(frozen=True)
@@ -76,6 +74,9 @@ class PatchEntry:
 class Artifact:
     contract_version: str
     model_version: str
+    schema_version: str
+    policy_pack_id: str
+    policy_pack_version: str
     type: str
     language: str
     run: RunHeader
@@ -86,6 +87,9 @@ class Artifact:
         payload: Dict[str, Any] = {
             "contract_version": self.contract_version,
             "model_version": self.model_version,
+            "schema_version": self.schema_version,
+            "policy_pack_id": self.policy_pack_id,
+            "policy_pack_version": self.policy_pack_version,
             "type": self.type,
             "language": self.language,
             "run": self.run.to_dict(),
@@ -126,6 +130,9 @@ class Delta:
 class Verdict:
     contract_version: str
     model_version: str
+    schema_version: str
+    policy_pack_id: str
+    policy_pack_version: str
     status: str
     checks: List[Check] = field(default_factory=list)
     delta: Optional[Delta] = None
@@ -136,6 +143,9 @@ class Verdict:
         payload: Dict[str, Any] = {
             "contract_version": self.contract_version,
             "model_version": self.model_version,
+            "schema_version": self.schema_version,
+            "policy_pack_id": self.policy_pack_id,
+            "policy_pack_version": self.policy_pack_version,
             "status": self.status,
             "checks": checks,
             "run": self.run.to_dict(),
@@ -148,6 +158,9 @@ class Verdict:
         return Verdict(
             contract_version=self.contract_version,
             model_version=self.model_version,
+            schema_version=self.schema_version,
+            policy_pack_id=self.policy_pack_id,
+            policy_pack_version=self.policy_pack_version,
             status=self.status,
             checks=checks,
             delta=self.delta,
@@ -162,6 +175,9 @@ class Verdict:
         return Verdict(
             contract_version=self.contract_version,
             model_version=self.model_version,
+            schema_version=self.schema_version,
+            policy_pack_id=self.policy_pack_id,
+            policy_pack_version=self.policy_pack_version,
             status="FAIL",
             checks=self.checks,
             delta=Delta(message=message, minimal_change="Remove banned phrases"),

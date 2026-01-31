@@ -1,5 +1,5 @@
 {
-  "contract_version": "0.1",
+  "contract_version": "0.2",
   "goal_id": "infeasible",
   "intent": "Do the impossible",
   "constraints": ["INFEASIBLE", "conflict"],

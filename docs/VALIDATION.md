@@ -1,6 +1,6 @@
 # Validation
 
-Validation ensures the engine’s outputs match the cA-0.4 contract and enforce drift guard rules.
+Validation ensures the engine’s outputs match the cA-1.0-pro contract and enforce drift guard rules.
 
 ## Schema validation
 
@@ -8,15 +8,16 @@ Validation ensures the engine’s outputs match the cA-0.4 contract and enforce 
 - `verdict.json` is validated against `schemas/verdict.schema.json`.
 - `goal` inputs are validated against `schemas/goal.schema.json` before generation.
 
-Validation uses `jsonschema` when available. If `jsonschema` is unavailable, a minimal required-field
-check is performed (required keys only).
+Validation uses `jsonschema` for schema enforcement.
 
 ## Contract checks
 
 The validator enforces:
 
-- `contract_version == "0.1"`
-- `model_version == "cA-0.4"`
+- `contract_version == "0.2"`
+- `model_version == "cA-1.0-pro"`
+- `schema_version == "1.0"`
+- `policy_pack_id`/`policy_pack_version` match the resolved policy pack
 
 Failures emit a `delta` describing the minimal change needed to comply.
 
@@ -33,11 +34,13 @@ Additional artifact checks include:
 - Python syntax is valid when `artifact.language == "python"`.
 - `artifact.files` is sorted lexicographically by path.
 - `artifact.patches` is sorted lexicographically by path when present.
+- Policy pack limits for file/patch counts and byte-size caps.
+- Policy pack toggles for TODO/FIXME enforcement and Python syntax validation.
 
 ## Verdict checks
 
-The verdict always includes the full list of check results. For failures, the first failure in
-sorted order is used to select the minimal change guidance in `delta`.
+The verdict always includes the full list of check results. For failures, a deterministic minimal
+delta is selected using stable tie-breakers (shortest minimal change, then stable key ordering).
 
 ## Drift guard
 
@@ -49,4 +52,4 @@ artifact content. Any drift hits force a failing verdict with a corrective `delt
 Validation failures result in:
 
 - `status = FAIL` with a `delta` describing the minimal change, or
-- `status = INFEASIBLE` if the planner detects conflicting constraints.
+- `status = INFEASIBLE` if the planner detects missing inputs or conflicting constraints.

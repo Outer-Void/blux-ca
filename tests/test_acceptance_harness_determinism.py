@@ -14,7 +14,7 @@ def test_acceptance_harness_determinism(tmp_path: Path) -> None:
     _write_goal(
         fixtures / "alpha.json",
         {
-            "contract_version": "0.1",
+            "contract_version": "0.2",
             "goal_id": "alpha",
             "intent": "Alpha",
             "constraints": [],
@@ -23,7 +23,7 @@ def test_acceptance_harness_determinism(tmp_path: Path) -> None:
     _write_goal(
         fixtures / "beta.json",
         {
-            "contract_version": "0.1",
+            "contract_version": "0.2",
             "goal_id": "beta",
             "intent": "Beta",
             "constraints": [],
