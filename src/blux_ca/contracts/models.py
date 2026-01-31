@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 
-MODEL_VERSION = "cA-0.1"
+MODEL_VERSION = "cA-0.4"
 CONTRACT_VERSION = "0.1"
 
 
@@ -54,9 +54,22 @@ class RunHeader:
 class FileEntry:
     path: str
     content: str
+    mode: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"path": self.path, "content": self.content}
+        payload = {"path": self.path, "content": self.content}
+        if self.mode is not None:
+            payload["mode"] = self.mode
+        return payload
+
+
+@dataclass(frozen=True)
+class PatchEntry:
+    path: str
+    unified_diff: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {"path": self.path, "unified_diff": self.unified_diff}
 
 
 @dataclass(frozen=True)
@@ -65,19 +78,29 @@ class Artifact:
     model_version: str
     type: str
     language: str
-    files: List[FileEntry]
     run: RunHeader
+    files: List[FileEntry] = field(default_factory=list)
+    patches: List[PatchEntry] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        files = sorted((file.to_dict() for file in self.files), key=lambda item: item["path"])
-        return {
+        payload: Dict[str, Any] = {
             "contract_version": self.contract_version,
             "model_version": self.model_version,
             "type": self.type,
             "language": self.language,
-            "files": files,
             "run": self.run.to_dict(),
         }
+        if self.files:
+            payload["files"] = sorted(
+                (file.to_dict() for file in self.files),
+                key=lambda item: item["path"],
+            )
+        if self.patches:
+            payload["patches"] = sorted(
+                (patch.to_dict() for patch in self.patches),
+                key=lambda item: item["path"],
+            )
+        return payload
 
 
 @dataclass(frozen=True)

@@ -1,6 +1,6 @@
 # Validation
 
-Validation ensures the engine’s outputs match the cA-0.1 contract and enforce drift guard rules.
+Validation ensures the engine’s outputs match the cA-0.4 contract and enforce drift guard rules.
 
 ## Schema validation
 
@@ -16,7 +16,7 @@ check is performed (required keys only).
 The validator enforces:
 
 - `contract_version == "0.1"`
-- `model_version == "cA-0.1"`
+- `model_version == "cA-0.4"`
 
 Failures emit a `delta` describing the minimal change needed to comply.
 
@@ -24,11 +24,15 @@ Failures emit a `delta` describing the minimal change needed to comply.
 
 Additional artifact checks include:
 
-- At least one file is present.
+- At least one file is present for non-`patch_bundle` artifacts.
+- At least one patch is present for `patch_bundle` artifacts.
 - No `TODO` or `FIXME` markers in file content.
 - File paths are safe (relative, no `..`, no leading `/`, no backslashes).
+- File paths are unique.
+- File and patch content contains no binary data (no null bytes) and uses normalized `\n` line endings.
 - Python syntax is valid when `artifact.language == "python"`.
 - `artifact.files` is sorted lexicographically by path.
+- `artifact.patches` is sorted lexicographically by path when present.
 
 ## Verdict checks
 

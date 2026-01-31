@@ -5,7 +5,7 @@
   "required": ["contract_version", "model_version", "status", "checks", "run"],
   "properties": {
     "contract_version": {"type": "string", "const": "0.1"},
-    "model_version": {"type": "string", "const": "cA-0.1"},
+    "model_version": {"type": "string", "const": "cA-0.4"},
     "status": {"type": "string", "enum": ["PASS", "FAIL", "INFEASIBLE"]},
     "checks": {
       "type": "array",

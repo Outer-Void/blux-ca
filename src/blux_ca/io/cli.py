@@ -5,14 +5,12 @@ import json
 from pathlib import Path
 
 from blux_ca.core.engine import run_engine
+from blux_ca.io.acceptance import run_acceptance
+from blux_ca.io.json_writer import write_canonical_json
 
 
 def _load_goal(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _write_json(path: Path, payload: dict) -> None:
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
 
 
 def main() -> None:
@@ -21,6 +19,9 @@ def main() -> None:
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--goal", required=True)
     run_parser.add_argument("--out", required=True)
+    accept_parser = subparsers.add_parser("accept")
+    accept_parser.add_argument("--fixtures", required=True)
+    accept_parser.add_argument("--out", required=True)
 
     args = parser.parse_args()
     if args.command == "run":
@@ -29,5 +30,10 @@ def main() -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
         goal = _load_goal(goal_path)
         artifact, verdict = run_engine(goal)
-        _write_json(out_dir / "artifact.json", artifact.to_dict())
-        _write_json(out_dir / "verdict.json", verdict.to_dict())
+        write_canonical_json(out_dir / "artifact.json", artifact.to_dict())
+        write_canonical_json(out_dir / "verdict.json", verdict.to_dict())
+    if args.command == "accept":
+        fixtures_dir = Path(args.fixtures)
+        out_dir = Path(args.out)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        run_acceptance(fixtures_dir, out_dir)

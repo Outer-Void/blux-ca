@@ -17,7 +17,9 @@ def test_drift_guard_engine():
     goal = json.loads(Path("examples/goal_drift_probe.json").read_text(encoding="utf-8"))
     artifact, verdict = run_engine(goal)
 
-    combined = "\n".join(file.content for file in artifact.files).lower()
+    combined = "\n".join(
+        [file.content for file in artifact.files] + [patch.unified_diff for patch in artifact.patches]
+    ).lower()
     for phrase in BANNED_SUBSTRINGS:
         assert phrase not in combined
     assert verdict.status == "PASS"

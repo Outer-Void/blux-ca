@@ -5,7 +5,7 @@ from blux_ca.validator.validators import validate_artifact
 def test_no_todo_fixme_validator_fails():
     artifact = Artifact(
         contract_version="0.1",
-        model_version="cA-0.1",
+        model_version="cA-0.4",
         type="code",
         language="python",
         files=[FileEntry(path="main.py", content="# TODO\nprint('ok')\n")],
@@ -21,7 +21,7 @@ def test_no_todo_fixme_validator_fails():
 def test_file_boundary_validator_fails():
     artifact = Artifact(
         contract_version="0.1",
-        model_version="cA-0.1",
+        model_version="cA-0.4",
         type="code",
         language="python",
         files=[FileEntry(path="../bad.py", content="print('ok')\n")],
@@ -37,7 +37,7 @@ def test_file_boundary_validator_fails():
 def test_python_syntax_validator_fails():
     artifact = Artifact(
         contract_version="0.1",
-        model_version="cA-0.1",
+        model_version="cA-0.4",
         type="code",
         language="python",
         files=[FileEntry(path="bad.py", content="def x(:\n  pass\n")],

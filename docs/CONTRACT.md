@@ -1,11 +1,11 @@
-# Contract (cA-0.1)
+# Contract (cA-0.4)
 
-This document defines the frozen cA-0.1 contract and how the CLI produces outputs.
+This document defines the frozen cA-0.4 contract and how the CLI produces outputs.
 
 ## Versions
 
 - `contract_version`: **"0.1"**
-- `model_version`: **"cA-0.1"**
+- `model_version`: **"cA-0.4"**
 
 These values are fixed and must match across code, schemas, and outputs.
 
@@ -26,10 +26,12 @@ The engine consumes a goal specification validated by `schemas/goal.schema.json`
 `artifact.json` is produced with the following required fields:
 
 - `contract_version` (string, const `"0.1"`)
-- `model_version` (string, const `"cA-0.1"`)
-- `type` (string enum: `code`, `config`, `diff`)
+- `model_version` (string, const `"cA-0.4"`)
+- `type` (string enum: `code`, `config`, `diff`, `patch_bundle`)
 - `language` (string)
-- `files` (array of `{ path, content }`, non-empty)
+- One of:
+  - `files` (array of `{ path, content, mode? }`, non-empty)
+  - `patches` (array of `{ path, unified_diff }`, non-empty)
 - `run` (object with `input_hash`)
 
 ### Verdict (`schemas/verdict.schema.json`)
@@ -37,7 +39,7 @@ The engine consumes a goal specification validated by `schemas/goal.schema.json`
 `verdict.json` is produced with the following required fields:
 
 - `contract_version` (string, const `"0.1"`)
-- `model_version` (string, const `"cA-0.1"`)
+- `model_version` (string, const `"cA-0.4"`)
 - `status` (string enum: `PASS`, `FAIL`, `INFEASIBLE`)
 - `checks` (array of `{ id, status, message }`)
 - `run` (object with `input_hash`)
@@ -58,3 +60,10 @@ The CLI writes:
 - `out/verdict.json`
 
 Both files must validate against their respective schemas without any runtime schema patching.
+
+## Tag notes
+
+- `cA-0.3-mini`: multi-file artifact structure and ordering rules.
+- `cA-0.3`: patch bundle output type and unified diff determinism.
+- `cA-0.4-mini`: acceptance harness and canonical JSON output centralization.
+- `cA-0.4`: deterministic acceptance reporting and validation hardening.
