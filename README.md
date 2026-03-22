@@ -44,11 +44,13 @@ This writes `out/artifact.json` and `out/verdict.json`.
 
 ```bash
 blux-ca accept --fixtures examples --out out/
+blux-ca accept --fixtures examples --out out-cpu/ --profile cpu
 ```
 
 This writes `out/<fixture>/artifact.json`, `out/<fixture>/verdict.json`, and `out/report.json`.
 The checked-in `examples/` fixtures include expected outputs, so the acceptance report should show
-`MATCH` results for both artifact and verdict comparisons.
+`MATCH` results for both artifact and verdict comparisons. When acceptance runs with a profile, the
+report also emits deterministic top-level `profile_id` and `profile_version` metadata.
 
 ## Quickstart runners
 

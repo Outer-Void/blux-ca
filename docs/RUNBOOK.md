@@ -46,6 +46,7 @@ py -3.11 -m blux_ca run --goal examples/goal_hello.json --out out/
 
 ```sh
 blux-ca accept --fixtures examples --out out/
+blux-ca accept --fixtures examples --out out-cpu/ --profile cpu
 ```
 
 Windows PowerShell:

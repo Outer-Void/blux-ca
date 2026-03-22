@@ -16,6 +16,10 @@ def test_profile_loading_determinism() -> None:
 
     assert canonical_json(artifact_a.to_dict()) == canonical_json(artifact_b.to_dict())
     assert canonical_json(verdict_a.to_dict()) == canonical_json(verdict_b.to_dict())
+    assert artifact_a.to_dict()["run"]["profile_id"] == "cpu"
+    assert artifact_a.to_dict()["run"]["profile_version"] == "1.0"
+    assert verdict_a.to_dict()["run"]["profile_id"] == "cpu"
+    assert verdict_a.to_dict()["run"]["profile_version"] == "1.0"
 
 
 def test_default_profile_matches_baseline() -> None:
