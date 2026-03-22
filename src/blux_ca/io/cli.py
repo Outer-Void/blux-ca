@@ -14,17 +14,22 @@ def _load_goal(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _add_profile_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--profile", help="Profile id from ./profiles (cpu/gpu)")
+    parser.add_argument("--profile-file", help="Path to a profile json file")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(prog="blux-ca")
     subparsers = parser.add_subparsers(dest="command", required=True)
     run_parser = subparsers.add_parser("run")
     run_parser.add_argument("--goal", required=True)
     run_parser.add_argument("--out", required=True)
-    run_parser.add_argument("--profile", help="Profile id from ./profiles (cpu/gpu)")
-    run_parser.add_argument("--profile-file", help="Path to a profile json file")
+    _add_profile_arguments(run_parser)
     accept_parser = subparsers.add_parser("accept")
     accept_parser.add_argument("--fixtures", required=True)
     accept_parser.add_argument("--out", required=True)
+    _add_profile_arguments(accept_parser)
 
     args = parser.parse_args()
     if args.command == "run":
@@ -43,4 +48,8 @@ def main() -> None:
         fixtures_dir = Path(args.fixtures)
         out_dir = Path(args.out)
         out_dir.mkdir(parents=True, exist_ok=True)
-        run_acceptance(fixtures_dir, out_dir)
+        profile = resolve_profile(
+            args.profile,
+            Path(args.profile_file) if args.profile_file else None,
+        )
+        run_acceptance(fixtures_dir, out_dir, profile=profile)

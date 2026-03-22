@@ -36,6 +36,7 @@ The engine emits fixed metadata headers:
 - `schema_version = "1.0"`
 - `policy_pack_id` / `policy_pack_version` from deterministic policy-pack resolution
 - optional `profile_id` / `profile_version` only when a profile is explicitly selected
+- acceptance `report.json` mirrors the selected profile metadata only when a profile is explicitly selected
 
 When no profile is selected, no profile fields are emitted.
 

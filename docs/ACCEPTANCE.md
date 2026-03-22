@@ -9,6 +9,7 @@ After installing the package:
 
 ```bash
 blux-ca accept --fixtures path/to/fixtures --out out/
+blux-ca accept --fixtures path/to/fixtures --out out-cpu/ --profile cpu
 ```
 
 Runner-based equivalent:
@@ -39,6 +40,7 @@ Top-level report fields:
 - `contract_version`
 - `model_version`
 - `schema_version`
+- optional `profile_id`, `profile_version` when the acceptance run selects a profile
 - `fixtures`
 
 Each fixture record includes:

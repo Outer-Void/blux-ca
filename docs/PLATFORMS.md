@@ -6,7 +6,7 @@ The package requires **Python 3.11+**.
 ## Termux (native)
 
 ```sh
-pkg install python3 git
+pkg install python3
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
@@ -19,7 +19,7 @@ python -m pip install -e .[dev]
 Host Termux:
 
 ```sh
-pkg install proot-distro git
+pkg install proot-distro
 proot-distro install debian
 proot-distro login debian
 ```

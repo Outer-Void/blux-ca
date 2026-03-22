@@ -88,6 +88,18 @@ def _compare_expected(expected_path: Optional[Path], payload: Dict[str, object])
     return ("MISMATCH", "expected output differed")
 
 
+def _report_metadata(profile: Optional[Profile]) -> Dict[str, object]:
+    metadata: Dict[str, object] = {
+        "contract_version": CONTRACT_VERSION,
+        "model_version": MODEL_VERSION,
+        "schema_version": SCHEMA_VERSION,
+    }
+    if profile is not None:
+        metadata["profile_id"] = profile.profile_id
+        metadata["profile_version"] = profile.profile_version
+    return metadata
+
+
 def run_acceptance(
     fixtures_dir: Path,
     out_dir: Path,
@@ -146,9 +158,7 @@ def run_acceptance(
         )
 
     report = {
-        "contract_version": CONTRACT_VERSION,
-        "model_version": MODEL_VERSION,
-        "schema_version": SCHEMA_VERSION,
+        **_report_metadata(profile),
         "fixtures": results,
     }
     write_canonical_json(out_dir / "report.json", report)
