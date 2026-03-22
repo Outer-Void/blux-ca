@@ -1,12 +1,13 @@
 # Platform Setup
 
 This repository is a Python project. Use `python -m pip`, not raw `pip`.
+The package requires **Python 3.11+**.
 
 ## Termux (native)
 
 ```sh
 pkg install python3 git
-python -m venv .venv
+python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .[dev]
@@ -36,28 +37,36 @@ python -m pip install -e .[dev]
 
 ## Debian / Ubuntu
 
+Install Python 3.11+ first, then:
+
 ```sh
-python3 -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .[dev]
 ./cA.sh run --goal examples/goal_hello.json --out out/
 ```
+
+If your `python3` already resolves to 3.11+, you may substitute `python3`.
 
 ## macOS
 
+Install Python 3.11+ first, then:
+
 ```sh
-python3 -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .[dev]
 ./cA.sh run --goal examples/goal_hello.json --out out/
 ```
+
+If your `python3` already resolves to 3.11+, you may substitute `python3`.
 
 ## Windows (PowerShell)
 
 ```powershell
-py -3 -m venv .venv
+py -3.11 -m venv .venv
 .\.venv\Scripts\python -m pip install -U pip
 .\.venv\Scripts\python -m pip install -e .[dev]
 .\cA.ps1 run --goal examples/goal_hello.json --out out/

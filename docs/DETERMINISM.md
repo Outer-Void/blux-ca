@@ -44,8 +44,15 @@ When no profile is selected, no profile fields are emitted.
 - `artifact.files` and `artifact.patches` are sorted lexicographically by `path`.
 - verdict checks are sorted lexicographically by `id`.
 - acceptance fixtures are processed in lexicographic order.
+- acceptance `report.json` fixture rows preserve that same lexicographic order.
 - minimal-delta selection uses stable tie-breakers.
 - policy-pack resolution is deterministic: explicit request wins, otherwise `cA-pro@1.0`.
+
+## Compatibility and determinism
+
+Legacy `0.1` goal inputs and legacy `0.1`/`cA-0.4` artifact or verdict schema branches are
+read-only compatibility paths. They do not introduce alternate output ordering, metadata, or hash
+rules for the frozen engine.
 
 ## Forbidden nondeterminism
 

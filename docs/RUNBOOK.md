@@ -1,11 +1,12 @@
 # Runbook
 
 This runbook describes deterministic offline execution for the frozen `cA-1.0-pro` repo.
+Use Python 3.11+ for all commands below.
 
 ## 1. Create a virtual environment
 
 ```sh
-python3 -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
 ```
@@ -13,7 +14,7 @@ python -m pip install -U pip
 Windows PowerShell:
 
 ```powershell
-py -3 -m venv .venv
+py -3.11 -m venv .venv
 .\.venv\Scripts\python -m pip install -U pip
 ```
 
@@ -26,7 +27,7 @@ python -m pip install -e .[dev]
 Windows PowerShell:
 
 ```powershell
-py -3 -m pip install -e .[dev]
+py -3.11 -m pip install -e .[dev]
 ```
 
 ## 3. Run the engine
@@ -38,7 +39,7 @@ blux-ca run --goal examples/goal_hello.json --out out/
 Windows PowerShell:
 
 ```powershell
-py -3 -m blux_ca run --goal examples/goal_hello.json --out out/
+py -3.11 -m blux_ca run --goal examples/goal_hello.json --out out/
 ```
 
 ## 4. Run the acceptance harness
@@ -50,7 +51,7 @@ blux-ca accept --fixtures examples --out out/
 Windows PowerShell:
 
 ```powershell
-py -3 -m blux_ca accept --fixtures examples --out out/
+py -3.11 -m blux_ca accept --fixtures examples --out out/
 ```
 
 ## 5. Validate outputs
