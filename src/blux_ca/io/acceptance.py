@@ -27,6 +27,8 @@ def _discover_fixtures(fixtures_dir: Path) -> List[FixtureSpec]:
     fixtures: List[FixtureSpec] = []
     for path in sorted(fixtures_dir.iterdir()):
         if path.is_file() and path.suffix == ".json":
+            if path.name.endswith((".artifact.json", ".verdict.json")):
+                continue
             expected_artifact = fixtures_dir / f"{path.stem}.artifact.json"
             expected_verdict = fixtures_dir / f"{path.stem}.verdict.json"
             fixtures.append(

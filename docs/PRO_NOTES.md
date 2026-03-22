@@ -1,11 +1,12 @@
 # Pro Notes
 
-`cA-1.0-pro` is the same contract shape as mini/full variants. The distinction is policy-driven:
+`cA-1.0-pro` is the repository's frozen implementation identity.
 
-- **Pro** uses the `cA-pro` policy pack, which raises deterministic limits for file/patch counts and
-  byte sizes.
-- **Mini** uses the `cA-mini` policy pack with stricter caps.
-- **Full** uses the `cA-full` policy pack with broader caps while preserving safety checks.
+The contract shape is the same as the documented mini/full policy-pack variants; the difference is
+policy selection, not schema structure.
 
-No schema shape or output structure changes between mini/full/pro. Only capability and strictness
-are adjusted via policy packs.
+- **Pro** uses the default `cA-pro@1.0` pack and is the repo's baseline identity.
+- **Mini** uses `cA-mini@1.0` with stricter deterministic caps.
+- **Full** uses `cA-full@1.0` with broader deterministic caps.
+
+No schema field names, status values, or output file names change across these policy-pack choices.
