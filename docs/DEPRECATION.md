@@ -1,14 +1,14 @@
 # Deprecation Policy
 
-This project avoids breaking changes within a contract version. Deprecations follow a documented
-process to preserve determinism and cross-platform stability.
+This repository is at final freeze. Deprecations are tightly controlled so the frozen contract
+remains deterministic and taggable.
 
 ## Rules
 
-1. **Announce**: Document upcoming deprecations in release notes and update `COMPATIBILITY.md`.
-2. **Grace period**: Keep deprecated behavior for at least one minor phase (e.g., cA-0.8 → cA-0.9).
-3. **Contract bump required**: Any schema shape change requires a new `contract_version`.
-4. **No silent removal**: Remove deprecated behavior only after a tagged release notes the change.
+1. No contract-shape change without a versioned contract bump.
+2. No silent removal of documented compatibility support.
+3. Any deprecation must update compatibility docs, tests, and release notes in the same change.
+4. Determinism and metadata stability take precedence over convenience cleanups.
 
 ## Current deprecations
 

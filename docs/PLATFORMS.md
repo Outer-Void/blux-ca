@@ -1,16 +1,21 @@
 # Platform Setup
 
-This repository is a Python project. Follow the steps below for your platform.
+This repository is a Python project. Use `python -m pip`, not raw `pip`.
 
 ## Termux (native)
 
 ```sh
+pkg install python3 git
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .[dev]
 ./cA_mux.sh run --goal examples/goal_hello.json --out out/
 ```
 
 ## Termux (proot-distro Debian)
 
-Host (Termux):
+Host Termux:
 
 ```sh
 pkg install proot-distro git
@@ -21,30 +26,46 @@ proot-distro login debian
 Inside Debian:
 
 ```sh
+sudo apt update && sudo apt install -y python3 python3-venv python3-pip git
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .[dev]
 ./cA_proot.sh run --goal examples/goal_hello.json --out out/
 ```
 
 ## Debian / Ubuntu
 
 ```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .[dev]
 ./cA.sh run --goal examples/goal_hello.json --out out/
 ```
 
 ## macOS
 
 ```sh
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .[dev]
 ./cA.sh run --goal examples/goal_hello.json --out out/
 ```
 
 ## Windows (PowerShell)
 
 ```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python -m pip install -U pip
+.\.venv\Scripts\python -m pip install -e .[dev]
 .\cA.ps1 run --goal examples/goal_hello.json --out out/
 ```
 
-## Cross-platform smoke commands
+## Cross-platform smoke checks
 
-Use these commands after the setup above. They create outputs and validate them against the schema.
+After setup, validate the generated outputs:
 
 ```sh
 python - <<'PY'

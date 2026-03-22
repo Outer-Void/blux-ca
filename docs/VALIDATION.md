@@ -1,55 +1,57 @@
 # Validation
 
-Validation ensures the engine’s outputs match the cA-1.0-pro contract and enforce drift guard rules.
+Validation enforces the frozen **cA-1.0-pro** contract and policy-pack rules.
 
 ## Schema validation
 
-- `artifact.json` is validated against `schemas/artifact.schema.json`.
-- `verdict.json` is validated against `schemas/verdict.schema.json`.
-- `goal` inputs are validated against `schemas/goal.schema.json` before generation.
+The project validates against checked-in JSON Schemas:
 
-Validation uses `jsonschema` for schema enforcement.
+- goal inputs: `schemas/goal.schema.json`
+- artifacts: `schemas/artifact.schema.json`
+- verdicts: `schemas/verdict.schema.json`
+- policy packs: `schemas/policy_pack.schema.json`
+- profiles: `schemas/profile.schema.json`
 
-## Contract checks
+Compatibility branches for legacy `cA-0.1` artifact/verdict payloads remain in the artifact and
+verdict schemas. The active frozen output shape is the `0.2` branch.
 
-The validator enforces:
+## Frozen metadata checks
+
+Artifact and verdict validation requires:
 
 - `contract_version == "0.2"`
 - `model_version == "cA-1.0-pro"`
 - `schema_version == "1.0"`
-- `policy_pack_id`/`policy_pack_version` match the resolved policy pack
+- `policy_pack_id` and `policy_pack_version` match the resolved policy pack
 
-Failures emit a `delta` describing the minimal change needed to comply.
+When any of these fail, the validator emits a deterministic minimal `delta`.
 
 ## Artifact checks
 
-Additional artifact checks include:
+Artifact validation also enforces:
 
-- At least one file is present for non-`patch_bundle` artifacts.
-- At least one patch is present for `patch_bundle` artifacts.
-- No `TODO` or `FIXME` markers in file content.
-- File paths are safe (relative, no `..`, no leading `/`, no backslashes).
-- File paths are unique.
-- File and patch content contains no binary data (no null bytes) and uses normalized `\n` line endings.
-- Python syntax is valid when `artifact.language == "python"`.
-- `artifact.files` is sorted lexicographically by path.
-- `artifact.patches` is sorted lexicographically by path when present.
-- Policy pack limits for file/patch counts and byte-size caps.
-- Policy pack toggles for TODO/FIXME enforcement and Python syntax validation.
+- non-`patch_bundle` artifacts must emit at least one file
+- `patch_bundle` artifacts must emit at least one patch
+- file paths and patch paths must be safe relative paths
+- file paths and patch paths must be unique
+- text content must not contain null bytes or CR line endings
+- Python syntax must be valid when Python syntax enforcement is enabled by the active policy pack
+- `artifact.files` and `artifact.patches` must already be in stable sorted order
+- policy-pack limits for counts and byte sizes must be respected
+- TODO/FIXME enforcement follows the active policy-pack toggle
 
 ## Verdict checks
 
-The verdict always includes the full list of check results. For failures, a deterministic minimal
-delta is selected using stable tie-breakers (shortest minimal change, then stable key ordering).
-
-## Drift guard
-
-The drift guard blocks expansion language such as "optional", "enhancement", or "next step" in
-artifact content. Any drift hits force a failing verdict with a corrective `delta`.
+Verdict validation enforces schema compliance and frozen metadata headers. The verdict always emits
+its full ordered check list; `delta` is emitted only when the run has a deterministic correction to
+report.
 
 ## Failure modes
 
-Validation failures result in:
+Validation produces one of the frozen verdict statuses:
 
-- `status = FAIL` with a `delta` describing the minimal change, or
-- `status = INFEASIBLE` if the planner detects missing inputs or conflicting constraints.
+- `PASS`
+- `FAIL`
+- `INFEASIBLE`
+
+`FAIL` and `INFEASIBLE` may emit a deterministic minimal `delta`.

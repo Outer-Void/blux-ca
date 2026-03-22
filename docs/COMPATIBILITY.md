@@ -1,23 +1,31 @@
 # Compatibility
 
-The contract remains stable across cA releases. Compatibility rules ensure older outputs remain
-readable and, when feasible, schema-valid.
+The implementation is frozen as **cA-1.0-pro**, but it intentionally retains a narrow,
+documented compatibility surface.
 
 ## Supported compatibility
 
-- Schema files accept cA-0.1 outputs alongside cA-0.2 outputs via `oneOf` branches.
-- Parsing and validation continue to succeed for older payloads without rewriting them.
-- New fields are only introduced under a new `contract_version` and `schema_version`.
+- `schemas/artifact.schema.json` accepts legacy `cA-0.1` / `cA-0.4` artifact payloads.
+- `schemas/verdict.schema.json` accepts legacy `cA-0.1` / `cA-0.4` verdict payloads.
+- Current code does not rewrite legacy payloads on read.
+- The frozen output path remains `contract_version = "0.2"` and `model_version = "cA-1.0-pro"`.
 
-## Compatibility rules
+## Non-goals
 
-1. **Schema shape changes require a contract bump**.
-2. **No automatic upgrades**: do not mutate older payloads on read.
-3. **Deterministic defaults**: if a consumer needs defaults for older payloads, they must be
-   hard-coded and deterministic.
-4. **Backward validation**: keep tests that validate known legacy fixtures against current schemas.
+Compatibility support does **not** mean:
 
-## Tests
+- automatic upgrade of old payloads,
+- mixed-version output emission,
+- weakening deterministic metadata requirements,
+- relaxing the frozen `0.2` output contract.
 
-Compatibility is enforced by `tests/test_compatibility.py`, which validates cA-0.1 payloads against
-current schemas.
+## Rules
+
+1. Schema shape changes require a contract/version bump.
+2. Compatibility branches must stay deterministic and read-only.
+3. Legacy support should remain only where tests prove it is still intentional.
+4. New output fields require synchronized code, schema, tests, and docs changes.
+
+## Verification
+
+Compatibility support is verified by `tests/test_compatibility.py`.

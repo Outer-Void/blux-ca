@@ -1,0 +1,1 @@
+{"contract_version":"0.2","files":[{"content":"print('Do the impossible')\n","path":"main.py"}],"language":"python","model_version":"cA-1.0-pro","policy_pack_id":"cA-pro","policy_pack_version":"1.0","run":{"input_hash":"29a5f65a5fb105cc629046b0bb1571f2fb097ce9220355153c8fad90149a4b4e"},"schema_version":"1.0","type":"code"}

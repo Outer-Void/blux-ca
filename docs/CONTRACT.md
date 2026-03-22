@@ -1,90 +1,96 @@
 # Contract (cA-1.0-pro)
 
-This document defines the frozen cA-1.0-pro contract and how the CLI produces outputs.
+This document defines the frozen **cA-1.0-pro** contract implemented by this repository.
 
-## Versions
+## Frozen identity
 
-- `contract_version`: **"0.2"**
-- `model_version`: **"cA-1.0-pro"**
-- `schema_version`: **"1.0"**
+- `contract_version`: **`"0.2"`**
+- `model_version`: **`"cA-1.0-pro"`**
+- `schema_version`: **`"1.0"`**
+- default policy pack: **`cA-pro@1.0`**
 
-These values are fixed and must match across code, schemas, and outputs. The policy pack headers
-(`policy_pack_id`, `policy_pack_version`) are also required for outputs.
+These values are fixed across code, schemas, docs, examples, and acceptance outputs.
 
-## Input schema
+## Goal input (`schemas/goal.schema.json`)
 
-The engine consumes a goal specification validated by `schemas/goal.schema.json`:
+Required fields:
 
-- `contract_version` (string, const `"0.2"`)
+- `contract_version` (string const `"0.2"` for the frozen contract; legacy `"0.1"` is accepted
+  only for schema compatibility)
 - `goal_id` (string)
 - `intent` (string)
 - `constraints` (array of strings)
-- Optional: `acceptance`, `request` (objects)
 
-## Output schemas
+Optional fields:
 
-### Artifact (`schemas/artifact.schema.json`)
+- `acceptance` (object)
+- `request` (object)
 
-`artifact.json` is produced with the following required fields:
+The engine normalizes `constraints` deterministically before hashing and execution.
 
-- `contract_version` (string, const `"0.2"`)
-- `model_version` (string, const `"cA-1.0-pro"`)
-- `schema_version` (string, const `"1.0"`)
+## Artifact output (`schemas/artifact.schema.json`)
+
+Required top-level fields:
+
+- `contract_version` (`"0.2"`)
+- `model_version` (`"cA-1.0-pro"`)
+- `schema_version` (`"1.0"`)
 - `policy_pack_id` (string)
 - `policy_pack_version` (string)
-- `type` (string enum: `code`, `config`, `diff`, `patch_bundle`)
+- `type` (`code | config | diff | patch_bundle`)
 - `language` (string)
-- One of:
-  - `files` (array of `{ path, content, mode? }`, non-empty)
-  - `patches` (array of `{ path, unified_diff }`, non-empty)
-- `run` (object with `input_hash`)
+- `run` (object)
 
-### Verdict (`schemas/verdict.schema.json`)
+`run` fields:
 
-`verdict.json` is produced with the following required fields:
+- required: `input_hash`
+- optional when a profile is selected: `profile_id`, `profile_version`
 
-- `contract_version` (string, const `"0.2"`)
-- `model_version` (string, const `"cA-1.0-pro"`)
-- `schema_version` (string, const `"1.0"`)
+Payload body:
+
+- `files` is emitted for non-`patch_bundle` artifacts and contains sorted entries with
+  `{ path, content, mode? }`.
+- `patches` is emitted for `patch_bundle` artifacts and contains sorted entries with
+  `{ path, unified_diff }`.
+
+## Verdict output (`schemas/verdict.schema.json`)
+
+Required top-level fields:
+
+- `contract_version` (`"0.2"`)
+- `model_version` (`"cA-1.0-pro"`)
+- `schema_version` (`"1.0"`)
 - `policy_pack_id` (string)
 - `policy_pack_version` (string)
-- `status` (string enum: `PASS`, `FAIL`, `INFEASIBLE`)
+- `status` (`PASS | FAIL | INFEASIBLE`)
 - `checks` (array of `{ id, status, message }`)
-- `run` (object with `input_hash`)
+- `run` (object)
 
-`delta` is included when the run reports a correction action for a failure.
+Optional field:
 
-## Status grammar
+- `delta` with `{ message, minimal_change }`
 
-- `PASS`: all checks passed and no contract violations were detected.
-- `FAIL`: one or more checks failed; `delta` describes the minimal change.
-- `INFEASIBLE`: constraints are mutually conflicting or impossible; `delta` describes the minimal change.
+`run` uses the same metadata rules as the artifact output.
 
-## Output files
+## Acceptance report output
 
-The CLI writes:
+`report.json` is deterministic and emits:
 
-- `out/artifact.json`
-- `out/verdict.json`
+- `contract_version`
+- `model_version`
+- `schema_version`
+- `fixtures` (lexicographically ordered fixture result records)
 
-Both files must validate against their respective schemas without any runtime schema patching.
+Each fixture result includes:
 
-## Tag notes
+- fixture identity: `fixture`
+- hashes: `input_hash`, `artifact_hash`, `verdict_hash`
+- output metadata: `policy_pack_id`, `policy_pack_version`, `status`
+- schema statuses/messages for goal, artifact, and verdict
+- expected-output comparison statuses/messages
 
-- `cA-0.3-mini`: multi-file artifact structure and ordering rules.
-- `cA-0.3`: patch bundle output type and unified diff determinism.
-- `cA-0.4-mini`: acceptance harness and canonical JSON output centralization.
-- `cA-0.4`: deterministic acceptance reporting and validation hardening.
-- `cA-0.5-mini`: policy packs with stricter mini limits.
-- `cA-0.5`: policy-driven validator toggles and pack metadata.
-- `cA-0.6-mini`: feasibility enumeration for missing inputs and conflicts.
-- `cA-0.6`: deterministic minimal-delta selection with stable tie-breakers.
-- `cA-0.7-mini`: explicit output headers and schema versioning.
-- `cA-0.7`: compatibility rules and validation for prior outputs.
-- `cA-0.8-mini`: dataset fixture hooks in acceptance harness.
-- `cA-0.8`: fixture update workflow documentation.
-- `cA-0.9-mini`: release discipline docs and platform runbook.
-- `cA-0.9`: cross-platform install verification in docs.
-- `cA-1.0-mini`: deterministic golden fixtures + drift guard lock.
-- `cA-1.0`: contract stability freeze with canonical hashing guard.
-- `cA-1.0-pro`: pro policy pack and capability notes.
+## Compatibility boundary
+
+The repository intentionally keeps schema compatibility branches for legacy `cA-0.1`
+artifact/verdict payloads. Those branches are compatibility-only and do **not** change the frozen
+final identity of the implementation, which is `cA-1.0-pro`.
