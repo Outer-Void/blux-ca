@@ -6,21 +6,27 @@
 
 ## Final identity
 
-The repository's implemented final identity is **`cA-1.0-pro`**:
+The repository's implemented final identity is:
 
+- package: **`blux-ca` 1.0.0**
+- runtime model identity: **`cA-1.0-pro`**
 - `contract_version = "0.2"`
-- `model_version = "cA-1.0-pro"`
 - `schema_version = "1.0"`
 - default policy pack: `cA-pro@1.0`
+- Python requirement: **3.11+**
 
 ## Install
 
+Use a Python 3.11+ interpreter to create the environment.
+
 ```bash
-python -m venv .venv
+python3.11 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e .[dev]
 ```
+
+If your platform exposes Python 3.11+ as `python3` or `python`, use that interpreter instead.
 
 ## CLI
 
@@ -77,7 +83,11 @@ Profiles are optional. If no profile is selected, output `run` metadata contains
   supported policy pack.
 - Drift guard behavior is fixed and validation is policy-pack-aware.
 - Acceptance runs are lexicographically ordered and produce deterministic `report.json` content.
-- Legacy `cA-0.1` artifact/verdict payloads remain schema-valid for compatibility only.
+- Legacy **goal intake** compatibility for `contract_version = "0.1"` remains read-only.
+- Legacy **artifact/verdict schema validation** for `contract_version = "0.1"` with
+  `model_version = "cA-0.4"` remains read-only.
+- The engine never emits mixed-version outputs: new runs always emit the frozen `0.2` /
+  `cA-1.0-pro` contract.
 
 See `docs/CONTRACT.md`, `docs/DETERMINISM.md`, `docs/VALIDATION.md`,
 `docs/ACCEPTANCE.md`, and `docs/PLATFORMS.md` for the frozen contract, determinism rules,

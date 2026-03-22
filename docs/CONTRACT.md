@@ -4,10 +4,12 @@ This document defines the frozen **cA-1.0-pro** contract implemented by this rep
 
 ## Frozen identity
 
+- package version: **`1.0.0`**
 - `contract_version`: **`"0.2"`**
 - `model_version`: **`"cA-1.0-pro"`**
 - `schema_version`: **`"1.0"`**
 - default policy pack: **`cA-pro@1.0`**
+- Python runtime requirement: **3.11+**
 
 These values are fixed across code, schemas, docs, examples, and acceptance outputs.
 
@@ -16,7 +18,7 @@ These values are fixed across code, schemas, docs, examples, and acceptance outp
 Required fields:
 
 - `contract_version` (string const `"0.2"` for the frozen contract; legacy `"0.1"` is accepted
-  only for schema compatibility)
+  only as read-only intake compatibility)
 - `goal_id` (string)
 - `intent` (string)
 - `constraints` (array of strings)
@@ -26,7 +28,8 @@ Optional fields:
 - `acceptance` (object)
 - `request` (object)
 
-The engine normalizes `constraints` deterministically before hashing and execution.
+The engine normalizes `constraints` deterministically before hashing and execution. Legacy `0.1`
+goal input does not change emitted output identity: runs still emit the frozen `0.2` contract.
 
 ## Artifact output (`schemas/artifact.schema.json`)
 
@@ -91,6 +94,6 @@ Each fixture result includes:
 
 ## Compatibility boundary
 
-The repository intentionally keeps schema compatibility branches for legacy `cA-0.1`
-artifact/verdict payloads. Those branches are compatibility-only and do **not** change the frozen
-final identity of the implementation, which is `cA-1.0-pro`.
+The repository intentionally keeps read-only compatibility branches for legacy `cA-0.1` goal,
+artifact, and verdict payloads. Those branches do **not** change the frozen final identity of the
+implementation, which remains `cA-1.0-pro` emitting the `0.2` contract.

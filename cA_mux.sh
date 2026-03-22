@@ -1,4 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
+set -eu
 
 if [ "$#" -eq 0 ]; then
   echo "Usage: ./cA_mux.sh <command> [args...]"

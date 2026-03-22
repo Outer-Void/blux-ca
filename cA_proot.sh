@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 if [ "$#" -eq 0 ]; then
   echo "Usage: ./cA_proot.sh <command> [args...]"

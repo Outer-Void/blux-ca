@@ -1,3 +1,6 @@
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+
 param(
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$Args

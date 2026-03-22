@@ -12,8 +12,12 @@ The project validates against checked-in JSON Schemas:
 - policy packs: `schemas/policy_pack.schema.json`
 - profiles: `schemas/profile.schema.json`
 
-Compatibility branches for legacy `cA-0.1` artifact/verdict payloads remain in the artifact and
-verdict schemas. The active frozen output shape is the `0.2` branch.
+Compatibility branches remain intentionally narrow and read-only:
+
+- goal intake may be `contract_version = "0.1"` or `"0.2"`,
+- legacy artifact/verdict schema validation accepts `contract_version = "0.1"` with
+  `model_version = "cA-0.4"`,
+- active engine output remains the frozen `0.2` branch.
 
 ## Frozen metadata checks
 
