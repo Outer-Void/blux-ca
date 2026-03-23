@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Tuple
 
+import jsonschema
+
 from blux_ca.contracts.models import Artifact, Delta, GoalSpec, Verdict
+from blux_ca.contracts.schemas import load_schema
 from blux_ca.core.delta import select_minimal_delta_from_list
 from blux_ca.core.determinism import stable_hash
 from blux_ca.core.drift_guard import scan_for_drift
@@ -47,6 +50,7 @@ def _run_header_profile(profile: Optional[Profile]) -> Optional[Tuple[str, str]]
 
 
 def run_engine(goal_input: Dict[str, Any], profile: Optional[Profile] = None) -> Tuple[Artifact, Verdict]:
+    jsonschema.validate(goal_input, load_schema("goal.schema.json"))
     normalized_goal = normalize_goal(goal_input)
     input_hash = stable_hash(normalized_goal)
     goal = GoalSpec.from_dict(normalized_goal)

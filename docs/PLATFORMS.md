@@ -27,7 +27,7 @@ proot-distro login debian
 Inside Debian:
 
 ```sh
-sudo apt update && sudo apt install -y python3 python3-venv python3-pip git
+sudo apt update && sudo apt install python3 python3-venv python3-pip git
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -U pip

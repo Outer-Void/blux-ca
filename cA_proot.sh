@@ -31,7 +31,7 @@ select_python() {
 PYTHON_CMD=$(select_python)
 
 if [ ! -d ".venv" ]; then
-  sudo apt update && sudo apt install -y python3 python3-venv python3-pip git
+  sudo apt update && sudo apt install python3 python3-venv python3-pip git
   sh -c "$PYTHON_CMD -m venv .venv"
 fi
 
