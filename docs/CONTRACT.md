@@ -17,8 +17,7 @@ These values are fixed across code, schemas, docs, examples, and acceptance outp
 
 Required fields:
 
-- `contract_version` (string const `"0.2"` for the frozen contract; legacy `"0.1"` is accepted
-  only as read-only intake compatibility)
+- `contract_version` (string const `"0.2"`)
 - `goal_id` (string)
 - `intent` (string)
 - `constraints` (array of strings)
@@ -28,8 +27,8 @@ Optional fields:
 - `acceptance` (object)
 - `request` (object)
 
-The engine normalizes `constraints` deterministically before hashing and execution. Legacy `0.1`
-goal input does not change emitted output identity: runs still emit the frozen `0.2` contract.
+The engine validates goal input against the frozen goal schema before execution and then normalizes
+`constraints` deterministically before hashing and execution.
 
 ## Artifact output (`schemas/artifact.schema.json`)
 
@@ -95,6 +94,6 @@ Each fixture result includes:
 
 ## Compatibility boundary
 
-The repository intentionally keeps read-only compatibility branches for legacy `cA-0.1` goal,
-artifact, and verdict payloads. Those branches do **not** change the frozen final identity of the
-implementation, which remains `cA-1.0-pro` emitting the `0.2` contract.
+The repository supports only the frozen `0.2` contract for goal intake and the frozen
+`0.2` / `cA-1.0-pro` contract for emitted artifact and verdict payloads. Legacy branches are not
+supported, not auto-upgraded, and not validated as part of the frozen release surface.

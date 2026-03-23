@@ -12,12 +12,11 @@ The project validates against checked-in JSON Schemas:
 - policy packs: `schemas/policy_pack.schema.json`
 - profiles: `schemas/profile.schema.json`
 
-Compatibility branches remain intentionally narrow and read-only:
+Supported contract surface is singular:
 
-- goal intake may be `contract_version = "0.1"` or `"0.2"`,
-- legacy artifact/verdict schema validation accepts `contract_version = "0.1"` with
-  `model_version = "cA-0.4"`,
-- active engine output remains the frozen `0.2` branch.
+- goal intake must use `contract_version = "0.2"`,
+- artifact schema validation accepts only the frozen `0.2` / `cA-1.0-pro` payload shape,
+- verdict schema validation accepts only the frozen `0.2` / `cA-1.0-pro` payload shape.
 
 ## Frozen metadata checks
 

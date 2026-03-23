@@ -49,11 +49,11 @@ When no profile is selected, no profile fields are emitted.
 - minimal-delta selection uses stable tie-breakers.
 - policy-pack resolution is deterministic: explicit request wins, otherwise `cA-pro@1.0`.
 
-## Compatibility and determinism
+## Support boundary and determinism
 
-Legacy `0.1` goal inputs and legacy `0.1`/`cA-0.4` artifact or verdict schema branches are
-read-only compatibility paths. They do not introduce alternate output ordering, metadata, or hash
-rules for the frozen engine.
+The engine accepts only the frozen `0.2` goal contract and emits only the frozen
+`0.2` / `cA-1.0-pro` output contract. Removing legacy branches eliminates alternate version paths
+that could otherwise confuse dataset consumers without changing hashing or output ordering rules.
 
 ## Forbidden nondeterminism
 

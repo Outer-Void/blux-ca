@@ -10,7 +10,7 @@ if [ "$#" -eq 0 ]; then
 fi
 
 if [ ! -d ".venv" ]; then
-  pkg install -y python3 git
+  pkg install python3
   python -m venv .venv
 fi
 
