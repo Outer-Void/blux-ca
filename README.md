@@ -85,7 +85,7 @@ Profiles are optional. If no profile is selected, output `run` metadata contains
   supported policy pack.
 - Drift guard behavior is fixed and validation is policy-pack-aware.
 - Acceptance runs are lexicographically ordered and produce deterministic `report.json` content.
-- Goal intake supports only `contract_version = "0.2"`.
+- Goal intake supports only an explicit `contract_version = "0.2"` value.
 - Artifact and verdict schema validation support only the frozen `0.2` / `cA-1.0-pro` contract.
 - The engine never emits mixed-version outputs: runs always emit the frozen `0.2` /
   `cA-1.0-pro` contract.
