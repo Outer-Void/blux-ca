@@ -41,7 +41,8 @@ The engine emits fixed metadata headers:
 - `profile_id` is always emitted (`default` when no named profile is selected)
 - optional `profile_version` when a named profile is explicitly selected
 - `run_hash` is always emitted in artifact/verdict run metadata and in each acceptance fixture record
-- acceptance `report.json` always emits `profile_id` and emits `profile_version` for named profiles
+- acceptance `report.json` emits `profile_id` and `profile_version` only when a profile is explicitly
+  selected for the acceptance run
 
 ## Deterministic ordering
 

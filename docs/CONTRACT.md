@@ -81,7 +81,7 @@ Optional field:
 - `contract_version`
 - `model_version`
 - `schema_version`
-- `profile_id`
+- optional `profile_id` when the acceptance run selects a profile explicitly
 - optional `profile_version` when the acceptance run selects a named profile
 - `fixtures` (lexicographically ordered fixture result records)
 

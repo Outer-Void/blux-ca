@@ -16,6 +16,8 @@ Supported versions (and only these versions):
 - `verdict.json` schema validation requires the same frozen output identity.
 - The engine emits only the frozen output identity and rejects unsupported goal versions at the
   canonical entrypoint.
+- Acceptance `report.json` emits profile metadata only for explicit profile selection
+  (`--profile`/`--profile-file`), avoiding implicit default-profile report fields.
 
 Unsupported versions:
 

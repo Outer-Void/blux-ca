@@ -10,6 +10,8 @@ def test_examples_acceptance_match(tmp_path: Path) -> None:
     assert report["contract_version"] == "0.2"
     assert report["model_version"] == "cA-1.0-pro"
     assert report["schema_version"] == "1.0"
+    assert "profile_id" not in report
+    assert "profile_version" not in report
 
     fixtures = report["fixtures"]
     assert [row["fixture"] for row in fixtures] == sorted(row["fixture"] for row in fixtures)

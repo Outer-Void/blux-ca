@@ -80,6 +80,8 @@ import json
 from pathlib import Path
 
 report = json.loads(Path("out/report.json").read_text(encoding="utf-8"))
+assert "profile_id" not in report
+assert "profile_version" not in report
 for row in report["fixtures"]:
     assert row["expected_artifact"] == "MATCH", row
     assert row["expected_verdict"] == "MATCH", row

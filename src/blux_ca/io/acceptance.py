@@ -11,7 +11,7 @@ from blux_ca.contracts.schemas import load_schema
 from blux_ca.core.determinism import canonical_json, stable_hash
 from blux_ca.core.engine import run_engine
 from blux_ca.core.profile import Profile
-from blux_ca.core.versions import CONTRACT_VERSION, DEFAULT_PROFILE_ID, MODEL_VERSION, SCHEMA_VERSION
+from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
 from blux_ca.io.json_writer import write_canonical_json
 
 
@@ -93,7 +93,6 @@ def _report_metadata(profile: Optional[Profile]) -> Dict[str, object]:
         "contract_version": CONTRACT_VERSION,
         "model_version": MODEL_VERSION,
         "schema_version": SCHEMA_VERSION,
-        "profile_id": DEFAULT_PROFILE_ID,
     }
     if profile is not None:
         metadata["profile_id"] = profile.profile_id
