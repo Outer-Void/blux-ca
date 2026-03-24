@@ -29,9 +29,11 @@ def test_default_profile_matches_baseline() -> None:
 
     assert canonical_json(artifact_default.to_dict()) == canonical_json(artifact_again.to_dict())
     assert canonical_json(verdict_default.to_dict()) == canonical_json(verdict_again.to_dict())
-    assert "profile_id" not in artifact_default.to_dict()["run"]
+    assert artifact_default.to_dict()["run"]["profile_id"] == "default"
+    assert isinstance(artifact_default.to_dict()["run"]["run_hash"], str)
     assert "profile_version" not in artifact_default.to_dict()["run"]
-    assert "profile_id" not in verdict_default.to_dict()["run"]
+    assert verdict_default.to_dict()["run"]["profile_id"] == "default"
+    assert isinstance(verdict_default.to_dict()["run"]["run_hash"], str)
     assert "profile_version" not in verdict_default.to_dict()["run"]
 
 

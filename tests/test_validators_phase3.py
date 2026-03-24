@@ -16,7 +16,7 @@ def test_duplicate_file_paths_fail() -> None:
         policy_pack_version=POLICY.policy_pack_version,
         type="code",
         language="python",
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
         files=[
             FileEntry(path="main.py", content="print('a')\n"),
             FileEntry(path="main.py", content="print('b')\n"),
@@ -37,7 +37,7 @@ def test_patch_bundle_requires_patches() -> None:
         policy_pack_version=POLICY.policy_pack_version,
         type="patch_bundle",
         language="diff",
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
         patches=[],
     )
 
@@ -55,7 +55,7 @@ def test_binary_or_crlf_content_fails() -> None:
         policy_pack_version=POLICY.policy_pack_version,
         type="patch_bundle",
         language="diff",
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
         patches=[PatchEntry(path="main.py", unified_diff="bad\r\n")],
     )
 

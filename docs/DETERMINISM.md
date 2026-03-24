@@ -27,6 +27,9 @@ verdict, and acceptance report writes.
 The same `input_hash` is emitted in both `artifact.run` and `verdict.run`, and is recorded in each
 acceptance fixture result.
 
+`run.run_hash` is SHA-256 over a canonical object containing:
+`contract_version`, `model_version`, `policy_pack_id`, `profile_id`, and `input_hash`.
+
 ## Stable output metadata
 
 The engine emits fixed metadata headers:
@@ -35,10 +38,10 @@ The engine emits fixed metadata headers:
 - `model_version = "cA-1.0-pro"`
 - `schema_version = "1.0"`
 - `policy_pack_id` / `policy_pack_version` from deterministic policy-pack resolution
-- optional `profile_id` / `profile_version` only when a profile is explicitly selected
-- acceptance `report.json` mirrors the selected profile metadata only when a profile is explicitly selected
-
-When no profile is selected, no profile fields are emitted.
+- `profile_id` is always emitted (`default` when no named profile is selected)
+- optional `profile_version` when a named profile is explicitly selected
+- `run_hash` is always emitted in artifact/verdict run metadata and in each acceptance fixture record
+- acceptance `report.json` always emits `profile_id` and emits `profile_version` for named profiles
 
 ## Deterministic ordering
 

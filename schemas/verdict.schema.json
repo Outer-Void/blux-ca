@@ -45,10 +45,11 @@
     "run": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["input_hash"],
+      "required": ["input_hash", "profile_id", "run_hash"],
       "properties": {
         "input_hash": {"type": "string"},
         "profile_id": {"type": "string"},
+        "run_hash": {"type": "string"},
         "profile_version": {"type": "string"}
       }
     }

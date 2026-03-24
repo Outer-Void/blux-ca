@@ -4,13 +4,14 @@ from typing import Any, Dict, Optional, Tuple
 
 import jsonschema
 
-from blux_ca.contracts.models import Artifact, Delta, GoalSpec, Verdict
+from blux_ca.contracts.models import Artifact, Delta, GoalSpec, RunHeader, Verdict
 from blux_ca.contracts.schemas import load_schema
 from blux_ca.core.delta import select_minimal_delta_from_list
-from blux_ca.core.determinism import stable_hash
+from blux_ca.core.determinism import stable_hash, stable_run_hash
 from blux_ca.core.drift_guard import scan_for_drift
 from blux_ca.core.normalize import normalize_goal
 from blux_ca.core.profile import Profile
+from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, DEFAULT_PROFILE_ID
 from blux_ca.planner.basic_planner import plan_goal
 from blux_ca.builder.basic_builder import build_artifact
 from blux_ca.policy.loader import resolve_policy_pack
@@ -43,9 +44,9 @@ def _with_status(verdict: Verdict, status: str, delta: Optional[Delta]) -> Verdi
     )
 
 
-def _run_header_profile(profile: Optional[Profile]) -> Optional[Tuple[str, str]]:
+def _run_header_profile(profile: Optional[Profile]) -> Tuple[str, Optional[str]]:
     if profile is None:
-        return None
+        return (DEFAULT_PROFILE_ID, None)
     return (profile.profile_id, profile.profile_version)
 
 
@@ -57,14 +58,27 @@ def run_engine(goal_input: Dict[str, Any], profile: Optional[Profile] = None) ->
     policy_pack = resolve_policy_pack(goal.request)
 
     profile_metadata = _run_header_profile(profile)
+    profile_id, profile_version = profile_metadata
+    run_hash = stable_run_hash(
+        contract_version=CONTRACT_VERSION,
+        model_version=MODEL_VERSION,
+        policy_pack_id=policy_pack.policy_pack_id,
+        profile_id=profile_id,
+        input_hash=input_hash,
+    )
+    run_header = RunHeader(
+        input_hash=input_hash,
+        profile_id=profile_id,
+        run_hash=run_hash,
+        profile_version=profile_version,
+    )
 
     plan = plan_goal(goal)
     artifact = build_artifact(
         goal,
-        input_hash,
+        run_header,
         policy_pack.policy_pack_id,
         policy_pack.policy_pack_version,
-        profile_metadata,
     )
     sorted_files = sorted(artifact.files, key=lambda entry: entry.path)
     sorted_patches = sorted(artifact.patches, key=lambda entry: entry.path)
@@ -88,10 +102,9 @@ def run_engine(goal_input: Dict[str, Any], profile: Optional[Profile] = None) ->
     verdict = build_verdict(
         plan,
         artifact,
-        input_hash,
+        run_header,
         policy_pack.policy_pack_id,
         policy_pack.policy_pack_version,
-        profile_metadata,
     )
 
     drift_sources = [file.content for file in artifact.files] + [

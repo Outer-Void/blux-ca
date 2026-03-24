@@ -26,7 +26,7 @@ def test_policy_pack_limits_enforced() -> None:
         policy_pack_version=policy.policy_pack_version,
         type="code",
         language="python",
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
         files=[
             FileEntry(path="a.py", content="print('a')\n"),
             FileEntry(path="b.py", content="print('b')\n"),

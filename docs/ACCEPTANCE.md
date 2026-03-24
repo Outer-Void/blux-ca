@@ -40,7 +40,8 @@ Top-level report fields:
 - `contract_version`
 - `model_version`
 - `schema_version`
-- optional `profile_id`, `profile_version` when the acceptance run selects a profile
+- `profile_id`
+- optional `profile_version` when the acceptance run selects a named profile
 - `fixtures`
 
 Each fixture record includes:
@@ -49,6 +50,7 @@ Each fixture record includes:
 - `artifact_hash`
 - `verdict_hash`
 - `input_hash`
+- `run_hash`
 - `policy_pack_id`
 - `policy_pack_version`
 - `status`
