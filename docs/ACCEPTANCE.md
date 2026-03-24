@@ -40,7 +40,7 @@ Top-level report fields:
 - `contract_version`
 - `model_version`
 - `schema_version`
-- `profile_id`
+- optional `profile_id` when `--profile` or `--profile-file` is provided
 - optional `profile_version` when the acceptance run selects a named profile
 - `fixtures`
 

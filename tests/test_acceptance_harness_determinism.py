@@ -36,6 +36,11 @@ def test_acceptance_harness_determinism(tmp_path: Path) -> None:
     run_acceptance(fixtures, out_a)
     run_acceptance(fixtures, out_b)
 
+    report_a = json.loads((out_a / "report.json").read_text(encoding="utf-8"))
+    report_b = json.loads((out_b / "report.json").read_text(encoding="utf-8"))
+    assert "profile_id" not in report_a
+    assert "profile_version" not in report_a
+    assert report_a == report_b
     assert (out_a / "report.json").read_bytes() == (out_b / "report.json").read_bytes()
     for fixture in ("alpha", "beta"):
         assert (out_a / fixture / "artifact.json").read_bytes() == (
