@@ -8,7 +8,7 @@ surface: the frozen `0.2` contract.
 The final freeze removes legacy compatibility branches and documents only the contract that is
 actually supported in production and dataset generation.
 
-What remains supported:
+Supported versions (and only these versions):
 
 - Goal intake requires an explicit `contract_version = "0.2"` field (no implicit defaulting).
 - `artifact.json` schema validation requires the frozen output identity:
@@ -17,7 +17,7 @@ What remains supported:
 - The engine emits only the frozen output identity and rejects unsupported goal versions at the
   canonical entrypoint.
 
-What is **not** supported:
+Unsupported versions:
 
 - `cA-0.1` goal inputs,
 - legacy `cA-0.4` artifact or verdict payloads,
@@ -25,6 +25,8 @@ What is **not** supported:
 - undocumented alias fields or dual-write compatibility shims,
 - implicit contract-version defaults for underspecified input payloads,
 - weakening deterministic metadata or drift-guard behavior.
+
+No implied support exists outside the explicit supported list above.
 
 ## Rules
 

@@ -17,7 +17,7 @@ def test_no_todo_fixme_validator_fails():
         type="code",
         language="python",
         files=[FileEntry(path="main.py", content="# TODO\nprint('ok')\n")],
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
     )
 
     result = validate_artifact(artifact, POLICY)
@@ -36,7 +36,7 @@ def test_file_boundary_validator_fails():
         type="code",
         language="python",
         files=[FileEntry(path="../bad.py", content="print('ok')\n")],
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
     )
 
     result = validate_artifact(artifact, POLICY)
@@ -55,7 +55,7 @@ def test_python_syntax_validator_fails():
         type="code",
         language="python",
         files=[FileEntry(path="bad.py", content="def x(:\n  pass\n")],
-        run=RunHeader(input_hash="hash"),
+        run=RunHeader(input_hash="hash", profile_id="default", run_hash="rh"),
     )
 
     result = validate_artifact(artifact, POLICY)

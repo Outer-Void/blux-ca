@@ -45,8 +45,8 @@ Required top-level fields:
 
 `run` fields:
 
-- required: `input_hash`
-- optional when a profile is selected: `profile_id`, `profile_version`
+- required: `input_hash`, `profile_id`, `run_hash`
+- optional when a named profile is selected: `profile_version`
 
 Payload body:
 
@@ -81,13 +81,14 @@ Optional field:
 - `contract_version`
 - `model_version`
 - `schema_version`
-- optional `profile_id`, `profile_version` when the acceptance run selects a profile
+- `profile_id`
+- optional `profile_version` when the acceptance run selects a named profile
 - `fixtures` (lexicographically ordered fixture result records)
 
 Each fixture result includes:
 
 - fixture identity: `fixture`
-- hashes: `input_hash`, `artifact_hash`, `verdict_hash`
+- hashes: `input_hash`, `run_hash`, `artifact_hash`, `verdict_hash`
 - output metadata: `policy_pack_id`, `policy_pack_version`, `status`
 - schema statuses/messages for goal, artifact, and verdict
 - expected-output comparison statuses/messages

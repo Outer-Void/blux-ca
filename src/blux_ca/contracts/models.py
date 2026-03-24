@@ -41,13 +41,16 @@ class GoalSpec:
 @dataclass(frozen=True)
 class RunHeader:
     input_hash: str
-    profile_id: Optional[str] = None
+    profile_id: str
+    run_hash: str
     profile_version: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        payload = {"input_hash": self.input_hash}
-        if self.profile_id is not None:
-            payload["profile_id"] = self.profile_id
+        payload = {
+            "input_hash": self.input_hash,
+            "profile_id": self.profile_id,
+            "run_hash": self.run_hash,
+        }
         if self.profile_version is not None:
             payload["profile_version"] = self.profile_version
         return payload
@@ -141,7 +144,9 @@ class Verdict:
     status: str
     checks: List[Check] = field(default_factory=list)
     delta: Optional[Delta] = None
-    run: RunHeader = field(default_factory=lambda: RunHeader(input_hash=""))
+    run: RunHeader = field(
+        default_factory=lambda: RunHeader(input_hash="", profile_id="", run_hash="")
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         checks = [check.to_dict() for check in sorted(self.checks, key=lambda item: item.id)]

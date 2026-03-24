@@ -1,9 +1,11 @@
 import json
 
-from blux_ca.core.determinism import canonical_json, stable_hash
+from blux_ca.core.determinism import canonical_json, stable_hash, stable_run_hash
 from blux_ca.core.engine import run_engine
 from blux_ca.core.normalize import normalize_goal
 from blux_ca.core.versions import (
+    CONTRACT_VERSION,
+    DEFAULT_PROFILE_ID,
     DEFAULT_POLICY_PACK_ID,
     DEFAULT_POLICY_PACK_VERSION,
     MODEL_VERSION,
@@ -39,7 +41,17 @@ def test_multifile_golden() -> None:
             {"path": "a.py", "content": "print('a')\n", "mode": "0644"},
             {"path": "b.py", "content": "print('b')\n", "mode": "0644"},
         ],
-        "run": {"input_hash": stable_hash(normalize_goal(goal))},
+        "run": {
+            "input_hash": stable_hash(normalize_goal(goal)),
+            "profile_id": DEFAULT_PROFILE_ID,
+            "run_hash": stable_run_hash(
+                contract_version=CONTRACT_VERSION,
+                model_version=MODEL_VERSION,
+                policy_pack_id=DEFAULT_POLICY_PACK_ID,
+                profile_id=DEFAULT_PROFILE_ID,
+                input_hash=stable_hash(normalize_goal(goal)),
+            ),
+        },
     }
     assert artifact.to_dict() == expected
     assert verdict.model_version == MODEL_VERSION
@@ -74,7 +86,17 @@ def test_patch_bundle_golden() -> None:
         "patches": [
             {"path": "app.py", "unified_diff": expected_patch},
         ],
-        "run": {"input_hash": stable_hash(normalize_goal(goal))},
+        "run": {
+            "input_hash": stable_hash(normalize_goal(goal)),
+            "profile_id": DEFAULT_PROFILE_ID,
+            "run_hash": stable_run_hash(
+                contract_version=CONTRACT_VERSION,
+                model_version=MODEL_VERSION,
+                policy_pack_id=DEFAULT_POLICY_PACK_ID,
+                profile_id=DEFAULT_PROFILE_ID,
+                input_hash=stable_hash(normalize_goal(goal)),
+            ),
+        },
     }
     assert artifact.to_dict() == expected
     assert verdict.model_version == MODEL_VERSION

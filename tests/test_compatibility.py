@@ -54,7 +54,7 @@ def test_artifact_schema_rejects_legacy_contract_version() -> None:
         "type": "code",
         "language": "python",
         "files": [{"path": "main.py", "content": "print('hi')\n"}],
-        "run": {"input_hash": "abc"},
+        "run": {"input_hash": "abc", "profile_id": "default", "run_hash": "rh"},
     }
 
     with pytest.raises(jsonschema.ValidationError):
@@ -67,7 +67,7 @@ def test_verdict_schema_rejects_legacy_contract_version() -> None:
         "model_version": "cA-0.4",
         "status": "PASS",
         "checks": [{"id": "plan", "status": "PASS", "message": "ok"}],
-        "run": {"input_hash": "abc"},
+        "run": {"input_hash": "abc", "profile_id": "default", "run_hash": "rh"},
     }
 
     with pytest.raises(jsonschema.ValidationError):

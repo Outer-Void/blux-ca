@@ -50,7 +50,8 @@ blux-ca accept --fixtures examples --out out-cpu/ --profile cpu
 This writes `out/<fixture>/artifact.json`, `out/<fixture>/verdict.json`, and `out/report.json`.
 The checked-in `examples/` fixtures include expected outputs, so the acceptance report should show
 `MATCH` results for both artifact and verdict comparisons. When acceptance runs with a profile, the
-report also emits deterministic top-level `profile_id` and `profile_version` metadata.
+report always emits deterministic top-level `profile_id` metadata and emits `profile_version`
+when a named profile is selected.
 
 ## Quickstart runners
 
@@ -69,8 +70,8 @@ invoke the stable CLI entry path.
 
 ## Profiles
 
-Profiles are optional. If no profile is selected, output `run` metadata contains only
-`input_hash`. When a profile is selected, `run.profile_id` and `run.profile_version` are emitted.
+Profiles are optional. Output `run` metadata always contains `input_hash`, `profile_id`, and
+`run_hash`. When a named profile is selected, `run.profile_version` is also emitted.
 
 ```bash
 ./cA.sh run --goal examples/goal_hello.json --out out/ --profile cpu
@@ -81,6 +82,7 @@ Profiles are optional. If no profile is selected, output `run` metadata contains
 
 - Outputs are canonical JSON and deterministic for identical inputs.
 - `artifact.json` and `verdict.json` always emit frozen metadata headers.
+- `artifact.run` and `verdict.run` always emit `input_hash`, `profile_id`, and `run_hash`.
 - The default run path resolves `cA-pro@1.0` unless the goal request explicitly selects another
   supported policy pack.
 - Drift guard behavior is fixed and validation is policy-pack-aware.
