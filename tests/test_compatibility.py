@@ -20,6 +20,33 @@ def test_goal_schema_rejects_legacy_contract_version() -> None:
         run_engine(legacy_goal)
 
 
+def test_goal_schema_rejects_missing_contract_version() -> None:
+    missing_contract_goal = {
+        "goal_id": "missing-contract",
+        "intent": "Goal without explicit contract version",
+        "constraints": [],
+    }
+
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(missing_contract_goal, load_schema("goal.schema.json"))
+
+    with pytest.raises(jsonschema.ValidationError):
+        run_engine(missing_contract_goal)
+
+
+def test_goal_schema_rejects_undocumented_alias_fields() -> None:
+    goal_with_alias = {
+        "contract_version": "0.2",
+        "goal_id": "alias-goal",
+        "intent": "Goal with an alias field",
+        "constraints": [],
+        "goal": "legacy-alias",
+    }
+
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(goal_with_alias, load_schema("goal.schema.json"))
+
+
 def test_artifact_schema_rejects_legacy_contract_version() -> None:
     legacy_artifact = {
         "contract_version": "0.1",

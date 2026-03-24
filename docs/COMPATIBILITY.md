@@ -10,7 +10,7 @@ actually supported in production and dataset generation.
 
 What remains supported:
 
-- Goal intake requires `contract_version = "0.2"`.
+- Goal intake requires an explicit `contract_version = "0.2"` field (no implicit defaulting).
 - `artifact.json` schema validation requires the frozen output identity:
   `contract_version = "0.2"`, `model_version = "cA-1.0-pro"`, `schema_version = "1.0"`.
 - `verdict.json` schema validation requires the same frozen output identity.
@@ -23,6 +23,7 @@ What is **not** supported:
 - legacy `cA-0.4` artifact or verdict payloads,
 - automatic upgrade or rewrite of old payloads,
 - undocumented alias fields or dual-write compatibility shims,
+- implicit contract-version defaults for underspecified input payloads,
 - weakening deterministic metadata or drift-guard behavior.
 
 ## Rules

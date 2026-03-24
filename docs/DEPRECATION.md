@@ -13,4 +13,4 @@ remains deterministic and taggable.
 ## Current deprecations
 
 Legacy `cA-0.1` goal intake and legacy `cA-0.4` artifact/verdict schema acceptance were removed at
-final freeze. Only the frozen `0.2` / `cA-1.0-pro` contract remains supported.
+final freeze. Only the frozen `0.2` / `cA-1.0-pro` contract remains supported, with explicit contract-version declaration and no alias fields.

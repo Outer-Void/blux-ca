@@ -3,8 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from blux_ca.core.versions import CONTRACT_VERSION, MODEL_VERSION, SCHEMA_VERSION
-
 
 @dataclass(frozen=True)
 class GoalSpec:
@@ -18,7 +16,7 @@ class GoalSpec:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "GoalSpec":
         return cls(
-            contract_version=data.get("contract_version", CONTRACT_VERSION),
+            contract_version=data["contract_version"],
             goal_id=data.get("goal_id", ""),
             intent=data.get("intent", ""),
             constraints=list(data.get("constraints", [])),
