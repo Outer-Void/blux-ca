@@ -139,3 +139,9 @@ Profiles are optional. Output `run` metadata always contains `input_hash`, `prof
 See `docs/CONTRACT.md`, `docs/DETERMINISM.md`, `docs/VALIDATION.md`,
 `docs/ACCEPTANCE.md`, and `docs/PLATFORMS.md` for the frozen contract, determinism rules,
 validation policy, acceptance workflow, and platform-specific setup.
+
+## License
+
+**BLUX Proprietary License** (proprietary). Copyright (c) 2026 Outer-Void / Justadudeinspace (JADIS). All rights reserved. See [LICENSE](LICENSE).
+
+Contact: outervoid.blux@gmail.com (main) · theoutervoid@outlook.com (fallback)
