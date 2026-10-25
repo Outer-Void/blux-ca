@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-SCHEMA_DIR = Path(__file__).resolve().parents[3] / "schemas"
+SCHEMA_DIR = Path(__file__).resolve().parents[1] / "frozen" / "schemas"
 
 
 def load_schema(name: str) -> Dict[str, Any]:

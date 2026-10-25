@@ -11,7 +11,7 @@ from blux_ca.validator.validators import validate_artifact
 
 
 def test_policy_pack_schema_valid() -> None:
-    pack_path = Path("policy_packs/cA-mini/1.0/policy_pack.json")
+    pack_path = Path("src/blux_ca/frozen/policy_packs/cA-mini/1.0/policy_pack.json")
     payload = json.loads(pack_path.read_text(encoding="utf-8"))
     jsonschema.validate(payload, load_schema("policy_pack.schema.json"))
 

@@ -6,11 +6,11 @@ Validation enforces the frozen **cA-1.0-pro** contract and policy-pack rules.
 
 The project validates against checked-in JSON Schemas:
 
-- goal inputs: `schemas/goal.schema.json`
-- artifacts: `schemas/artifact.schema.json`
-- verdicts: `schemas/verdict.schema.json`
-- policy packs: `schemas/policy_pack.schema.json`
-- profiles: `schemas/profile.schema.json`
+- goal inputs: `src/blux_ca/frozen/schemas/goal.schema.json`
+- artifacts: `src/blux_ca/frozen/schemas/artifact.schema.json`
+- verdicts: `src/blux_ca/frozen/schemas/verdict.schema.json`
+- policy packs: `src/blux_ca/frozen/schemas/policy_pack.schema.json`
+- profiles: `src/blux_ca/frozen/schemas/profile.schema.json`
 
 Supported contract surface is singular:
 

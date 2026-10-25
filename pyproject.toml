@@ -4,20 +4,51 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blux-ca"
-version = "1.0.0"
-description = "cA-1.0-pro deterministic contract engine"
+version = "2.0.0"
+description = "cA: BLUX's construction and repair engine (changesets, bounded repair, rollback) plus the frozen cA-1.0-pro contract engine"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = ["jsonschema>=4.19"]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.4"]
+dev = ["pytest>=7.4", "hypothesis>=6.100", "pyyaml>=6.0", "ruff>=0.6", "mypy>=1.11"]
 
 [project.scripts]
 blux-ca = "blux_ca.io.cli:main"
+ca = "blux_ca.construction.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"blux_ca.construction" = ["schemas/*.json"]
+"blux_ca.frozen" = ["schemas/*.json", "policy_packs/*/*/*.json"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+
+# Lint and type checks cover cA 2 (blux_ca.construction). The frozen cA 1.0 modules are left as they are.
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+include = ["src/blux_ca/construction/**/*.py", "tests/construction/**/*.py", "scripts/*.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "A", "BLE", "RUF", "SIM", "PL", "C4", "N"]
+ignore = ["PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR2004", "PLC0415", "S101", "S603", "S607", "PLR1714"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "PLR", "BLE", "PLW1510", "N"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["blux_ca", "tests"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = ["src"]
+packages = ["blux_ca.construction"]
+
+[[tool.mypy.overrides]]
+module = ["jsonschema", "jsonschema.*"]
+ignore_missing_imports = true

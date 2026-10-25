@@ -4,7 +4,7 @@ This document defines the frozen **cA-1.0-pro** contract implemented by this rep
 
 ## Frozen identity
 
-- package version: **`1.0.0`**
+- introduced in package version **`1.0.0`** (the package is now 2.0.0, which adds cA 2 in `blux_ca.construction` and keeps this contract unchanged)
 - `contract_version`: **`"0.2"`**
 - `model_version`: **`"cA-1.0-pro"`**
 - `schema_version`: **`"1.0"`**
@@ -13,7 +13,7 @@ This document defines the frozen **cA-1.0-pro** contract implemented by this rep
 
 These values are fixed across code, schemas, docs, examples, and acceptance outputs.
 
-## Goal input (`schemas/goal.schema.json`)
+## Goal input (`src/blux_ca/frozen/schemas/goal.schema.json`)
 
 Required fields:
 
@@ -30,7 +30,7 @@ Optional fields:
 The engine validates goal input against the frozen goal schema before execution and then normalizes
 `constraints` deterministically before hashing and execution.
 
-## Artifact output (`schemas/artifact.schema.json`)
+## Artifact output (`src/blux_ca/frozen/schemas/artifact.schema.json`)
 
 Required top-level fields:
 
@@ -55,7 +55,7 @@ Payload body:
 - `patches` is emitted for `patch_bundle` artifacts and contains sorted entries with
   `{ path, unified_diff }`.
 
-## Verdict output (`schemas/verdict.schema.json`)
+## Verdict output (`src/blux_ca/frozen/schemas/verdict.schema.json`)
 
 Required top-level fields:
 

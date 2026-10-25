@@ -1,0 +1,61 @@
+{
+  "$id": "urn:outervoid:ca:repo.patch:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Apply a multi-file unified diff or a reviewed ca.changeset to a workspace, all or nothing.",
+  "oneOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "diff": {
+          "maxLength": 8388608,
+          "minLength": 1,
+          "type": "string"
+        },
+        "dry_run": {
+          "description": "Compute the changeset without writing anything (default false).",
+          "type": "boolean"
+        },
+        "strip": {
+          "maximum": 8,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "workspace": {
+          "description": "Workspace directory (relative to the caller's working directory).",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace",
+        "diff"
+      ],
+      "type": "object"
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "changeset": {
+          "type": "object"
+        },
+        "dry_run": {
+          "description": "Compute the changeset without writing anything (default false).",
+          "type": "boolean"
+        },
+        "workspace": {
+          "description": "Workspace directory (relative to the caller's working directory).",
+          "maxLength": 4096,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace",
+        "changeset"
+      ],
+      "type": "object"
+    }
+  ],
+  "title": "repo.patch request"
+}

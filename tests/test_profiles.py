@@ -38,7 +38,7 @@ def test_default_profile_matches_baseline() -> None:
 
 
 def test_profile_schema_validation() -> None:
-    schema = json.loads(Path("schemas/profile.schema.json").read_text(encoding="utf-8"))
+    schema = json.loads(Path("src/blux_ca/frozen/schemas/profile.schema.json").read_text(encoding="utf-8"))
     cpu = json.loads(Path("profiles/cpu.json").read_text(encoding="utf-8"))
     gpu = json.loads(Path("profiles/gpu.json").read_text(encoding="utf-8"))
 

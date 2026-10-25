@@ -1,0 +1,48 @@
+{
+  "contract": "coga.request",
+  "goal": {
+    "statement": "Ship v2"
+  },
+  "max_parallel": 2,
+  "tasks": [
+    {
+      "effort": 3,
+      "id": "design",
+      "title": "Design"
+    },
+    {
+      "depends_on": [
+        "design"
+      ],
+      "effort": 5,
+      "id": "build",
+      "title": "Build"
+    },
+    {
+      "depends_on": [
+        "design"
+      ],
+      "effort": 2,
+      "id": "docs",
+      "title": "Docs"
+    },
+    {
+      "depends_on": [
+        "build"
+      ],
+      "effort": 2,
+      "id": "test",
+      "title": "Test"
+    },
+    {
+      "depends_on": [
+        "test",
+        "docs"
+      ],
+      "effort": 1,
+      "id": "release",
+      "title": "Release"
+    }
+  ],
+  "version": 1
+}

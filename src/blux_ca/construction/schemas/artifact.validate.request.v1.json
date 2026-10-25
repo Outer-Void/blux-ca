@@ -1,0 +1,23 @@
+{
+  "$id": "urn:outervoid:ca:artifact.validate:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Check a changeset's integrity and whether it applies to the workspace. Not a certification.",
+  "properties": {
+    "changeset": {
+      "type": "object"
+    },
+    "workspace": {
+      "description": "Workspace directory (relative to the caller's working directory).",
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace",
+    "changeset"
+  ],
+  "title": "artifact.validate request",
+  "type": "object"
+}

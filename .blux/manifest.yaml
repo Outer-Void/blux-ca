@@ -1,0 +1,11 @@
+contract: blux.project
+contract_version: "1.0"
+project_id: blux-ca
+name: cA
+description: BLUX's construction and repair engine. Minimal, auditable changesets with rollback artifacts and bounded repair; never certifies its own work (DAT validates).
+role: standalone
+repository: Outer-Void/blux-ca
+capabilities: capabilities.yaml
+policy: policy.yaml
+labels:
+  owner: outer-void

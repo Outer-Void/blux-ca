@@ -1,0 +1,189 @@
+{
+  "$id": "urn:outervoid:ca:changeset:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "base_tree": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "capability": {
+      "maxLength": 64,
+      "type": "string"
+    },
+    "changeset_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "contract": {
+      "const": "ca.changeset"
+    },
+    "noop": {
+      "type": "boolean"
+    },
+    "operations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "create",
+              "modify",
+              "delete"
+            ]
+          },
+          "added": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "after": {
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "enum": [
+                  "100644",
+                  "100755",
+                  null
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "sha256",
+              "mode"
+            ],
+            "type": "object"
+          },
+          "before": {
+            "additionalProperties": false,
+            "properties": {
+              "mode": {
+                "enum": [
+                  "100644",
+                  "100755",
+                  null
+                ]
+              },
+              "sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "sha256",
+              "mode"
+            ],
+            "type": "object"
+          },
+          "diff": {
+            "maxLength": 8388608,
+            "type": "string"
+          },
+          "path": {
+            "description": "Workspace-relative path with forward slashes.",
+            "maxLength": 1024,
+            "minLength": 1,
+            "type": "string"
+          },
+          "removed": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "sources": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "path",
+          "action",
+          "before",
+          "after",
+          "diff",
+          "added",
+          "removed",
+          "sources"
+        ],
+        "type": "object"
+      },
+      "maxItems": 500,
+      "type": "array"
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "stats": {
+      "additionalProperties": false,
+      "properties": {
+        "created": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "deleted": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "files": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lines_added": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "lines_removed": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "modified": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "files",
+        "created",
+        "modified",
+        "deleted",
+        "lines_added",
+        "lines_removed"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "contract",
+    "version",
+    "changeset_id",
+    "capability",
+    "base_tree",
+    "provenance",
+    "operations",
+    "stats",
+    "noop"
+  ],
+  "title": "ca.changeset v1",
+  "type": "object"
+}

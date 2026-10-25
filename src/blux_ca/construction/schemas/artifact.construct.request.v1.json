@@ -1,0 +1,218 @@
+{
+  "$id": "urn:outervoid:ca:artifact.construct:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Build files from a blueprint in the order of a CogA plan; returns a changeset.",
+  "properties": {
+    "blueprint": {
+      "additionalProperties": false,
+      "properties": {
+        "units": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "files": {
+                "items": {
+                  "oneOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "content": {
+                          "maxLength": 1048576,
+                          "type": "string"
+                        },
+                        "executable": {
+                          "type": "boolean"
+                        },
+                        "path": {
+                          "description": "Workspace-relative path with forward slashes.",
+                          "maxLength": 1024,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "content"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "executable": {
+                          "type": "boolean"
+                        },
+                        "params": {
+                          "additionalProperties": {
+                            "maxLength": 65536,
+                            "type": "string"
+                          },
+                          "maxProperties": 100,
+                          "propertyNames": {
+                            "pattern": "^[_A-Za-z][_A-Za-z0-9]*$"
+                          },
+                          "type": "object"
+                        },
+                        "path": {
+                          "description": "Workspace-relative path with forward slashes.",
+                          "maxLength": 1024,
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "template": {
+                          "maxLength": 1048576,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "template"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "builtin": {
+                          "enum": [
+                            "editorconfig",
+                            "gitignore.python",
+                            "markdown.readme",
+                            "python.module",
+                            "python.package",
+                            "python.test"
+                          ]
+                        },
+                        "executable": {
+                          "type": "boolean"
+                        },
+                        "params": {
+                          "additionalProperties": {
+                            "maxLength": 65536,
+                            "type": "string"
+                          },
+                          "maxProperties": 100,
+                          "propertyNames": {
+                            "pattern": "^[_A-Za-z][_A-Za-z0-9]*$"
+                          },
+                          "type": "object"
+                        },
+                        "path": {
+                          "description": "Workspace-relative path with forward slashes.",
+                          "maxLength": 1024,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "builtin"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "config": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "data": {},
+                            "format": {
+                              "enum": [
+                                "json",
+                                "toml",
+                                "yaml",
+                                "ini",
+                                "env"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "data"
+                          ],
+                          "type": "object"
+                        },
+                        "executable": {
+                          "type": "boolean"
+                        },
+                        "path": {
+                          "description": "Workspace-relative path with forward slashes.",
+                          "maxLength": 1024,
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "config"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                },
+                "maxItems": 500,
+                "minItems": 1,
+                "type": "array"
+              },
+              "task": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "task",
+              "files"
+            ],
+            "type": "object"
+          },
+          "maxItems": 500,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "units"
+      ],
+      "type": "object"
+    },
+    "dry_run": {
+      "description": "Compute the changeset without writing anything (default false).",
+      "type": "boolean"
+    },
+    "plan": {
+      "description": "A CogA reason.plan artifact, unmodified.",
+      "properties": {
+        "artifact_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "capability": {
+          "const": "reason.plan"
+        },
+        "contract": {
+          "const": "coga.artifact"
+        }
+      },
+      "required": [
+        "contract",
+        "capability",
+        "artifact_id",
+        "result"
+      ],
+      "type": "object"
+    },
+    "workspace": {
+      "description": "Workspace directory (relative to the caller's working directory).",
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace",
+    "blueprint"
+  ],
+  "title": "artifact.construct request",
+  "type": "object"
+}

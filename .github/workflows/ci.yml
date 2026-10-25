@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "stage-*/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip build
+          pip install -e '.[dev]'
+          # Test-only: .blux/ is validated with the Contract v1 SDK, and the native loop runs real DAT.
+          # cA itself imports nothing from BLUX or DAT.
+          pip install "blux-sdk @ git+https://github.com/Outer-Void/blux.git@0b09a46a98a29cbdb108679f3ef5252b0b6881d1#subdirectory=sdk/python"
+          pip install "outervoid-dat @ git+https://github.com/Outer-Void/dat.git@ba5838636d8576b555fcf854793a709210814a1a"
+      - name: Lint, types, generated files
+        run: make lint types generated
+      - name: Tests (cA 2 engine and the frozen cA 1.0 contract)
+        run: make test
+      - name: Wheel (clean venv)
+        run: make wheel
+      # The frozen 1.0 contract must still reproduce the dataset's fixtures. (cA-full is excluded: its
+      # policy_pack_matrix expectation is wrong in the dataset itself; docs/AUDIT-1.0.md.)
+      - uses: actions/checkout@v4
+        with:
+          repository: Outer-Void/blux-ca-dataset
+          ref: fbc31fbaf16a597395ed88737b7d8c4e906a4d79
+          path: _dataset
+      - name: blux-ca-dataset verification
+        working-directory: _dataset
+        run: |
+          python scripts/validate_dataset.py
+          python scripts/verify_fixtures.py --engine-root "$GITHUB_WORKSPACE" --policy-pack cA-pro
+          python scripts/verify_fixtures.py --engine-root "$GITHUB_WORKSPACE" --policy-pack cA-mini
+          python scripts/verify_fixtures.py --engine-root "$GITHUB_WORKSPACE" --policy-pack cA-pro --profile cpu

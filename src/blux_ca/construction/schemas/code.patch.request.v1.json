@@ -1,0 +1,41 @@
+{
+  "$id": "urn:outervoid:ca:code.patch:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Apply a unified diff to one file, exactly (no fuzz).",
+  "properties": {
+    "diff": {
+      "maxLength": 8388608,
+      "minLength": 1,
+      "type": "string"
+    },
+    "dry_run": {
+      "description": "Compute the changeset without writing anything (default false).",
+      "type": "boolean"
+    },
+    "path": {
+      "description": "Workspace-relative path with forward slashes.",
+      "maxLength": 1024,
+      "minLength": 1,
+      "type": "string"
+    },
+    "strip": {
+      "maximum": 8,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "workspace": {
+      "description": "Workspace directory (relative to the caller's working directory).",
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace",
+    "path",
+    "diff"
+  ],
+  "title": "code.patch request",
+  "type": "object"
+}

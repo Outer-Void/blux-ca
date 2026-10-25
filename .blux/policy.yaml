@@ -1,0 +1,21 @@
+# Default policy for running cA through BLUX. Checking a changeset (artifact.validate) only reads, so every
+# actor may do it. The writing capabilities change files in the workspace they are given, always through a
+# changeset with rollback artifacts; they are for users and services. An agent can still have its work
+# built by asking a service to run it, which keeps a non-agent principal on every write.
+contract: blux.policy
+contract_version: "1.0"
+policy_id: ca-default
+default_effect: deny
+rules:
+  - rule_id: allow-validate
+    effect: allow
+    capabilities: ["artifact.validate"]
+    actor_types: [user, service, agent]
+    max_side_effects: read
+    grants: ["fs:read:workspace"]
+  - rule_id: allow-construction
+    effect: allow
+    capabilities: ["artifact.construct", "artifact.modify", "artifact.repair", "code.patch", "repo.patch", "config.generate"]
+    actor_types: [user, service]
+    max_side_effects: write
+    grants: ["fs:read:workspace", "fs:write:workspace"]

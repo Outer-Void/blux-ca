@@ -15,7 +15,7 @@ from blux_ca.core.versions import (
 )
 
 
-POLICY_PACK_DIR = Path(__file__).resolve().parents[3] / "policy_packs"
+POLICY_PACK_DIR = Path(__file__).resolve().parents[1] / "frozen" / "policy_packs"
 
 
 @dataclass(frozen=True)

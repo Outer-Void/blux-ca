@@ -1,0 +1,142 @@
+{
+  "$id": "urn:outervoid:ca:check:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "capability": {
+      "const": "artifact.validate"
+    },
+    "certified": {
+      "const": false
+    },
+    "changeset_id": {
+      "anyOf": [
+        {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "checks": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "message"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "contract": {
+      "const": "ca.check"
+    },
+    "engine": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "ca"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "type": "object"
+    },
+    "input_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "linkage": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "required": [
+            "operation_id",
+            "capability_id",
+            "system"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "state": {
+      "enum": [
+        "applicable",
+        "applied",
+        "noop",
+        "conflict",
+        "invalid"
+      ]
+    },
+    "validation": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "dat"
+        },
+        "status": {
+          "enum": [
+            "required",
+            "pending-apply",
+            "unchanged"
+          ]
+        },
+        "suggested": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "authority",
+        "status",
+        "suggested"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "contract",
+    "version",
+    "engine",
+    "capability",
+    "input_sha256",
+    "changeset_id",
+    "state",
+    "checks",
+    "certified",
+    "validation",
+    "linkage"
+  ],
+  "title": "ca.check v1",
+  "type": "object"
+}

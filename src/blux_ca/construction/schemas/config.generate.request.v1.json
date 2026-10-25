@@ -1,0 +1,45 @@
+{
+  "$id": "urn:outervoid:ca:config.generate:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Write a JSON, TOML, YAML, INI or env file in canonical form from structured data.",
+  "properties": {
+    "data": {},
+    "dry_run": {
+      "description": "Compute the changeset without writing anything (default false).",
+      "type": "boolean"
+    },
+    "format": {
+      "enum": [
+        "json",
+        "toml",
+        "yaml",
+        "ini",
+        "env"
+      ]
+    },
+    "overwrite": {
+      "description": "Replace an existing file with different content (default false).",
+      "type": "boolean"
+    },
+    "path": {
+      "description": "Workspace-relative path with forward slashes.",
+      "maxLength": 1024,
+      "minLength": 1,
+      "type": "string"
+    },
+    "workspace": {
+      "description": "Workspace directory (relative to the caller's working directory).",
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace",
+    "path",
+    "data"
+  ],
+  "title": "config.generate request",
+  "type": "object"
+}

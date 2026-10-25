@@ -1,0 +1,337 @@
+{
+  "$id": "urn:outervoid:ca:artifact.modify:request:v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Apply structured edits (create, replace, insert, append, delete, chmod) to a workspace.",
+  "properties": {
+    "dry_run": {
+      "description": "Compute the changeset without writing anything (default false).",
+      "type": "boolean"
+    },
+    "edits": {
+      "items": {
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "properties": {
+              "content": {
+                "maxLength": 1048576,
+                "type": "string"
+              },
+              "executable": {
+                "type": "boolean"
+              },
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "create"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "content"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "content": {
+                "maxLength": 1048576,
+                "type": "string"
+              },
+              "executable": {
+                "type": "boolean"
+              },
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "write"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "content"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "count": {
+                "maximum": 10000,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "new": {
+                "maxLength": 1048576,
+                "type": "string"
+              },
+              "old": {
+                "maxLength": 1048576,
+                "minLength": 1,
+                "type": "string"
+              },
+              "op": {
+                "const": "replace"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "old",
+              "new"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "anchor": {
+                "maxLength": 1048576,
+                "minLength": 1,
+                "type": "string"
+              },
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "insert"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              },
+              "position": {
+                "enum": [
+                  "before",
+                  "after"
+                ]
+              },
+              "text": {
+                "maxLength": 1048576,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "anchor",
+              "position",
+              "text"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "append"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              },
+              "text": {
+                "maxLength": 1048576,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "text"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "prepend"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              },
+              "text": {
+                "maxLength": 1048576,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "text"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "delete"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "properties": {
+              "executable": {
+                "type": "boolean"
+              },
+              "expect_sha256": {
+                "anyOf": [
+                  {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "op": {
+                "const": "chmod"
+              },
+              "path": {
+                "description": "Workspace-relative path with forward slashes.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "path",
+              "executable"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "maxItems": 1000,
+      "minItems": 1,
+      "type": "array"
+    },
+    "workspace": {
+      "description": "Workspace directory (relative to the caller's working directory).",
+      "maxLength": 4096,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "workspace",
+    "edits"
+  ],
+  "title": "artifact.modify request",
+  "type": "object"
+}

@@ -1,34 +1,77 @@
 # blux-ca
 
-`blux-ca` is the frozen **cA-1.0-pro** engine. It emits deterministic `artifact.json`,
-`verdict.json`, and acceptance `report.json` payloads with a fixed contract schema and
-**default pro policy-pack behavior**.
+**cA** is BLUX's construction and repair engine.
 
-## Final identity
+It turns explicit instructions into a minimal, auditable **changeset** and applies it to a workspace
+transactionally, keeping rollback artifacts. The instructions can be:
 
-The repository's implemented final identity is:
+- a blueprint ordered by a CogA plan;
+- structured edits;
+- unified diffs;
+- configuration data;
+- DAT findings.
 
-- package: **`blux-ca` 1.0.0**
-- runtime model identity: **`cA-1.0-pro`**
-- `contract_version = "0.2"`
-- `schema_version = "1.0"`
-- default policy pack: `cA-pro@1.0`
-- Python requirement: **3.11+**
+cA never certifies its own work: every result says `certified: false` and names DAT as the validator.
+
+| capability | |
+|---|---|
+| `artifact.construct` | build files from a blueprint, in the order of a CogA `reason.plan` artifact |
+| `artifact.modify` | structured edits: create, write, replace, insert, append, prepend, delete, chmod |
+| `artifact.repair` | minimal rule-specific fixes for DAT findings; 2 attempts by default, enforced from the ledger |
+| `artifact.validate` | a changeset's integrity and applicability; read-only, not a certification |
+| `code.patch` / `repo.patch` | apply a unified diff (one file / many files, all or nothing), exactly, without fuzz |
+| `config.generate` | canonical JSON, TOML, YAML, INI or env files from data |
+
+```text
+CogA reason.plan -> cA artifact.construct -> DAT repo.quality (fail)
+                 -> cA artifact.repair (attempt 1 of 2) -> DAT repo.quality (pass)   all recorded in BLUX System
+```
+
+Every capability supports `dry_run`. `ca rollback ID` undoes any applied changeset, and `ca recover`
+restores a workspace after an interrupted change. There is no model, network access or hidden reasoning:
+results are deterministic, so the same request on the same files gives the same `changeset_id`.
 
 ## Install
 
-Use a Python 3.11+ interpreter to create the environment.
+Python 3.11+.
 
 ```bash
-python3.11 -m venv .venv
-. .venv/bin/activate
+python3 -m venv .venv && . .venv/bin/activate
 python -m pip install -U pip
-python -m pip install -e .[dev]
+python -m pip install -e '.[dev]'
 ```
 
-If your platform exposes Python 3.11+ as `python3` or `python`, use that interpreter instead.
+## cA 2: `ca`
 
-## CLI
+```bash
+ca construct build.json --dry-run --pretty   # see the changeset; nothing is written
+ca construct build.json                      # apply it (rollback artifacts in build/.ca/)
+ca loop build.json --fail-on low             # construct, then DAT-validate and repair within the limit
+ca status -w build                           # the ledger
+ca rollback <changeset_id> -w build
+```
+
+| docs | |
+|---|---|
+| [docs/CONSTRUCTION.md](docs/CONSTRUCTION.md) | rules, changesets, diffs, workspace state, construction, repair, config |
+| [docs/USAGE.md](docs/USAGE.md) | commands, exit and error codes |
+| [docs/BLUX.md](docs/BLUX.md) | capabilities, policy, protocol and the Stage 07 hard gate |
+| [docs/AUDIT-1.0.md](docs/AUDIT-1.0.md) | what the cA 1.0 audit found and what changed |
+
+`make ci` runs format, lint, types, the generated-schema check, tests and a clean-venv wheel check.
+
+## cA 1.0 (frozen): `blux-ca`
+
+The original **cA-1.0-pro** engine is kept unchanged for the blux-ca-dataset:
+
+- `contract_version = "0.2"` and `schema_version = "1.0"`;
+- default policy pack `cA-pro@1.0`;
+- byte-identical `artifact.json` / `verdict.json` / `report.json` output.
+
+Its schemas and policy packs now ship inside the package (`src/blux_ca/frozen/`), so it also works from a
+normal install.
+
+### CLI
 
 After installation, use either the console script or `python -m blux_ca`.
 
@@ -53,7 +96,7 @@ The checked-in `examples/` fixtures include expected outputs, so the acceptance 
 explicit-only: no `profile_id` / `profile_version` fields are emitted unless `--profile` or
 `--profile-file` is provided.
 
-## Quickstart runners
+### Quickstart runners
 
 The repo-level runners create `.venv` if needed, install the package with `python -m pip`, and
 invoke the stable CLI entry path.
@@ -68,7 +111,7 @@ invoke the stable CLI entry path.
 .\cA.ps1 run --goal examples/goal_hello.json --out out/
 ```
 
-## Profiles
+### Profiles
 
 Profiles are optional. Output `run` metadata always contains `input_hash`, `profile_id`, and
 `run_hash`. When a named profile is selected, `run.profile_version` is also emitted.
@@ -78,7 +121,7 @@ Profiles are optional. Output `run` metadata always contains `input_hash`, `prof
 ./cA.sh run --goal examples/goal_hello.json --out out/ --profile-file profiles/gpu.json
 ```
 
-## Stable behavior
+### Stable behavior
 
 - Outputs are canonical JSON and deterministic for identical inputs.
 - `artifact.json` and `verdict.json` always emit frozen metadata headers.
