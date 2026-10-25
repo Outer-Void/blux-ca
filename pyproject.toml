@@ -7,6 +7,7 @@ name = "blux-ca"
 version = "2.0.0"
 description = "cA: BLUX's construction and repair engine (changesets, bounded repair, rollback) plus the frozen cA-1.0-pro contract engine"
 readme = "README.md"
+license = {text = "BLUX Proprietary License"}
 requires-python = ">=3.11"
 dependencies = ["jsonschema>=4.19"]
 
