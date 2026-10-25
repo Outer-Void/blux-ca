@@ -100,7 +100,8 @@ class Workspace:
         """Resolve a checked relative path, refusing symlinks anywhere along it."""
         check_path(path)
         current = self.root
-        for part in path.split("/"):
+        parts = path.split("/")
+        for depth, part in enumerate(parts, 1):
             current = current / part
             try:
                 st = os.lstat(current)
@@ -108,6 +109,13 @@ class Workspace:
                 return self.root / path
             if stat.S_ISLNK(st.st_mode):
                 raise CaError("UNSAFE_PATH", f"{path!r} passes through a symbolic link.", {"path": path})
+            if depth < len(parts) and not stat.S_ISDIR(st.st_mode):
+                prefix = "/".join(parts[:depth])
+                raise CaError(
+                    "CONFLICT",
+                    f"{path!r} needs {prefix!r} to be a directory, but it is a file.",
+                    {"path": path, "file": prefix},
+                )
         return current
 
     def read(self, path: str) -> cs.State:

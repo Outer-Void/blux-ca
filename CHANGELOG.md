@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.1 (Stage 08)
+
+- Fixed: a path that runs through an existing file (`lib/extra.py` when `lib` is a file) crashed with an
+  uncaught `NotADirectoryError`; it is now a `CONFLICT` naming the file (`details.file`). Found by the
+  blux-ca-dataset build. Regression test: `test_a_path_through_an_existing_file_is_a_conflict_not_a_crash`.
+
 ## 2.0.0 (Stage 07)
 
 cA becomes BLUX's construction and repair engine (`blux_ca.construction`, `ca` command). The cA 1.0

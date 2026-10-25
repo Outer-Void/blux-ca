@@ -331,6 +331,21 @@ def test_symlinks_cannot_redirect_writes_outside_the_workspace(ws: Path, tmp_pat
     assert list(outside.iterdir()) == []
 
 
+def test_a_path_through_an_existing_file_is_a_conflict_not_a_crash(ws: Path) -> None:
+    write(ws, {"lib": "not a directory\n"})
+    for capability, request in (
+        (
+            "artifact.modify",
+            {"workspace": W, "edits": [{"op": "create", "path": "lib/extra.py", "content": "y = 2\n"}]},
+        ),
+        ("config.generate", {"workspace": W, "path": "lib/conf.json", "data": {}}),
+        ("repo.patch", {"workspace": W, "diff": "--- /dev/null\n+++ b/lib/x.py\n@@ -0,0 +1 @@\n+x = 1\n"}),
+    ):
+        err = refused(capability, request)
+        assert (err.code, err.details["file"]) == ("CONFLICT", "lib")
+    assert tree(ws) == {"lib": "not a directory\n"}
+
+
 def test_a_symlinked_workspace_is_refused(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(tmp_path)
     (tmp_path / "real").mkdir()

@@ -8,7 +8,7 @@ import re
 import unicodedata
 from typing import Any
 
-ENGINE_VERSION = "2.0.0"
+ENGINE_VERSION = "2.0.1"
 
 MAX_REQUEST_BYTES = 4 * 1024 * 1024
 MAX_FILE_BYTES = 1024 * 1024

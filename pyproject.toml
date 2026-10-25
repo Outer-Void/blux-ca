@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blux-ca"
-version = "2.0.0"
+version = "2.0.1"
 description = "cA: BLUX's construction and repair engine (changesets, bounded repair, rollback) plus the frozen cA-1.0-pro contract engine"
 readme = "README.md"
 license = {text = "BLUX Proprietary License"}
